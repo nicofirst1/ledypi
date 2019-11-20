@@ -1,20 +1,20 @@
-from DotStar_Emulator.emulator.send_test_data import App
+
+from Fillers.Default import Default
 
 
-class Snow(App):
+class Snow(Default):
     data_type = "Snow"
 
     def __init__(self, args, trail_length=5):
         """
         Init for snow effect
-        :param args:
+        :param args: for App
         :param trail_length: length of snow trail
         """
         super().__init__(args)
 
         self.trail = trail_length
         self.min_space = 3  # min space between trail end and trail start
-        self.strip_length = self.grid_size.x + self.grid_size.y
         self.counter = 0
 
     def fill(self):
@@ -36,12 +36,8 @@ class Snow(App):
             else:
                 intensity = 0
 
-        self.update_couter()
+        self.update_counter()
 
-    def update_couter(self):
+    def update_counter(self):
         self.counter += 1
         self.counter %= self.strip_length
-
-    def on_loop(self):
-        self.fill()
-        self.send()

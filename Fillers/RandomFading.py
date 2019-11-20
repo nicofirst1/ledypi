@@ -3,11 +3,12 @@ from random import randint
 
 from DotStar_Emulator.emulator.send_test_data import App
 
+from Fillers.Default import Default
 from RGB import RGB
 from utils import bound_sub, bound_add
 
 
-class RandomFading(App):
+class RandomFading(Default):
     data_type = "RandomFading"
 
     def __init__(self, args, random_points=20, delay_start=4, delay_end=20):
@@ -24,7 +25,6 @@ class RandomFading(App):
         self.random_points = random_points
         self.delay_start = delay_start
         self.delay_end = delay_end
-        self.strip_length = self.grid_size.x + self.grid_size.y - 1
 
         # assert there are no more points than leds
         assert random_points < self.strip_length
@@ -44,16 +44,6 @@ class RandomFading(App):
 
         return default_dict
 
-    def set(self, index, rgb, **kwargs):
-        """
-        use set with RGB class
-        :param index: index of led to set
-        :param rgb: RGB class color
-        :param kwargs: ...
-        :return:
-        """
-
-        super().set(index, rgb.c, rgb.r, rgb.b, rgb.b)
 
     def fill(self):
 
@@ -90,7 +80,7 @@ class RandomFading(App):
 
             # update and set color
             color.update_single(c=alpha)
-            self.set(c, color)
+            self.color_set(c, color)
 
             # update for original dict too
             self.centers[c]['alpha'] = alpha
@@ -106,7 +96,3 @@ class RandomFading(App):
                     new_c = randint(0, self.strip_length - 1)
                 # add it to list
                 self.centers[new_c] = self.empty_center()
-
-    def on_loop(self):
-        self.fill()
-        self.send()

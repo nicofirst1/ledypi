@@ -1,14 +1,15 @@
 from DotStar_Emulator.emulator.send_test_data import App
 from math import sin, pi, floor
 
+from Fillers.Default import Default
 from utils import scale
 
 
-class Rainbow(App):
+class Rainbow(Default):
 
     data_type = "FireWork"
 
-    def __init__(self, args):
+    def __init__(self, args, intensity=255):
         """
         Init for FireWork effect
         :param args:
@@ -17,8 +18,10 @@ class Rainbow(App):
 
         self.strip_length=self.grid_size.x+self.grid_size.y
         self.counter=0
+        self.intensity=intensity
 
     def fill(self):
+
 
         for idx in range(self.strip_length):
 
@@ -35,11 +38,8 @@ class Rainbow(App):
             g=floor(g)
             b=floor(b)
 
-            self.set(idx, 255, r, g, b)
+            self.set(idx, self.intensity, r, g, b)
 
         self.counter+=1
         self.counter%=self.strip_length
 
-    def on_loop(self):
-        self.fill()
-        self.send()
