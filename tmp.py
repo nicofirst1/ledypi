@@ -6,6 +6,7 @@ from DotStar_Emulator.emulator.widgets.dotgrid import DotGridWidget
 
 from Fillers.ColorWipe import ColorWipe
 from Fillers.Fading import Fading
+from Fillers.Fire import Fire
 from Fillers.Strobe import Strobe
 from RGB import RGB
 
