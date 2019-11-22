@@ -6,7 +6,7 @@ from RGB import RGB
 class ColorWipe(Default):
     data_type = "ColorWipe"
 
-    def __init__(self, rate, color='rand', alpha=255):
+    def __init__(self, rate, color='rand'):
         """
         Init for steady color
         :param args: for App
@@ -18,7 +18,6 @@ class ColorWipe(Default):
             color=RGB(random=True)
 
         self.color = color
-        self.alpha=alpha
         self.step=1
         self.reverse=False
 

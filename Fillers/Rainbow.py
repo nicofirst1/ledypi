@@ -2,6 +2,7 @@ from DotStar_Emulator.emulator.send_test_data import App
 from math import sin, pi, floor
 
 from Fillers.Default import Default
+from RGB import RGB
 from utils import scale
 
 
@@ -22,6 +23,8 @@ class Rainbow(Default):
         self.r_div=0
         self.b_div=1
         self.g_div=2
+        self.max_range=360
+        self.set_pixels()
 
     def fill(self):
 
@@ -39,7 +42,7 @@ class Rainbow(Default):
 
         for idx in range(self.strip_length):
 
-            idx2degree=scale(idx+self.counter,0,360,0,self.strip_length)
+            idx2degree=scale(idx+self.counter,0,self.max_range,0,self.strip_length)
 
             r=sin(idx2degree+r_div)
             g=sin(idx2degree+g_div)
@@ -53,8 +56,9 @@ class Rainbow(Default):
             g=floor(g)
             b=floor(b)
 
-            self.set(idx, self.intensity, r, g, b)
+            self.pixels[idx]['color']=RGB(r=r,g=g,b=b,c=self.intensity)
+
 
         self.counter+=1
         self.counter%=self.strip_length
-
+        self.set_pixels()

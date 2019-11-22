@@ -1,3 +1,4 @@
+import time
 from copy import deepcopy
 from random import randint
 
@@ -15,14 +16,26 @@ class Default(App):
         Init for snow effect
         :param args:
         """
+
+        rate*=100
         super().__init__(rate)
 
         self.strip_length = self.grid_size.x + self.grid_size.y - 1
+        self.alpha=255
+        self.pixels={idx:dict(color=RGB()) for idx in range(self.strip_length+1)}
 
+    def set_pixels(self):
+        for idx in range(self.strip_length):
+            self.color_set(idx, self.pixels[idx]['color'])
+        self.send()
 
     def color_set(self, index, rgb, **kwargs):
 
         super().set(index, rgb.c, rgb.b, rgb.g, rgb.r)
+        time.sleep(self.rate)
+
+
+
 
     def fill(self):
 

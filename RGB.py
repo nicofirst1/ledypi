@@ -1,3 +1,5 @@
+import math
+from copy import deepcopy
 from random import randint
 
 from utils import bound_add
@@ -79,7 +81,44 @@ class RGB:
             self.b=255
             self.c=255
 
+    def fade(self, fade_val, minimum=10):
+        """
+        Fade colors
+        :param fade_val: 0 to 255
+        :param minimum: threshold after which
+        :return:
+        """
 
+        self.r-=self.r*fade_val/256
+        self.g-=self.g*fade_val/256
+        self.b-=self.b*fade_val/256
+
+        self.r=math.floor(self.r)
+        self.g=math.floor(self.g)
+        self.b=math.floor(self.b)
+
+        if self.r <= minimum:
+            self.r = 0
+
+        if self.g <= minimum:
+            self.g = 0
+
+        if self.b <= minimum:
+            self.b = 0
+
+
+
+    def is_black(self):
+
+
+        if self.c>0:
+            if self.r>0 or self.g>0 or self.b>0:
+                return False
+
+        return True
+
+    def copy(self):
+        return deepcopy(self)
 
     def update_single(self, **kwargs):
         """

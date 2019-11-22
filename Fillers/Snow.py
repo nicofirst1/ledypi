@@ -1,5 +1,6 @@
 
 from Fillers.Default import Default
+from RGB import RGB
 
 
 class Snow(Default):
@@ -30,13 +31,15 @@ class Snow(Default):
 
         for jdx in reversed(range(num_of_trail)):
             for idx in range(jdx + self.counter, self.strip_length + jdx + self.counter, num_of_trail):
-                self.set(idx % self.strip_length, intensity, 255, 255, 255)
+                self.pixels[idx % self.strip_length]['color']=RGB(r=255,g=255,b=255,c=intensity)
+
             if not intensity - loss < 0:
                 intensity -= loss
             else:
                 intensity = 0
 
         self.update_counter()
+        self.set_pixels()
 
     def update_counter(self):
         self.counter += 1

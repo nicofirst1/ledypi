@@ -15,7 +15,6 @@ class Strobe(Default):
         super().__init__(rate)
 
         self.color = RGB(random=True)
-        self.alpha=255
         self.delay=10
         self.step=0
 

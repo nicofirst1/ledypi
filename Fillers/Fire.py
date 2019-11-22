@@ -9,7 +9,7 @@ from utils import bound_sub
 class Fire(Default):
     data_type = "Fire"
 
-    def __init__(self, rate,cooling=100,sparking=50, speed=20):
+    def __init__(self, rate,cooling=60,sparking=50, speed=20):
         """
         Init for steady color
         :param args: for App

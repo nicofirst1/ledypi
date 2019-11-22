@@ -3,11 +3,12 @@ from random import randint
 
 from DotStar_Emulator.emulator.send_test_data import App
 
+from Fillers.Default import Default
 from RGB import RGB
 from utils import bound_sub, circular_step
 
 
-class FireWork(App):
+class FireWork(Default):
     data_type = "FireWork"
 
     def __init__(self, args, num_of_fires=5, usa_add=False):
@@ -23,7 +24,6 @@ class FireWork(App):
         self.strip_length = self.grid_size.x + self.grid_size.y - 1
         self.step = 0
         self.centers = {randint(0, self.strip_length-1): self.empty_center() for _ in range(num_of_fires)}
-        self.pixels = {idx: RGB() for idx in range(self.strip_length)}
 
     def empty_center(self):
         return dict(color=RGB(random=True), tail=[], step=0)
@@ -115,26 +115,22 @@ class FireWork(App):
 
         self.update_couter()
 
-        # update pixels with value in list
-        for idx, color in self.pixels.items():
-            # if c is zero ser led to black
-            if color.c==0:
-                self.set(idx,RGB())
-            else:
-                self.set(idx, color)
+
+
+        self.set_pixels()
 
     def add_update_pixel(self, idx, new_color):
 
-        current_color=self.pixels[idx]
+        current_color=self.pixels[idx]['color']
 
 
 
         if current_color.same_color(new_color) or current_color.is_gray()  :
-            self.pixels[idx].update_color(new_color)
+            self.pixels[idx]['color'].update_color(new_color)
         elif self.use_add:
-            self.pixels[idx].add_colors(new_color)
+            self.pixels[idx]['color'].add_colors(new_color)
         else:
-            self.pixels[idx].update_color(new_color)
+            self.pixels[idx]['color'].update_color(new_color)
 
 
 

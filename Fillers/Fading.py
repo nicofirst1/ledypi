@@ -11,7 +11,7 @@ from utils import bound_sub, bound_add
 class Fading(Default):
     data_type = "Fading"
 
-    def __init__(self, rate, random_points=20, rate_start=4, rate_end=20, color='rand'):
+    def __init__(self, rate, random_points=20, rate_start=40, rate_end=4, color='rand'):
 
 
         # assert delays are in range
@@ -69,10 +69,10 @@ class Fading(Default):
 
             # if increasing and there is still room for increasing do it
             if 0 <= alpha < 255 and increasing:
-                alpha = bound_add(alpha, self.rate_start, maximum=255)
+                alpha = bound_add(alpha, self.rate_end, maximum=255)
             # if not increasing and still in good range, decrease
             elif 0 < alpha <= 255 and not increasing:
-                alpha = bound_sub(alpha, self.rate_end, minimum=0)
+                alpha = bound_sub(alpha, self.rate_start, minimum=0)
             # if zero and decreasing we're done
             elif alpha == 0 and not increasing:
                 done = True

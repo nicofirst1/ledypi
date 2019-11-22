@@ -15,7 +15,6 @@ class Steady(Default):
         super().__init__(rate)
 
         self.color = RGB(random=True)
-        self.alpha=255
 
 
     def fill(self):
