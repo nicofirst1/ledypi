@@ -5,15 +5,15 @@ from Fillers.Default import Default
 class Snow(Default):
     data_type = "Snow"
 
-    def __init__(self, args, trail_length=5):
+    def __init__(self, rate, trail=5):
         """
         Init for snow effect
         :param args: for App
         :param trail_length: length of snow trail
         """
-        super().__init__(args)
+        super().__init__(rate)
 
-        self.trail = trail_length
+        self.trail = trail
         self.min_space = 3  # min space between trail end and trail start
         self.counter = 0
 
