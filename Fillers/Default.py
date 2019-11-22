@@ -22,7 +22,7 @@ class Default(App):
 
     def color_set(self, index, rgb, **kwargs):
 
-        super().set(index, rgb.c, rgb.r, rgb.b, rgb.b)
+        super().set(index, rgb.c, rgb.b, rgb.g, rgb.r)
 
     def fill(self):
 
