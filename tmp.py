@@ -7,7 +7,8 @@ from Fillers.RandomFading import RandomFading
 from Fillers.Snow import Snow
 from Fillers.Rainbow import Rainbow
 from Fillers.FireWork import FireWork
+from Fillers.Steady import Steady
 
-args=argparse.Namespace(rate=10,loop=True)
-color=RandomFading(args)
+rate=10
+color=Steady(rate)
 color.run()
