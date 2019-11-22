@@ -8,23 +8,22 @@ from RGB import RGB
 from utils import bound_sub, bound_add
 
 
-class RandomFading(Default):
-    data_type = "RandomFading"
+class Fading(Default):
+    data_type = "Fading"
 
-    def __init__(self, args, random_points=20, delay_start=4, delay_end=20):
-        """
-        Init for snow effect
-        :param args:
-        """
+    def __init__(self, rate, random_points=20, rate_start=4, rate_end=20, color='rand'):
+
 
         # assert delays are in range
-        assert 0 <= delay_start <= 20
-        assert 0 <= delay_end <= 20
+        assert 0 <= rate_start <= 50
+        assert 0 <= rate_end <= 50
 
-        super().__init__(args)
+        self.color=color
+
+        super().__init__(rate)
         self.random_points = random_points
-        self.delay_start = delay_start
-        self.delay_end = delay_end
+        self.rate_start = rate_start
+        self.rate_end = rate_end
 
         # assert there are no more points than leds
         assert random_points < self.strip_length
@@ -36,10 +35,13 @@ class RandomFading(Default):
         :return:
         """
 
-        default_dict = dict(color=RGB(random=True), alpha=0, delay=randint(0, 10), increasing=True)
+        if self.color=='rand':
+            default_dict = dict(color=RGB(random=True), alpha=0, delay=randint(0, 10), increasing=True)
+        else:
+            default_dict = dict(color=RGB(rgb=self.color), alpha=0, delay=randint(0, 10), increasing=True)
 
         # if there is no start in delay then alpha is maximum
-        if not self.delay_start:
+        if not self.rate_start:
             default_dict['alpha'] = 255
 
         return default_dict
@@ -67,10 +69,10 @@ class RandomFading(Default):
 
             # if increasing and there is still room for increasing do it
             if 0 <= alpha < 255 and increasing:
-                alpha = bound_add(alpha, self.delay_start, maximum=255)
+                alpha = bound_add(alpha, self.rate_start, maximum=255)
             # if not increasing and still in good range, decrease
             elif 0 < alpha <= 255 and not increasing:
-                alpha = bound_sub(alpha, self.delay_end, minimum=0)
+                alpha = bound_sub(alpha, self.rate_end, minimum=0)
             # if zero and decreasing we're done
             elif alpha == 0 and not increasing:
                 done = True

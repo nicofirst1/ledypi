@@ -1,14 +1,15 @@
 import argparse
+from random import randint
 
 from DotStar_Emulator.emulator.widgets.color_value import ColorValueWidget
 from DotStar_Emulator.emulator.widgets.dotgrid import DotGridWidget
 
-from Fillers.RandomFading import RandomFading
-from Fillers.Snow import Snow
-from Fillers.Rainbow import Rainbow
-from Fillers.FireWork import FireWork
-from Fillers.Steady import Steady
+from Fillers.ColorWipe import ColorWipe
+from Fillers.Fading import Fading
+from Fillers.Strobe import Strobe
+from RGB import RGB
 
-rate=10
-color=Steady(rate)
+rate=100
+color=RGB(white=True)
+color=ColorWipe(rate,color=color)
 color.run()
