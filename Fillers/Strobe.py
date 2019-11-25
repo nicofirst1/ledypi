@@ -15,17 +15,16 @@ class Strobe(Default):
         super().__init__(rate)
 
         self.color = RGB(random=True)
-        self.delay=10
         self.step=0
 
 
     def fill(self):
 
 
-        if self.color.c>0 and self.step%self.delay!=0:
+        if self.color.c>0 and self.step%self.rate!=0:
             self.color.update_single(c=0)
             self.step=0
-        if self.color.c == 0 and self.step % self.delay != 0:
+        if self.color.c == 0 and self.step % self.rate != 0:
             self.color.update_single(c=self.alpha)
             self.step=0
 
