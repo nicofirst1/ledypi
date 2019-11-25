@@ -10,12 +10,12 @@ class Rainbow(Default):
 
     data_type = "Rainbow"
 
-    def __init__(self, args, intensity=255):
+    def __init__(self, rate, intensity=255):
         """
         Init for FireWork effect
-        :param args:
+        :param rate:
         """
-        super().__init__(args)
+        super().__init__(rate)
 
         self.strip_length=self.grid_size.x+self.grid_size.y
         self.counter=0
@@ -23,7 +23,7 @@ class Rainbow(Default):
         self.r_div=0
         self.b_div=1
         self.g_div=2
-        self.max_range=360
+        self.max_range=10
         self.set_pixels()
 
     def fill(self):
@@ -60,5 +60,5 @@ class Rainbow(Default):
 
 
         self.counter+=1
-        self.counter%=self.strip_length
+        self.counter%=self.strip_length*3
         self.set_pixels()
