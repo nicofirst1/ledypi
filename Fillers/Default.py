@@ -1,6 +1,5 @@
 import time
-from copy import deepcopy
-from random import randint
+
 
 from DotStar_Emulator.emulator.send_test_data import App
 
