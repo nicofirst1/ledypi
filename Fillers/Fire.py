@@ -9,7 +9,7 @@ from utils import bound_sub
 class Fire(Default):
     data_type = "Fire"
 
-    def __init__(self, rate,cooling=60,sparking=50, speed=20):
+    def __init__(self, rate,cooling=60,sparking=50):
         """
         Init for steady color
         :param args: for App
@@ -20,11 +20,9 @@ class Fire(Default):
 
         #assert 20<=cooling<=100
         assert 50<=sparking<=200
-        assert 0<=speed<=20
 
         self.cooling=cooling
         self.sparking=sparking
-        self.speed=speed
         self.color = RGB(random=True)
         self.alpha=255
 
