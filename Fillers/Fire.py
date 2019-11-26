@@ -26,24 +26,24 @@ class Fire(Default):
         self.color = RGB(random=True)
         self.alpha=255
 
-        self.pixels=[0 for _ in range(self.strip_length)]
+        self.cooling=[0 for _ in range(self.strip_length)]
 
 
     def fill(self):
         # cooling_down
         for idx in range(self.strip_length):
-            cooldown = randint(0, ceil(((self.cooling * 10) / self.strip_length)) + 2)
-            self.pixels[idx]=bound_sub(self.pixels[idx],cooldown,minimum=0)
+            cooldown = randint(0, ceil(((self.cooling[idx] * 10) / self.strip_length)) + 2)
+            self.cooling[idx]=bound_sub(self.cooling[idx], cooldown, minimum=0)
 
         for idx in range(self.strip_length - 1, 2, -1):
-            self.pixels[idx] = (self.pixels[idx - 1] + self.pixels[idx - 2] + self.pixels[idx - 2]) / 3
+            self.cooling[idx] = (self.cooling[idx - 1] + self.cooling[idx - 2] + self.cooling[idx - 2]) / 3
 
         if randint(0,255) < self.sparking:
             y = randint(0,7)
-            self.pixels[y] = self.pixels[y] + randint(160, 255)
+            self.cooling[y] = self.cooling[y] + randint(160, 255)
 
         for idx in range(self.strip_length):
-            self.color_set(idx, heat_to_rgb(self.pixels[idx]))
+            self.pixels[idx]['color']= heat_to_rgb(self.cooling[idx])
 
 
 def heat_to_rgb(temperature):
