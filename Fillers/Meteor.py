@@ -34,5 +34,6 @@ class Meteor(Default):
                 self.pixels[self.step-jdx]['color']=self.color.copy()
 
         self.step+=1
+        self.step%=self.strip_length
 
 
