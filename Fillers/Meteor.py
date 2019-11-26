@@ -18,23 +18,21 @@ class Meteor(Default):
         self.size=size
         self.trail_decay=trail_decay
         self.random_decay=random_decay
+        self.step=0
 
 
     def fill(self):
 
 
-        for idx in range(self.strip_length*2):
 
-            for jdx in range(self.strip_length):
-                if not self.random_decay or randint(0,10) > 5:
-                    self.pixels[jdx]['color'].fade(self.trail_decay)
+        for jdx in range(self.strip_length):
+            if not self.random_decay or randint(0,10) > 5:
+                self.pixels[jdx]['color'].fade(self.trail_decay)
 
-            for jdx in range( 0, self.size):
-                if idx-jdx< self.strip_length and idx-jdx>=0:
-                    self.pixels[idx-jdx]['color']=self.color.copy()
+        for jdx in range( 0, self.size):
+            if self.step-jdx< self.strip_length and self.step-jdx>=0:
+                self.pixels[self.step-jdx]['color']=self.color.copy()
 
-
-            self.set_pixels()
-
+        self.step+=1
 
 
