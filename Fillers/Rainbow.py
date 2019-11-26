@@ -60,4 +60,3 @@ class Rainbow(Default):
 
         self.counter+=1
         self.counter%=self.strip_length*3
-        self.set_pixels()
