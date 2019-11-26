@@ -22,7 +22,7 @@ class Rainbow(Default):
         self.r_phi=0
         self.b_phi=1
         self.g_phi=2
-        self.max_range=10
+        self.max_range=1
         self.set_pixels()
 
     def fill(self):
@@ -57,6 +57,6 @@ class Rainbow(Default):
 
             self.pixels[idx]['color']=RGB(r=r,g=g,b=b,c=self.intensity)
 
-        #todo: fix counter
         self.counter+=1
-        self.counter%=self.strip_length*3
+        self.counter%=self.strip_length*255
+
