@@ -34,7 +34,7 @@ class ColorWipe(Default):
 
         for idx in range(self.strip_length):
             if idx< step:
-                self.color_set(idx,color)
+                self.pixels[idx]['color']=color
 
 
         self.step+=1
