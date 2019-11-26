@@ -42,7 +42,6 @@ class Default(App):
     def on_loop(self):
         self.fill()
         self.set_pixels()
-        self.send()
         time.sleep(self.rate)
 
     def update_args(self, **kwargs):
