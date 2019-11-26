@@ -48,9 +48,19 @@ class Default(App):
     def update_args(self, **kwargs):
         variables = [i for i in dir(self) if not inspect.ismethod(i)]
 
+        changed=False
         for k in kwargs.keys():
             if k in variables:
-                setattr(self, k, 21)
+                setattr(self, k, kwargs[k])
+                changed=True
+
+        if not changed:
+            for k in kwargs.keys():
+                print(f"No such attribute named '{k}' for class {self.__str__()}")
+
+        return changed
+
+
 
     def stop(self):
         self.is_stopped=True
