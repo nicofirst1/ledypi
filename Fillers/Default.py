@@ -23,6 +23,8 @@ class Default(App):
         self.alpha = 255
         self.color = color
         self.pixels = {idx: dict(color=self.color) for idx in range(self.strip_length + 1)}
+        self.set_pixels()
+
 
     def set_pixels(self):
         for idx in range(self.strip_length):
