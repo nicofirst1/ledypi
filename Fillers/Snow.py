@@ -39,7 +39,6 @@ class Snow(Default):
                 intensity = 0
 
         self.update_counter()
-        self.set_pixels()
 
     def update_counter(self):
         self.counter += 1
