@@ -17,36 +17,35 @@ class Rainbow(Default):
         """
         super().__init__(rate)
 
-        self.strip_length=self.grid_size.x+self.grid_size.y
         self.counter=0
         self.intensity=intensity
-        self.r_div=0
-        self.b_div=1
-        self.g_div=2
+        self.r_phi=0
+        self.b_phi=1
+        self.g_phi=2
         self.max_range=10
         self.set_pixels()
 
     def fill(self):
 
-        r_div=self.r_div
-        b_div=self.b_div
-        g_div=self.g_div
+        r_phi=self.r_phi
+        b_phi=self.b_phi
+        g_phi=self.g_phi
 
-        if not self.r_div == 0:
-            r_div = pi/self.r_div
-        if not self.b_div == 0:
-            b_div = pi/self.b_div
-        if not self.g_div == 0:
-            g_div = pi/self.g_div
+        if not self.r_phi == 0:
+            r_phi = pi/self.r_phi
+        if not self.b_phi == 0:
+            b_phi = pi/self.b_phi
+        if not self.g_phi == 0:
+            g_phi = pi/self.g_phi
 
 
         for idx in range(self.strip_length):
 
             idx2degree=scale(idx+self.counter,0,self.max_range,0,self.strip_length)
 
-            r=sin(idx2degree+r_div)
-            g=sin(idx2degree+g_div)
-            b=sin(idx2degree+b_div)
+            r=sin(idx2degree+r_phi)
+            g=sin(idx2degree+g_phi)
+            b=sin(idx2degree+b_phi)
 
             r=scale(r,0,255,-1,1)
             g=scale(g,0,255,-1,1)
