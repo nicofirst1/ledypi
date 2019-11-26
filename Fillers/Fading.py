@@ -11,7 +11,7 @@ from utils import bound_sub, bound_add
 class Fading(Default):
     data_type = "Fading"
 
-    def __init__(self, rate, random_points=20, rate_start=40, rate_end=4, color='rand'):
+    def __init__(self, rate, random_points=20, rate_start=40, rate_end=4, color=RGB(white=True), random_color=True):
 
 
         # assert delays are in range
@@ -19,6 +19,7 @@ class Fading(Default):
         assert 0 <= rate_end <= 50
 
         self.color=color
+        self.random_colors=random_color
 
         super().__init__(rate)
         self.random_points = random_points
@@ -35,7 +36,7 @@ class Fading(Default):
         :return:
         """
 
-        if self.color=='rand':
+        if self.random_colors:
             default_dict = dict(color=RGB(random=True), alpha=0, delay=randint(0, 10), increasing=True)
         else:
             default_dict = dict(color=RGB(rgb=self.color), alpha=0, delay=randint(0, 10), increasing=True)
@@ -51,6 +52,10 @@ class Fading(Default):
 
         # copy original dict
         center_copy = deepcopy(self.centers)
+        
+        # bound the rnadom point to the maximum 
+        if self.random_points>self.strip_length:
+            self.random_points=self.strip_length
 
         # for every center in the list
         for c, attr in center_copy.items():
