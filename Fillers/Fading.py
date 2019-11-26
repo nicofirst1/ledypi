@@ -87,7 +87,7 @@ class Fading(Default):
 
             # update and set color
             color.update_single(c=alpha)
-            self.color_set(c, color)
+            self.pixels[c]['color']=color
 
             # update for original dict too
             self.centers[c]['alpha'] = alpha
