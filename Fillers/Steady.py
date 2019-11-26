@@ -12,16 +12,14 @@ class Steady(Default):
         :param args: for App
         :param trail_length: length of snow trail
         """
-        super().__init__(rate)
+        super().__init__(rate,color=RGB(random=True))
 
-        self.color = RGB(random=True)
 
 
     def fill(self):
 
         self.color.update_single(c=self.alpha)
-
         for idx in range(self.strip_length):
-            self.color_set(idx,self.color)
+            self.pixels[idx]['color']=self.color
 
 
