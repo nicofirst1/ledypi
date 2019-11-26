@@ -10,7 +10,7 @@ import inspect
 class Default(App):
     data_type = ""
 
-    def __init__(self, rate):
+    def __init__(self, rate,color=RGB()):
         """
         Init for snow effect
         :param args:
@@ -21,7 +21,8 @@ class Default(App):
 
         self.strip_length = self.grid_size.x + self.grid_size.y - 1
         self.alpha=255
-        self.pixels={idx:dict(color=RGB()) for idx in range(self.strip_length+1)}
+        self.color=color
+        self.pixels={idx:dict(color=self.color) for idx in range(self.strip_length+1)}
 
     def set_pixels(self):
         for idx in range(self.strip_length):
@@ -31,7 +32,6 @@ class Default(App):
     def color_set(self, index, rgb, **kwargs):
 
         super().set(index, rgb.c, rgb.b, rgb.g, rgb.r)
-        time.sleep(self.rate)
 
 
 
@@ -43,7 +43,10 @@ class Default(App):
 
     def on_loop(self):
         self.fill()
+        self.set_pixels()
         self.send()
+        time.sleep(self.rate)
+
 
     def update_args(self, **kwargs):
         variables = [i for i in dir(self) if not inspect.ismethod(i)]
