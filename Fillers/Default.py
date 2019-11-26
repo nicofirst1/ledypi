@@ -51,3 +51,6 @@ class Default(App):
         for k in kwargs.keys():
             if k in variables:
                 setattr(self, k, 21)
+
+    def stop(self):
+        self.is_stopped=True
