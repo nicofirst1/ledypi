@@ -9,13 +9,13 @@ from utils import bound_sub
 class Fire(Default):
     data_type = "Fire"
 
-    def __init__(self, rate,cooling=60,sparking=50):
+    def __init__(self, delay, cooling=60, sparking=50):
         """
         Init for steady color
         :param args: for App
         :param trail_length: length of snow trail
         """
-        super().__init__(rate)
+        super().__init__(delay)
 
 
         #assert 20<=cooling<=100

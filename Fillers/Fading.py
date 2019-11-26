@@ -11,7 +11,7 @@ from utils import bound_sub, bound_add
 class Fading(Default):
     data_type = "Fading"
 
-    def __init__(self, rate, random_points=20, rate_start=40, rate_end=4, color=RGB(white=True), random_color=True):
+    def __init__(self, delay, random_points=20, rate_start=40, rate_end=4, color=RGB(white=True), random_color=True):
 
 
         # assert delays are in range
@@ -21,7 +21,7 @@ class Fading(Default):
         self.color=color
         self.random_colors=random_color
 
-        super().__init__(rate)
+        super().__init__(delay)
         self.random_points = random_points
         self.rate_start = rate_start
         self.rate_end = rate_end

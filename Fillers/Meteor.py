@@ -6,13 +6,13 @@ from RGB import RGB
 
 class Meteor(Default):
     data_type = "Meteor"
-    def __init__(self, rate,size=10,  trail_decay=64,  random_decay=True):
+    def __init__(self, delay, size=10, trail_decay=64, random_decay=True):
         """
         Init for steady color
         :param args: for App
         :param trail_length: length of snow trail
         """
-        super().__init__(rate)
+        super().__init__(delay)
 
         self.color = RGB(random=True)
         self.size=size

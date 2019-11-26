@@ -10,12 +10,12 @@ class Rainbow(Default):
 
     data_type = "Rainbow"
 
-    def __init__(self, rate, intensity=255):
+    def __init__(self, delay, intensity=255):
         """
         Init for FireWork effect
-        :param rate:
+        :param delay:
         """
-        super().__init__(rate)
+        super().__init__(delay)
 
         self.counter=0
         self.intensity=intensity
@@ -57,6 +57,6 @@ class Rainbow(Default):
 
             self.pixels[idx]['color']=RGB(r=r,g=g,b=b,c=self.intensity)
 
-
+        #todo: fix counter
         self.counter+=1
         self.counter%=self.strip_length*3

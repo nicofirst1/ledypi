@@ -6,13 +6,13 @@ from RGB import RGB
 class Snow(Default):
     data_type = "Snow"
 
-    def __init__(self, rate, trail=5):
+    def __init__(self, delay, trail=5):
         """
         Init for snow effect
         :param args: for App
         :param trail_length: length of snow trail
         """
-        super().__init__(rate)
+        super().__init__(delay)
 
         self.trail = trail
         self.min_space = 3  # min space between trail end and trail start

@@ -6,13 +6,13 @@ from utils import bound_sub, bound_add
 class Strobe(Default):
     data_type = "Strobe"
 
-    def __init__(self, rate):
+    def __init__(self, delay):
         """
         Init for steady color
         :param args: for App
         :param trail_length: length of snow trail
         """
-        super().__init__(rate)
+        super().__init__(delay)
 
         self.color = RGB(random=True)
         self.increasing = False
