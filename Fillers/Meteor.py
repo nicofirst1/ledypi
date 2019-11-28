@@ -16,9 +16,10 @@ class Meteor(Default):
         self.step=0
 
 
+    def bound_attrs(self):
+        self.size=min(self.size,self.strip_length)
+
     def fill(self):
-
-
 
         for jdx in range(self.strip_length):
             if not self.random_decay or randint(0,10) > 5:
