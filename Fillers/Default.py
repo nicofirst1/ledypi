@@ -24,8 +24,10 @@ class Default(App,threading.Thread ):
         self.alpha = 255
         self.color = color
         self.randomize_color=False
+
         self.pixels = {idx: dict(color=self.color) for idx in range(self.strip_length + 1)}
         self.set_pixels()
+
 
 
     def set_pixels(self):
@@ -72,3 +74,10 @@ class Default(App,threading.Thread ):
             pass
 
         super().close_connetcion()
+
+    def bound_attrs(self):
+        """
+        override this function if the fill method to bound attributes to a limited range
+        :return:
+        """
+        raise NotImplementedError()
