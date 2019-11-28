@@ -1,12 +1,12 @@
 import inspect
 import time
-
+import threading
 from DotStar_Emulator.emulator.send_test_data import App
 
 from RGB import RGB
 
 
-class Default(App):
+class Default(App,threading.Thread ):
     data_type = ""
 
     def __init__(self, delay, color=RGB()):
@@ -15,7 +15,8 @@ class Default(App):
         :param args:
         """
 
-        delay /= 100
+        delay /= 10000
+        threading.Thread.__init__(self)
         super().__init__(delay)
         self.rate = delay
 
@@ -61,3 +62,12 @@ class Default(App):
 
     def stop(self):
         self.is_stopped = True
+
+    def run(self):
+        try:
+            while not self.is_stopped:
+                self.on_loop()
+        except KeyboardInterrupt:
+            pass
+
+        super().close_connetcion()
