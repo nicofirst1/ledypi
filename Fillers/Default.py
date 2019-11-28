@@ -23,6 +23,7 @@ class Default(App,threading.Thread ):
         self.strip_length = self.grid_size.x + self.grid_size.y - 1
         self.alpha = 255
         self.color = color
+        self.randomize_color=False
         self.pixels = {idx: dict(color=self.color) for idx in range(self.strip_length + 1)}
         self.set_pixels()
 
