@@ -7,6 +7,8 @@ from Fillers.Rainbow import Rainbow
 from Fillers.Snow import Snow
 from Fillers.Steady import Steady
 from Fillers.Strobe import Strobe
+from Fillers.Chasing import Chasing
+
 
 
 
@@ -20,5 +22,6 @@ Patterns=dict(
     Snow=Snow,
     Steady=Steady,
     Strobe=Strobe,
+    Chasing=Chasing,
 
 )
