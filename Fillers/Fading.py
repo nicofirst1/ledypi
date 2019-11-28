@@ -15,14 +15,13 @@ class Fading(Default):
 
         super().__init__(**kwargs)
 
-        self.random_colors=True
 
-        self.random_points = 29
+        self.point_number = 29
         self.rate_start = 40
         self.rate_end = 4
 
         # assert there are no more points than leds
-        self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.random_points)}
+        self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.point_number)}
 
     def empty_center(self):
         """
@@ -30,12 +29,11 @@ class Fading(Default):
         :return:
         """
 
-        self.random_points=min(self.random_points,self.strip_length)
 
-        if self.random_colors:
-            default_dict = dict(color=RGB(random=True), alpha=0, delay=randint(0, 10), increasing=True)
+        if self.randomize_color:
+            default_dict = dict(color=RGB(random=True), alpha=0, delay=randint(0, 100), increasing=True)
         else:
-            default_dict = dict(color=RGB(rgb=self.color), alpha=0, delay=randint(0, 10), increasing=True)
+            default_dict = dict(color=RGB(rgb=self.color), alpha=0, delay=randint(0, 100), increasing=True)
 
         # if there is no start in delay then alpha is maximum
         if not self.rate_start:
@@ -50,8 +48,7 @@ class Fading(Default):
         center_copy = deepcopy(self.centers)
         
         # bound the rnadom point to the maximum 
-        if self.random_points>self.strip_length:
-            self.random_points=self.strip_length
+        self.point_number = min(self.point_number, self.strip_length)
 
         # for every center in the list
         for c, attr in center_copy.items():
@@ -93,9 +90,12 @@ class Fading(Default):
             if done:
                 # pop center
                 self.centers.pop(c)
-                # get a new one
-                new_c = randint(0, self.strip_length - 1)
-                while new_c in self.centers.keys():
+
+                # if centers are less than supposed, add other
+                if len(self.centers) < self.point_number:
+                    # get a new one
                     new_c = randint(0, self.strip_length - 1)
-                # add it to list
-                self.centers[new_c] = self.empty_center()
+                    while new_c in self.centers.keys():
+                        new_c = randint(0, self.strip_length - 1)
+                    # add it to list
+                    self.centers[new_c] = self.empty_center()
