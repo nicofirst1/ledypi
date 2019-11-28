@@ -37,6 +37,7 @@ class FBC:
         if event.path == '/':
             pass
 
+        # todo: add attr update for specific pattern
         elif "cur_pattern" in event.path:
             self.pattern_choice = self.get_cur_pattern(data=event.data)
             self.pattern.stop()
@@ -76,6 +77,8 @@ class FBC:
             data=float(data)
         elif t==int:
             data=floor_int(data)
+        elif t==bool:
+            data=data=="true"
         else:
             raise NotImplementedError(f"No data conversion implemented for key: '{key}' of type '{t}'")
 
