@@ -25,7 +25,7 @@ class FBC:
 
         self.pattern = Fillers.Patterns[self.pattern_choice](self.rate)
         self.update_args()
-        self.pattern.run()
+        self.pattern.start()
 
     def listener(self,event):
         print(event.event_type)  # can be 'put' or 'patch'
@@ -41,14 +41,15 @@ class FBC:
             self.pattern.stop()
             self.pattern = Fillers.Patterns[self.pattern_choice](self.rate)
             self.update_args()
-            self.pattern.run()
+            self.pattern.start()
+            print(1)
 
         elif "rate" in event.path:
             self.rate = self.get_rate(data=event.data)
             self.pattern.stop()
             self.pattern = Fillers.Patterns[self.pattern_choice](self.rate)
             self.update_args()
-            self.pattern.run()
+            self.pattern.start()
 
 
         elif "RGBA" in event.path:
@@ -61,7 +62,7 @@ class FBC:
             if "rainbow" in event.path:
                 self.rainbow_getter(key,data=event.data)
             elif 'fading' in event.path:
-                self.fading_getter(data=event.data)
+                self.fading_getter(key,data=event.data)
 
         else:
             raise NotImplementedError(f"No such field for {event.path}")
@@ -71,7 +72,7 @@ class FBC:
         
         # get the data
         if data is None:
-            data=self.get("pattern_attributes").get('fading').get('key')
+            data=self.get("pattern_attributes").get('fading').get(key)
 
         # get every attribute
         if key == "point_number":
@@ -156,7 +157,7 @@ class FBC:
     def update_rgba(self):
         rgba=self.get("RGBA")
 
-        random=rgba.get("random")
+        random=rgba.get("random")=="true"
 
         if not random:
 
@@ -186,5 +187,6 @@ def floor_int(value):
     value = math.floor(value)
     return int(value)
 
+if __name__ == '__main__':
 
-fbc = FBC()
+    fbc = FBC()
