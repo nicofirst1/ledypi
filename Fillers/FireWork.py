@@ -6,10 +6,6 @@ from RGB import RGB
 from utils import bound_sub, circular_step
 
 
-def empty_center():
-    return dict(color=RGB(random=True), tail=[], step=0)
-
-
 class FireWork(Default):
     data_type = "FireWork"
 
@@ -20,7 +16,13 @@ class FireWork(Default):
         self.use_add = False
         self.loss = 25
         self.step = 0
-        self.centers = {randint(0, self.strip_length - 1): empty_center() for _ in range(self.fires)}
+        self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.fires)}
+
+    def empty_center(self):
+        if self.randomize_color:
+            return dict(color=RGB(random=True), tail=[], step=0)
+        else:
+            return dict(color=self.color, tail=[], step=0)
 
 
     def bound_attrs(self):
@@ -105,7 +107,7 @@ class FireWork(Default):
                             while rd in self.centers.keys():
                                 rd = randint(0, self.strip_length - 1)
                             # put random color
-                            self.centers[rd] = empty_center()
+                            self.centers[rd] = self.empty_center()
                         has_popped = True
 
             # is the center has been removed then dont update
