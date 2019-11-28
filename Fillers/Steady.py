@@ -12,7 +12,12 @@ class Steady(Default):
 
     def fill(self):
 
-        self.color.update_single(c=self.alpha)
+        if self.randomize_color:
+            color=RGB(random=True)
+        else:
+            color=self.color
+
+        color.update_single(c=self.alpha)
         for idx in range(self.strip_length):
             self.pixels[idx]['color']=self.color
 
