@@ -15,7 +15,7 @@ class Default(App,threading.Thread ):
         :param args:
         """
 
-        delay /= 10000
+        delay /= 100
         threading.Thread.__init__(self)
         super().__init__(delay)
         self.rate = delay
