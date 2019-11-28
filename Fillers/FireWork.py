@@ -6,6 +6,10 @@ from RGB import RGB
 from utils import bound_sub, circular_step
 
 
+def empty_center():
+    return dict(color=RGB(random=True), tail=[], step=0)
+
+
 class FireWork(Default):
     data_type = "FireWork"
 
@@ -15,15 +19,16 @@ class FireWork(Default):
         self.fires = 5
         self.use_add = False
         self.loss = 25
-        self.strip_length = self.grid_size.x + self.grid_size.y - 1
         self.step = 0
-        self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.fires)}
+        self.centers = {randint(0, self.strip_length - 1): empty_center() for _ in range(self.fires)}
 
-    def empty_center(self):
-        return dict(color=RGB(random=True), tail=[], step=0)
 
+    def bound_attrs(self):
+        self.fires=min(self.fires,self.strip_length)
 
     def fill(self):
+
+        self.bound_attrs()
 
         loss_weight = 1.3
         center_copy = deepcopy(self.centers)
@@ -90,19 +95,27 @@ class FireWork(Default):
                 else:
                     # remove the center
                     self.centers.pop(c)
-                    # get another one which is not in the center lists already
-                    rd = randint(0, self.strip_length - 1)
-                    while rd in self.centers.keys():
-                        rd = randint(0, self.strip_length - 1)
-                    # put random color
-                    self.centers[rd] = self.empty_center()
-                    has_popped = True
+
+                    if len(self.centers)<self.fires:
+
+                        for _ in range(self.fires-len(self.centers)):
+
+                            # get another one which is not in the center lists already
+                            rd = randint(0, self.strip_length - 1)
+                            while rd in self.centers.keys():
+                                rd = randint(0, self.strip_length - 1)
+                            # put random color
+                            self.centers[rd] = empty_center()
+                        has_popped = True
 
             # is the center has been removed then dont update
             if not has_popped:
-                self.centers[c]["tail"] = attr["tail"]
-                step = circular_step(step, self.strip_length)
-                self.centers[c]["step"] = step
+                try:
+                    self.centers[c]["tail"] = attr["tail"]
+                    step = circular_step(step, self.strip_length)
+                    self.centers[c]["step"] = step
+                except KeyError:
+                    pass
 
         self.update_couter()
 
