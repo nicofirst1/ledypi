@@ -9,7 +9,7 @@ class Strobe(Default):
     def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
-        
+
         self.increasing = False
         self.loss = 255
 

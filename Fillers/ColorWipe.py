@@ -10,8 +10,6 @@ class ColorWipe(Default):
 
         super().__init__(**kwargs)
 
-
-
         self.step=1
         self.reverse=False
 
