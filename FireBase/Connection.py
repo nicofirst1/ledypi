@@ -25,8 +25,7 @@ class FBC:
         self.random_colors = False
         self.update_vars()
 
-        self.pattern = Fillers.Patterns[self.pattern_choice](delay=self.delay)
-        self.update_args()
+        self.pattern = Fillers.Patterns[self.pattern_choice](delay=self.delay,color=self.rgba)
         self.pattern.start()
 
     def listener(self, event):
@@ -42,7 +41,7 @@ class FBC:
             self.pattern_choice = self.get_cur_pattern(data=event.data)
             self.pattern.stop()
             self.pattern = Fillers.Patterns[self.pattern_choice](delay=self.delay)
-            self.update_args()
+            self.update_rgba()
             self.pattern.start()
             print(1)
 
@@ -50,14 +49,13 @@ class FBC:
             self.delay = self.get_rate(data=event.data)
             self.pattern.stop()
             self.pattern = Fillers.Patterns[self.pattern_choice](delay=self.delay)
-            self.update_args()
+            self.update_rgba()
             self.pattern.start()
 
 
         elif "RGBA" in event.path:
             self.update_rgba()
-            changed = self.pattern.update_args(color=self.rgba)
-            changed = self.pattern.update_args(random_colors=self.random_colors)
+
 
         elif "pattern_attributes" in event.path:
             key = event.path.split("/")[-1]
@@ -79,16 +77,11 @@ class FBC:
         elif t==int:
             data=floor_int(data)
         else:
-            raise NotImplementedError(f"No data conversion implemented for key: '{key}'")
+            raise NotImplementedError(f"No data conversion implemented for key: '{key}' of type '{t}'")
 
         # update
         self.pattern.update_args(**{key:data})
 
-
-    # todo: get rid of this
-    def update_args(self):
-        changed = self.pattern.update_args(color=self.rgba)
-        changed = self.pattern.update_args(random_colors=self.random_colors)
 
     def get(self, key, default=None):
         gets = self.fb.get()
@@ -121,11 +114,7 @@ class FBC:
 
         random = rgba.get("random") == "true"
 
-        # if method is called before pattern initialization skip
-        try:
-            self.pattern.update_args(randomize_color=random)
-        except AttributeError:
-            pass
+
 
         r = rgba.get("r")
         g = rgba.get("g")
@@ -138,6 +127,14 @@ class FBC:
         a = floor_int(a)
 
         self.rgba = RGB(r=r, g=g, b=b, c=a)
+
+        # if method is called before pattern initialization skip
+        try:
+            self.pattern.update_args(randomize_color=random)
+            self.pattern.update_args(color=self.rgba)
+
+        except AttributeError:
+            pass
 
 
 def floor_int(value):
