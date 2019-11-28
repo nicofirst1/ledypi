@@ -6,14 +6,8 @@ from RGB import RGB
 class Steady(Default):
     data_type = "Steady"
 
-    def __init__(self, delay):
-        """
-        Init for steady color
-        :param args: for App
-        :param trail_length: length of snow trail
-        """
-        super().__init__(delay, color=RGB(random=True))
-
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
 
     def fill(self):

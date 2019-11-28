@@ -11,30 +11,26 @@ from utils import bound_sub, bound_add
 class Fading(Default):
     data_type = "Fading"
 
-    def __init__(self, delay, random_points=20, rate_start=40, rate_end=4, color=RGB(white=True), random_color=True):
+    def __init__(self, **kwargs):
 
+        super().__init__(**kwargs)
 
-        # assert delays are in range
-        assert 0 <= rate_start <= 50
-        assert 0 <= rate_end <= 50
+        self.random_colors=True
 
-        self.color=color
-        self.random_colors=random_color
-
-        super().__init__(delay)
-        self.random_points = random_points
-        self.rate_start = rate_start
-        self.rate_end = rate_end
+        self.random_points = 29
+        self.rate_start = 40
+        self.rate_end = 4
 
         # assert there are no more points than leds
-        assert random_points < self.strip_length
-        self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(random_points)}
+        self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.random_points)}
 
     def empty_center(self):
         """
         Return an empty center point as a dict with fields
         :return:
         """
+
+        self.random_points=min(self.random_points,self.strip_length)
 
         if self.random_colors:
             default_dict = dict(color=RGB(random=True), alpha=0, delay=randint(0, 10), increasing=True)

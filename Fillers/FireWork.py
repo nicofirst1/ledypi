@@ -9,19 +9,15 @@ from utils import bound_sub, circular_step
 class FireWork(Default):
     data_type = "FireWork"
 
-    def __init__(self, delay, num_of_fires=5, usa_add=False):
-        """
-        Init for snow effect
-        :param delay:
-        """
-        super().__init__(delay)
+    def __init__(self, **kwargs):
 
-        self.fires = num_of_fires
-        self.use_add = usa_add
+        super().__init__(**kwargs)
+        self.fires = 5
+        self.use_add = False
         self.loss = 25
         self.strip_length = self.grid_size.x + self.grid_size.y - 1
         self.step = 0
-        self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(num_of_fires)}
+        self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.fires)}
 
     def empty_center(self):
         return dict(color=RGB(random=True), tail=[], step=0)

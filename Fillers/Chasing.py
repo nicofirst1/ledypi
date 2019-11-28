@@ -8,18 +8,13 @@ from utils import bound_add, bound_sub
 class Chasing(Default):
     data_type = "Chasing"
 
-    def __init__(self, delay, size=2, trail_decay=64, random_decay=True):
-        """
-        Init for steady color
-        :param args: for App
-        :param trail_length: length of snow trail
-        """
-        super().__init__(delay)
+    def __init__(self, **kwargs):
 
+        super().__init__(**kwargs)
         self.color = RGB(random=True)
-        self.size=size
-        self.trail_decay=trail_decay
-        self.random_decay=random_decay
+        self.size=1
+        self.trail_decay=64
+        self.random_decay=True
         self.step=0
         self.increasing=True
 

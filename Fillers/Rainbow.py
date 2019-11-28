@@ -10,15 +10,11 @@ class Rainbow(Default):
 
     data_type = "Rainbow"
 
-    def __init__(self, delay, intensity=255):
-        """
-        Init for FireWork effect
-        :param delay:
-        """
-        super().__init__(delay)
+    def __init__(self, **kwargs):
 
+        super().__init__(**kwargs)
         self.counter=0
-        self.intensity=intensity
+        self.intensity=255
         self.r_phi=0
         self.b_phi=1
         self.g_phi=2

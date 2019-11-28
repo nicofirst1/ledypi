@@ -6,18 +6,12 @@ from RGB import RGB
 class ColorWipe(Default):
     data_type = "ColorWipe"
 
-    def __init__(self, delay, color='rand'):
-        """
-        Init for steady color
-        :param args: for App
-        :param trail_length: length of snow trail
-        """
-        super().__init__(delay)
+    def __init__(self, **kwargs):
 
-        if color=="rand":
-            color=RGB(random=True)
+        super().__init__(**kwargs)
 
-        self.color = color
+
+
         self.step=1
         self.reverse=False
 
