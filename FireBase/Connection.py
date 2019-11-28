@@ -11,7 +11,7 @@ from RGB import RGB
 class FBC:
 
     def __init__(self):
-        #todo: use read file for certificate, url and init database
+        # todo: use read file for certificate, url and init database
         cred = credentials.Certificate("/Users/giulia/Desktop/ledypie/FireBase/firebase_key.json")
 
         firebase_admin.initialize_app(credential=cred,
@@ -19,45 +19,54 @@ class FBC:
         self.fb = db.reference('/')
         self.fb.listen(self.listener)
 
-        self.pattern_choice = None
         self.rgba = None
-        self.delay = None
         self.random_colors = False
-        self.update_vars()
 
-        self.pattern = Fillers.Patterns[self.pattern_choice](delay=self.delay,color=self.rgba)
+        # update db with Fillers
+        self.fb.update(dict(patterns='.'.join(Fillers.Patterns)))
+        # get pattern,delay
+        self.pattern_choice = self.get_cur_pattern()
+        self.delay = self.get_delay()
+        # update rgba
+        self.update_rgba()
+
+        # choose correct pattern and start it
+        self.pattern = Fillers.Patterns[self.pattern_choice](delay=self.delay, color=self.rgba)
         self.pattern.start()
 
     def listener(self, event):
+        """
+        Main listener, called when db is updated
+        :param event: dict
+        :return: None
+        """
         print(event.event_type)  # can be 'put' or 'patch'
         print(event.path)  # relative to the reference, it seems
         print(event.data)  # new data at /reference/event.path. None if deleted
         print("#" * 20)
 
+        # pass at the start
         if event.path == '/':
             pass
 
         # todo: add attr update for specific pattern
-        elif "cur_pattern" in event.path:
-            self.pattern_choice = self.get_cur_pattern(data=event.data)
+        # stop and restart pattern if required
+        elif "cur_pattern" in event.path or "delay" in event.path:
+            # get values
+            self.pattern_choice = self.get_cur_pattern()
+            self.delay = self.get_delay()
+            # stop and restart
             self.pattern.stop()
             self.pattern = Fillers.Patterns[self.pattern_choice](delay=self.delay)
             self.update_rgba()
             self.pattern.start()
             print(1)
 
-        elif "rate" in event.path:
-            self.delay = self.get_rate(data=event.data)
-            self.pattern.stop()
-            self.pattern = Fillers.Patterns[self.pattern_choice](delay=self.delay)
-            self.update_rgba()
-            self.pattern.start()
-
-
+        # update rgba
         elif "RGBA" in event.path:
             self.update_rgba()
 
-
+        # update pattern attributes
         elif "pattern_attributes" in event.path:
             key = event.path.split("/")[-1]
             self.ps_attrs_getter(key, event.data)
@@ -68,25 +77,36 @@ class FBC:
             raise NotImplementedError(f"No such field for {event.path}")
 
     def ps_attrs_getter(self, key, data):
+        """
+        Converts and updates values from db
+        :param key: str, name of db variable AND of class attribute
+        :param data: str, data to convert
+        :return:
+        """
 
         # get the original type from the pattern
-        t=type(self.pattern.__dict__[key])
+        t = type(self.pattern.__dict__[key])
 
         # convert it
-        if t==float:
-            data=float(data)
-        elif t==int:
-            data=floor_int(data)
-        elif t==bool:
-            data=data=="true"
+        if t == float:
+            data = float(data)
+        elif t == int:
+            data = floor_int(data)
+        elif t == bool:
+            data = data == "true"
         else:
             raise NotImplementedError(f"No data conversion implemented for key: '{key}' of type '{t}'")
 
         # update
-        self.pattern.update_args(**{key:data})
-
+        self.pattern.update_args(**{key: data})
 
     def get(self, key, default=None):
+        """
+        Get a key from the database
+        :param key: str, key to get
+        :param default: obj, default value to return if key is not found
+        :return: the key
+        """
         gets = self.fb.get()
 
         if key in gets.keys():
@@ -94,48 +114,60 @@ class FBC:
 
         return default
 
-    def update_vars(self):
-        self.fb.update(dict(patterns='.'.join(Fillers.Patterns)))
-        self.pattern_choice = self.get_cur_pattern()
-        self.delay = self.get_rate()
-        self.update_rgba()
-
-    def get_rate(self, data=None):
+    def get_delay(self, data=None):
+        """
+       Manipulate rate output from db
+       :param data: str, data from db, optional, will be loaded if None
+       :return: int, Usable data
+       """
         if data is None:
             data = self.get('rate')
 
         return floor_int(data)
 
     def get_cur_pattern(self, data=None):
+        """
+        Manipulate cur_pattern output from db
+        :param data: str, data from db, optional, will be loaded if None
+        :return: str, Usable data
+        """
         if data is None:
             data = self.get('cur_pattern')
 
         return data.replace('"', '')
 
     def update_rgba(self):
+        """
+        Update RGBA values taking them from the database
+        :return:
+        """
+
+        # get data from db
         rgba = self.get("RGBA")
 
-        random = rgba.get("random") == "true"
-
-
-
+        # extract values
         r = rgba.get("r")
         g = rgba.get("g")
         b = rgba.get("b")
         a = rgba.get("a")
 
+        # convert them to ints
         r = floor_int(r)
         g = floor_int(g)
         b = floor_int(b)
         a = floor_int(a)
 
+        # update attr
         self.rgba = RGB(r=r, g=g, b=b, c=a)
+
+        # extract random value and convert to bool
+        random = rgba.get("random") == "true"
 
         # if method is called before pattern initialization skip
         try:
+            # update pattern values
             self.pattern.update_args(randomize_color=random)
             self.pattern.update_args(color=self.rgba)
-
         except AttributeError:
             pass
 
