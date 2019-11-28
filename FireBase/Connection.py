@@ -1,5 +1,6 @@
-import firebase_admin
 import math
+
+import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 
@@ -10,6 +11,7 @@ from RGB import RGB
 class FBC:
 
     def __init__(self):
+        #todo: use read file for certificate, url and init database
         cred = credentials.Certificate("/Users/giulia/Desktop/ledypie/FireBase/firebase_key.json")
 
         firebase_admin.initialize_app(credential=cred,
@@ -19,167 +21,123 @@ class FBC:
 
         self.pattern_choice = None
         self.rgba = None
-        self.rate = None
-        self.random_colors=False
+        self.delay = None
+        self.random_colors = False
         self.update_vars()
 
-        self.pattern = Fillers.Patterns[self.pattern_choice](self.rate)
+        self.pattern = Fillers.Patterns[self.pattern_choice](delay=self.delay)
         self.update_args()
         self.pattern.start()
 
-    def listener(self,event):
+    def listener(self, event):
         print(event.event_type)  # can be 'put' or 'patch'
         print(event.path)  # relative to the reference, it seems
         print(event.data)  # new data at /reference/event.path. None if deleted
-        print("#"*20)
+        print("#" * 20)
 
-        if event.path=='/':
+        if event.path == '/':
             pass
 
-        elif "cur_pattern" in event.path :
-            self.pattern_choice=self.get_cur_pattern(data=event.data)
+        elif "cur_pattern" in event.path:
+            self.pattern_choice = self.get_cur_pattern(data=event.data)
             self.pattern.stop()
-            self.pattern = Fillers.Patterns[self.pattern_choice](self.rate)
+            self.pattern = Fillers.Patterns[self.pattern_choice](delay=self.delay)
             self.update_args()
             self.pattern.start()
             print(1)
 
         elif "rate" in event.path:
-            self.rate = self.get_rate(data=event.data)
+            self.delay = self.get_rate(data=event.data)
             self.pattern.stop()
-            self.pattern = Fillers.Patterns[self.pattern_choice](self.rate)
+            self.pattern = Fillers.Patterns[self.pattern_choice](delay=self.delay)
             self.update_args()
             self.pattern.start()
 
 
         elif "RGBA" in event.path:
             self.update_rgba()
-            changed=self.pattern.update_args(color=self.rgba)
+            changed = self.pattern.update_args(color=self.rgba)
             changed = self.pattern.update_args(random_colors=self.random_colors)
 
         elif "pattern_attributes" in event.path:
-            key=event.path.split("/")[-1]
-            if "rainbow" in event.path:
-                self.rainbow_getter(key,data=event.data)
-            elif 'fading' in event.path:
-                self.fading_getter(key,data=event.data)
+            key = event.path.split("/")[-1]
+            self.ps_attrs_getter(key, event.data)
+
+
 
         else:
             raise NotImplementedError(f"No such field for {event.path}")
 
+    def ps_attrs_getter(self, key, data):
 
-    def fading_getter(self, key,data=None):
-        
-        # get the data
-        if data is None:
-            data=self.get("pattern_attributes").get('fading').get(key)
+        # get the original type from the pattern
+        t=type(self.pattern.__dict__[key])
 
-        # get every attribute
-        if key == "point_number":
-            self.pattern.update_args(point_number=data)
-        elif key == "rate_start":
-            self.pattern.update_args(rate_start=data)
-        elif key == "rate_end":
-            self.pattern.update_args(rate_end=data)
-        elif key == "random_color":
-            self.pattern.update_args(random_color=data)
-
+        # convert it
+        if t==float:
+            data=float(data)
+        elif t==int:
+            data=floor_int(data)
         else:
-            raise NotImplementedError(f"No such field for {key} in faiding getter")
+            raise NotImplementedError(f"No data conversion implemented for key: '{key}'")
+
+        # update
+        self.pattern.update_args(**{key:data})
 
 
-    def rainbow_getter(self, key, data=None):
-        # get the data
-        if data is None:
-            data=self.get("pattern_attributes").get('rainbow').get(key)
-
-        data=floor_int(data)
-        
-        # get every attribute
-        if key=="max_range":
-            self.pattern.update_args(max_range=data)
-        elif key=="b_phi":
-            self.pattern.update_args( b_phi=data)
-        elif key=="g_phi":
-            self.pattern.update_args( g_phi=data)
-        elif key == "r_phi":
-            self.pattern.update_args(r_phi=data)
-
-        else:
-            raise NotImplementedError(f"No such field for {key} in rainbow getter")
-
-    def fireworks_getter(self, data=None):
-        # get the data
-        if data is None:
-            data=self.get("pattern_attributes").get('fireworks')
-        
-        # get every attribute
-        num_fires=data.get('num_fires')
-        
-
-        # update in class
-        self.pattern.update_args(fires=num_fires)
-
-        
-        
-
+    # todo: get rid of this
     def update_args(self):
         changed = self.pattern.update_args(color=self.rgba)
         changed = self.pattern.update_args(random_colors=self.random_colors)
 
+    def get(self, key, default=None):
+        gets = self.fb.get()
 
-    def get(self,key,default=None):
-            gets=self.fb.get()
+        if key in gets.keys():
+            return gets[key]
 
-            if key in gets.keys():
-                return gets[key]
-
-            return default
+        return default
 
     def update_vars(self):
         self.fb.update(dict(patterns='.'.join(Fillers.Patterns)))
         self.pattern_choice = self.get_cur_pattern()
-        self.rate = self.get_rate()
+        self.delay = self.get_rate()
         self.update_rgba()
 
-    def get_rate(self,data=None):
+    def get_rate(self, data=None):
         if data is None:
-            data=self.get('rate')
+            data = self.get('rate')
 
         return floor_int(data)
 
-    def get_cur_pattern(self,data=None):
+    def get_cur_pattern(self, data=None):
         if data is None:
-            data= self.get('cur_pattern')
+            data = self.get('cur_pattern')
 
-        return data.replace('"','')
+        return data.replace('"', '')
 
     def update_rgba(self):
-        rgba=self.get("RGBA")
+        rgba = self.get("RGBA")
 
-        random=rgba.get("random")=="true"
+        random = rgba.get("random") == "true"
 
-        if not random:
+        # if method is called before pattern initialization skip
+        try:
+            self.pattern.update_args(randomize_color=random)
+        except AttributeError:
+            pass
 
-            r =rgba.get( "r")
-            g = rgba.get( "g")
-            b = rgba.get( "b")
-            a = rgba.get( "a")
+        r = rgba.get("r")
+        g = rgba.get("g")
+        b = rgba.get("b")
+        a = rgba.get("a")
 
-            r = floor_int(r)
-            g = floor_int(g)
-            b = floor_int(b)
-            a = floor_int(a)
+        r = floor_int(r)
+        g = floor_int(g)
+        b = floor_int(b)
+        a = floor_int(a)
 
-            self.rgba = RGB(r=r, g=g, b=b, c=a)
-        else:
-            self.rgba=RGB(random=True)
-            self.random_colors=True
-            try:
-                self.pattern.update_args(random=True)
-            except AttributeError:
-                # skip if pattern has not been initialized yet
-                pass
+        self.rgba = RGB(r=r, g=g, b=b, c=a)
 
 
 def floor_int(value):
@@ -187,6 +145,6 @@ def floor_int(value):
     value = math.floor(value)
     return int(value)
 
-if __name__ == '__main__':
 
+if __name__ == '__main__':
     fbc = FBC()
