@@ -1,7 +1,7 @@
 from math import ceil
 from random import randint
 
-from Fillers.Default import Default
+from Patterns.Default import Default
 from RGB import RGB
 from utils import bound_sub
 
@@ -9,7 +9,7 @@ from utils import bound_sub
 class Fire(Default):
     data_type = "Fire"
 
-    def __init__(self, **kwargs):
+    def __init__(self, kwargs):
 
         super().__init__(**kwargs)
 

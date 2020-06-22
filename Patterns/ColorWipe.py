@@ -1,12 +1,12 @@
 
-from Fillers.Default import Default
+from Patterns.Default import Default
 from RGB import RGB
 
 
 class ColorWipe(Default):
     data_type = "ColorWipe"
 
-    def __init__(self, **kwargs):
+    def __init__(self, kwargs):
 
         super().__init__(**kwargs)
 

@@ -1,4 +1,4 @@
-from Fillers.Default import Default
+from Patterns.Default import Default
 from RGB import RGB
 from utils import bound_sub, bound_add
 
@@ -6,7 +6,7 @@ from utils import bound_sub, bound_add
 class Strobe(Default):
     data_type = "Strobe"
 
-    def __init__(self, **kwargs):
+    def __init__(self, kwargs):
 
         super().__init__(**kwargs)
 

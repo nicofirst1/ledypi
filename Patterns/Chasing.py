@@ -1,6 +1,6 @@
 from random import randint
 
-from Fillers.Default import Default
+from Patterns.Default import Default
 from RGB import RGB
 from utils import bound_add, bound_sub
 
@@ -8,7 +8,7 @@ from utils import bound_add, bound_sub
 class Chasing(Default):
     data_type = "Chasing"
 
-    def __init__(self, **kwargs):
+    def __init__(self, kwargs):
 
         super().__init__(**kwargs)
         self.size = 1

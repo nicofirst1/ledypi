@@ -1,7 +1,7 @@
 from DotStar_Emulator.emulator.send_test_data import App
 from math import sin, pi, floor
 
-from Fillers.Default import Default
+from Patterns.Default import Default
 from RGB import RGB
 from utils import scale
 
@@ -10,7 +10,7 @@ class Rainbow(Default):
 
     data_type = "Rainbow"
 
-    def __init__(self, **kwargs):
+    def __init__(self, kwargs):
 
         super().__init__(**kwargs)
         self.counter=0

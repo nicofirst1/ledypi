@@ -4,26 +4,26 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 
-import Fillers
+import Patterns
 from RGB import RGB
 
 
 class FBC:
 
-    def __init__(self):
+    def __init__(self, credential_path, database_url='https://ledypie.firebaseio.com/'):
         # todo: use read file for certificate, url and init database
-        cred = credentials.Certificate("/Users/giulia/Desktop/ledypie/FireBase/firebase_key.json")
+        cred = credentials.Certificate(credential_path)
 
         firebase_admin.initialize_app(credential=cred,
-                                      options={'databaseURL': 'https://ledypie.firebaseio.com/'})
+                                      options={'databaseURL': database_url})
         self.fb = db.reference('/')
         self.fb.listen(self.listener)
 
         self.rgba = None
         self.random_colors = False
 
-        # update db with Fillers
-        self.fb.update(dict(patterns='.'.join(Fillers.Patterns)))
+        # update db with Patterns
+        self.fb.update(dict(patterns='.'.join(Patterns.Patterns)))
         # get pattern,delay
         self.pattern_choice = self.get_cur_pattern()
         self.delay = self.get_delay()
@@ -31,7 +31,7 @@ class FBC:
         self.update_rgba()
 
         # choose correct pattern and start it
-        self.pattern = Fillers.Patterns[self.pattern_choice](delay=self.delay, color=self.rgba)
+        self.pattern = Patterns.Patterns[self.pattern_choice](delay=self.delay, color=self.rgba)
         self.pattern.start()
 
     def listener(self, event):
@@ -57,7 +57,7 @@ class FBC:
             self.delay = self.get_delay()
             # stop and restart
             self.pattern.stop()
-            self.pattern = Fillers.Patterns[self.pattern_choice](delay=self.delay)
+            self.pattern = Patterns.Patterns[self.pattern_choice](delay=self.delay)
             self.update_rgba()
             self.pattern.start()
             print(1)
@@ -179,4 +179,4 @@ def floor_int(value):
 
 
 if __name__ == '__main__':
-    fbc = FBC()
+    fbc = FBC("")

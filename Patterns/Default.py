@@ -9,16 +9,16 @@ from RGB import RGB
 class Default(App,threading.Thread ):
     data_type = ""
 
-    def __init__(self, delay, color=RGB()):
+    def __init__(self, rate, color=RGB()):
         """
         Init for snow effect
         :param args:
         """
 
-        delay /= 100
+        rate /= 100
         threading.Thread.__init__(self)
-        super().__init__(delay)
-        self.rate = delay
+        super().__init__(rate)
+        self.rate = rate
 
         self.strip_length = self.grid_size.x + self.grid_size.y - 1
         self.alpha = 255

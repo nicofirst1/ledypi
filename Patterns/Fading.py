@@ -3,7 +3,7 @@ from random import randint
 
 from DotStar_Emulator.emulator.send_test_data import App
 
-from Fillers.Default import Default
+from Patterns.Default import Default
 from RGB import RGB
 from utils import bound_sub, bound_add
 
@@ -11,7 +11,7 @@ from utils import bound_sub, bound_add
 class Fading(Default):
     data_type = "Fading"
 
-    def __init__(self, **kwargs):
+    def __init__(self, kwargs):
 
         super().__init__(**kwargs)
 

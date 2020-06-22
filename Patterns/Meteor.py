@@ -1,13 +1,13 @@
 from random import randint
 
-from Fillers.Default import Default
+from Patterns.Default import Default
 from RGB import RGB
 
 
 class Meteor(Default):
     data_type = "Meteor"
 
-    def __init__(self, **kwargs):
+    def __init__(self, kwargs):
 
         super().__init__(**kwargs)
         self.size=10
