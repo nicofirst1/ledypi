@@ -10,7 +10,7 @@ In the following I will guide you to the installation and setup required to make
 The project works with python>=3.6, to setup your environment follow the steps:
 - (Optional) source your environment, 
 - Install the required modules: `pip install -r requirements.txt `
-- As mentioned before, this project uses a custom implementation on the [DotStar_emulator repo](https://github.com/chrisrossx/DotStar_Emulator). Installit with:
+- As mentioned before, this project uses a custom implementation on the [DotStar_emulator repo](https://github.com/chrisrossx/DotStar_Emulator). Install it with:
 ```
 python DotStar_Emulator/setup.py install
 ```
@@ -49,18 +49,23 @@ If you get a `ModuleNotFoundError` try to set the python path as follows in your
 ```shell script
 export PYTHONPATH=./src   
 ```
+Both the local and remote test relies on two processes to work, one of which is always the [gui](src/main_gui.py).
 
 ### Local 
 To test first run the [gui](src/main_gui.py) and then in a separate process run [patterns](src/test.py)
-```
+```shell script
 python src/main_gui.py
 python src/test.py
 ```
-You can change the 
-### Database
+
+### Remote
 To test the app together with the database you will need to have the app running on your phone and start both connection and the main gui in different processes
+```shell script
+python src/main_gui.py
+python src/firebase/connect.py path2PrivateKey.json
 ```
-python main_gui.py
-python FireBase/Connection.py
+If the _databaseURL_ is incorrect (by default it is set to `https://ledypie.firebaseio.com/`) you can specify it with 
+```shell script
+python src/firebase/connect.py --databaseURL yourURL path2PrivateKey.json
 ```
-Once you are done you can change the patterns from the app on your phone and check the updates in real time on the screen
+Once you are done you can change the patterns from the app on your phone and check the updates in real time on the screen.
