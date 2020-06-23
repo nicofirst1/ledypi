@@ -21,7 +21,7 @@ class Strobe(Default):
         elif 0 < c <= 255 and not self.increasing:
             c = bound_sub(c, self.loss, minimum=0)
         else:
-            self.increasing=not self.increasing
+            self.increasing = not self.increasing
 
         self.color.update_single(c=c)
 

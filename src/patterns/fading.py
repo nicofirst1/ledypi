@@ -13,7 +13,6 @@ class Fading(Default):
 
         super().__init__(**kwargs)
 
-
         self.point_number = 29
         self.rate_start = 40
         self.rate_end = 4
@@ -27,7 +26,6 @@ class Fading(Default):
         :return:
         """
 
-
         if self.randomize_color:
             default_dict = dict(color=RGB(random=True), alpha=0, delay=randint(0, 100), increasing=True)
         else:
@@ -39,12 +37,11 @@ class Fading(Default):
 
         return default_dict
 
-
     def fill(self):
 
         # copy original dict
         center_copy = deepcopy(self.centers)
-        
+
         # bound the rnadom point to the maximum 
         self.point_number = min(self.point_number, self.strip_length)
 
@@ -78,7 +75,7 @@ class Fading(Default):
 
             # update and set color
             color.update_single(c=alpha)
-            self.pixels[c]['color']=color
+            self.pixels[c]['color'] = color
 
             # update for original dict too
             self.centers[c]['alpha'] = alpha

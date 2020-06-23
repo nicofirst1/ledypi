@@ -15,10 +15,10 @@ from rgb import RGB
 # Chasing
 
 # choose pattern, rate and color
-pat= Patterns['Chasing']
-rate=10
-color=RGB(random=True)
+pat = Patterns['Chasing']
+rate = 10
+color = RGB(random=True)
 
 # init app and run
-app= pat(rate=rate, color=color)
+app = pat(rate=rate, color=color)
 app.run()

@@ -24,9 +24,8 @@ class FireWork(Default):
         else:
             return dict(color=self.color, tail=[], step=0)
 
-
     def bound_attrs(self):
-        self.fires=min(self.fires,self.strip_length)
+        self.fires = min(self.fires, self.strip_length)
 
     def fill(self):
 
@@ -98,9 +97,9 @@ class FireWork(Default):
                     # remove the center
                     self.centers.pop(c)
 
-                    if len(self.centers)<self.fires:
+                    if len(self.centers) < self.fires:
 
-                        for _ in range(self.fires-len(self.centers)):
+                        for _ in range(self.fires - len(self.centers)):
 
                             # get another one which is not in the center lists already
                             rd = randint(0, self.strip_length - 1)
@@ -136,5 +135,3 @@ class FireWork(Default):
     def update_couter(self):
         self.step += 1
         self.step %= self.strip_length
-
-

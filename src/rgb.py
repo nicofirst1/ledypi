@@ -41,24 +41,24 @@ class RGB:
             self.assertion(kwargs["r"])
             self.r = kwargs["r"]
         else:
-            self.r=0
+            self.r = 0
 
         if "g" in kwargs.keys():
             self.assertion(kwargs["g"])
             self.g = kwargs["g"]
         else:
-            self.g=0
+            self.g = 0
         if "b" in kwargs.keys():
             self.assertion(kwargs["b"])
             self.b = kwargs["b"]
         else:
-            self.b=0
+            self.b = 0
 
         if "c" in kwargs.keys():
             self.assertion(kwargs["c"])
             self.c = kwargs["c"]
         else:
-            self.c=0
+            self.c = 0
 
         if "rgb" in kwargs.keys():
             self.assertion(kwargs["rgb"].r)
@@ -70,16 +70,16 @@ class RGB:
             self.c = kwargs["rgb"].c
 
         if "random" in kwargs.keys():
-            self.r=randint(0,255)
-            self.g=randint(0,255)
-            self.b=randint(0,255)
-            self.c=255
+            self.r = randint(0, 255)
+            self.g = randint(0, 255)
+            self.b = randint(0, 255)
+            self.c = 255
 
         if 'white' in kwargs.keys():
-            self.r=255
-            self.g=255
-            self.b=255
-            self.c=255
+            self.r = 255
+            self.g = 255
+            self.b = 255
+            self.c = 255
 
     def fade(self, fade_val, minimum=10):
         """
@@ -89,13 +89,13 @@ class RGB:
         :return:
         """
 
-        self.r-=self.r*fade_val/256
-        self.g-=self.g*fade_val/256
-        self.b-=self.b*fade_val/256
+        self.r -= self.r * fade_val / 256
+        self.g -= self.g * fade_val / 256
+        self.b -= self.b * fade_val / 256
 
-        self.r=math.floor(self.r)
-        self.g=math.floor(self.g)
-        self.b=math.floor(self.b)
+        self.r = math.floor(self.r)
+        self.g = math.floor(self.g)
+        self.b = math.floor(self.b)
 
         if self.r <= minimum:
             self.r = 0
@@ -106,13 +106,10 @@ class RGB:
         if self.b <= minimum:
             self.b = 0
 
-
-
     def is_black(self):
 
-
-        if self.c>0:
-            if self.r>0 or self.g>0 or self.b>0:
+        if self.c > 0:
+            if self.r > 0 or self.g > 0 or self.b > 0:
                 return False
 
         return True
@@ -127,31 +124,30 @@ class RGB:
         :return:
         """
 
-        for k,v in kwargs.items():
+        for k, v in kwargs.items():
             self.assertion(v)
-            if k=="r":
-                self.r=v
-            elif k=="b":
-                self.b=v
+            if k == "r":
+                self.r = v
+            elif k == "b":
+                self.b = v
             elif k == "g":
                 self.g = v
             elif k == "c":
                 self.c = v
 
     def update_color(self, color):
-        self.r=color.r
-        self.g=color.g
-        self.b=color.b
-        self.c=color.c
-
+        self.r = color.r
+        self.g = color.g
+        self.b = color.b
+        self.c = color.c
 
     def same_color(self, rgb2):
-        if self.r==rgb2.r and self.g==rgb2.g and self.b==rgb2.b:
+        if self.r == rgb2.r and self.g == rgb2.g and self.b == rgb2.b:
             return True
 
         return False
 
-    def add_values(self, r, g, b,c):
+    def add_values(self, r, g, b, c):
         self.assertion(r)
         self.assertion(g)
         self.assertion(b)
@@ -167,14 +163,13 @@ class RGB:
         self.r = bound_add(self.r, rgb.r)
         self.g = bound_add(self.g, rgb.g)
         self.b = bound_add(self.b, rgb.b)
-        #self.c = bound_add(self.c, rgb.c)
+        # self.c = bound_add(self.c, rgb.c)
 
     def is_gray(self):
-        if self.r==self.g==self.b:
+        if self.r == self.g == self.b:
             return True
 
         return False
-
 
     @staticmethod
     def assertion(val):

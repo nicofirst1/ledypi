@@ -176,4 +176,3 @@ def floor_int(value):
     value = float(value)
     value = math.floor(value)
     return int(value)
-

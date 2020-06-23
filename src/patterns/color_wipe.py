@@ -9,29 +9,25 @@ class ColorWipe(Default):
 
         super().__init__(**kwargs)
 
-        self.step=1
-        self.reverse=False
-
+        self.step = 1
+        self.reverse = False
 
     def fill(self):
 
         self.color.update_single(c=self.alpha)
 
-        step=self.step
-        color=self.color
+        step = self.step
+        color = self.color
 
         if self.reverse:
-            color=RGB()
+            color = RGB()
 
         for idx in range(self.strip_length):
-            if idx< step:
-                self.pixels[idx]['color']=color
+            if idx < step:
+                self.pixels[idx]['color'] = color
 
+        self.step += 1
 
-        self.step+=1
-
-        if self.step>self.strip_length :
-            self.reverse=not self.reverse
-            self.step=0
-
-
+        if self.step > self.strip_length:
+            self.reverse = not self.reverse
+            self.step = 0

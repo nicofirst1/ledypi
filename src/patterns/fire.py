@@ -31,7 +31,8 @@ class Fire(Default):
             self.cooldown_list[idx] = bound_sub(self.cooldown_list[idx], cooldown, minimum=0)
 
         for idx in range(self.strip_length - 1, 2, -1):
-            self.cooldown_list[idx] = (self.cooldown_list[idx - 1] + self.cooldown_list[idx - 2] + self.cooldown_list[idx - 2]) / 3
+            self.cooldown_list[idx] = (self.cooldown_list[idx - 1] + self.cooldown_list[idx - 2] + self.cooldown_list[
+                idx - 2]) / 3
 
         if randint(0, 255) < self.sparking:
             y = randint(0, 7)

@@ -25,7 +25,7 @@ class Snow(Default):
 
         for jdx in reversed(range(num_of_trail)):
             for idx in range(jdx + self.counter, self.strip_length + jdx + self.counter, num_of_trail):
-                self.pixels[idx % self.strip_length]['color']=RGB(r=255,g=255,b=255,c=intensity)
+                self.pixels[idx % self.strip_length]['color'] = RGB(r=255, g=255, b=255, c=intensity)
 
             if not intensity - loss < 0:
                 intensity -= loss

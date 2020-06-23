@@ -1,12 +1,13 @@
 import inspect
-import time
 import threading
+import time
+
 from DotStar_Emulator.emulator.send_test_data import App
 
 from rgb import RGB
 
 
-class Default(App,threading.Thread ):
+class Default(App, threading.Thread):
     data_type = ""
 
     def __init__(self, rate, color=RGB()):
@@ -23,12 +24,10 @@ class Default(App,threading.Thread ):
         self.strip_length = self.grid_size.x + self.grid_size.y - 1
         self.alpha = 255
         self.color = color
-        self.randomize_color=False
+        self.randomize_color = False
 
         self.pixels = {idx: dict(color=self.color) for idx in range(self.strip_length + 1)}
         self.set_pixels()
-
-
 
     def set_pixels(self):
         for idx in range(self.strip_length):
