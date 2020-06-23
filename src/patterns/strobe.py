@@ -1,5 +1,4 @@
-from Patterns.Default import Default
-from RGB import RGB
+from patterns.default import Default
 from utils import bound_sub, bound_add
 
 

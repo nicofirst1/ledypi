@@ -4,13 +4,13 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 
-import Patterns
-from RGB import RGB
+from patterns import Patterns
+from rgb import RGB
 
 
-class FBC:
+class FireBaseConnector:
 
-    def __init__(self, credential_path, database_url='https://ledypie.firebaseio.com/'):
+    def __init__(self, credential_path, database_url):
         # todo: use read file for certificate, url and init database
         cred = credentials.Certificate(credential_path)
 
@@ -22,8 +22,8 @@ class FBC:
         self.rgba = None
         self.random_colors = False
 
-        # update db with Patterns
-        self.fb.update(dict(patterns='.'.join(Patterns.Patterns)))
+        # update db with patterns
+        self.fb.update(dict(patterns='.'.join(Patterns)))
         # get pattern,rate
         self.pattern_choice = self.get_cur_pattern()
         self.rate = self.get_rate()
@@ -31,7 +31,7 @@ class FBC:
         self.update_rgba()
 
         # choose correct pattern and start it
-        self.pattern = Patterns.Patterns[self.pattern_choice](rate=self.rate, color=self.rgba)
+        self.pattern = Patterns[self.pattern_choice](rate=self.rate, color=self.rgba)
         self.pattern.start()
 
     def listener(self, event):
@@ -57,7 +57,7 @@ class FBC:
             self.rate = self.get_rate()
             # stop and restart
             self.pattern.stop()
-            self.pattern = Patterns.Patterns[self.pattern_choice](rate=self.rate)
+            self.pattern = Patterns[self.pattern_choice](rate=self.rate)
             self.update_rgba()
             self.pattern.start()
             print(1)
@@ -177,6 +177,3 @@ def floor_int(value):
     value = math.floor(value)
     return int(value)
 
-
-if __name__ == '__main__':
-    fbc = FBC("../ledypie-firebase-adminsdk-htj51-ec42fb3bff.json")

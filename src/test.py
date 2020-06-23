@@ -1,6 +1,6 @@
-from Patterns import Patterns, ColorWipe
+from patterns import Patterns
 
-from RGB import RGB
+from rgb import RGB
 
 pat= Patterns['Chasing']
 rate=10

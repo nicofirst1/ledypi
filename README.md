@@ -46,7 +46,7 @@ This will create a _privatekey.json_ file which will be used later.
 
 # Testing
 ### Local 
-To test first run the [gui](main_gui.py) and then in a separate process run [patterns](test.py)
+To test first run the [gui](src/main_gui.py) and then in a separate process run [patterns](src/test.py)
 ```
 python main_gui.py
 python patterns.py

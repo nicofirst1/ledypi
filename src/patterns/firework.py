@@ -1,8 +1,8 @@
 from copy import deepcopy
 from random import randint
 
-from Patterns.Default import Default
-from RGB import RGB
+from patterns.default import Default
+from rgb import RGB
 from utils import bound_sub, circular_step
 
 

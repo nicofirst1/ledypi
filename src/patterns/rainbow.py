@@ -1,8 +1,7 @@
-from DotStar_Emulator.emulator.send_test_data import App
 from math import sin, pi, floor
 
-from Patterns.Default import Default
-from RGB import RGB
+from patterns.default import Default
+from rgb import RGB
 from utils import scale
 
 

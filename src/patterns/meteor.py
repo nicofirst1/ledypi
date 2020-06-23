@@ -1,7 +1,6 @@
 from random import randint
 
-from Patterns.Default import Default
-from RGB import RGB
+from patterns.default import Default
 
 
 class Meteor(Default):

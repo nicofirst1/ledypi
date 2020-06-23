@@ -3,7 +3,7 @@ import time
 import threading
 from DotStar_Emulator.emulator.send_test_data import App
 
-from RGB import RGB
+from rgb import RGB
 
 
 class Default(App,threading.Thread ):
