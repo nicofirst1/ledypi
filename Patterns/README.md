@@ -20,3 +20,6 @@ which is a [RGB](RGB.py) object. During the init or fill method you can add more
 ### Fill method
 To change the values of the pixel, the fill method has to be implemented. This method will be called once every loop 
 iteration to change the attributes of the pixels which will be then written wih the `set_pixels` method.
+
+### Adding to init
+To make the new pattern available to the database add it in the [init file](Patterns/__init__.py) as the value of the Pattern dictionary. 
