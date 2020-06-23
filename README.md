@@ -45,13 +45,18 @@ Click Generate New Private Key, then confirm by clicking Generate Key.
 This will create a _privatekey.json_ file which will be used later.
 
 # Testing
+If you get a `ModuleNotFoundError` try to set the python path as follows in your terminal window:
+```shell script
+export PYTHONPATH=./src   
+```
+
 ### Local 
 To test first run the [gui](src/main_gui.py) and then in a separate process run [patterns](src/test.py)
 ```
-python main_gui.py
-python patterns.py
+python src/main_gui.py
+python src/test.py
 ```
-
+You can change the 
 ### Database
 To test the app together with the database you will need to have the app running on your phone and start both connection and the main gui in different processes
 ```
