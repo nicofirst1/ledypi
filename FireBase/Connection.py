@@ -24,14 +24,14 @@ class FBC:
 
         # update db with Patterns
         self.fb.update(dict(patterns='.'.join(Patterns.Patterns)))
-        # get pattern,delay
+        # get pattern,rate
         self.pattern_choice = self.get_cur_pattern()
-        self.delay = self.get_delay()
+        self.rate = self.get_rate()
         # update rgba
         self.update_rgba()
 
         # choose correct pattern and start it
-        self.pattern = Patterns.Patterns[self.pattern_choice](delay=self.delay, color=self.rgba)
+        self.pattern = Patterns.Patterns[self.pattern_choice](rate=self.rate, color=self.rgba)
         self.pattern.start()
 
     def listener(self, event):
@@ -51,13 +51,13 @@ class FBC:
 
         # todo: add attr update for specific pattern
         # stop and restart pattern if required
-        elif "cur_pattern" in event.path or "delay" in event.path:
+        elif "cur_pattern" in event.path or "rate" in event.path:
             # get values
             self.pattern_choice = self.get_cur_pattern()
-            self.delay = self.get_delay()
+            self.rate = self.get_rate()
             # stop and restart
             self.pattern.stop()
-            self.pattern = Patterns.Patterns[self.pattern_choice](delay=self.delay)
+            self.pattern = Patterns.Patterns[self.pattern_choice](rate=self.rate)
             self.update_rgba()
             self.pattern.start()
             print(1)
@@ -114,7 +114,7 @@ class FBC:
 
         return default
 
-    def get_delay(self, data=None):
+    def get_rate(self, data=None):
         """
        Manipulate rate output from db
        :param data: str, data from db, optional, will be loaded if None
@@ -179,4 +179,4 @@ def floor_int(value):
 
 
 if __name__ == '__main__':
-    fbc = FBC("")
+    fbc = FBC("../ledypie-firebase-adminsdk-htj51-ec42fb3bff.json")

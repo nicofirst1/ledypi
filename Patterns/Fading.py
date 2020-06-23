@@ -11,7 +11,7 @@ from utils import bound_sub, bound_add
 class Fading(Default):
     data_type = "Fading"
 
-    def __init__(self, kwargs):
+    def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
 

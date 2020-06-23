@@ -8,7 +8,7 @@ from utils import bound_add, bound_sub
 class Chasing(Default):
     data_type = "Chasing"
 
-    def __init__(self, kwargs):
+    def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
         self.size = 1

@@ -9,7 +9,7 @@ from utils import bound_sub
 class Fire(Default):
     data_type = "Fire"
 
-    def __init__(self, kwargs):
+    def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
 

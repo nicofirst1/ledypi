@@ -6,7 +6,7 @@ from RGB import RGB
 class Snow(Default):
     data_type = "Snow"
 
-    def __init__(self, kwargs):
+    def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
         self.trail = 5

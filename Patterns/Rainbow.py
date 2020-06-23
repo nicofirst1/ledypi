@@ -10,7 +10,7 @@ class Rainbow(Default):
 
     data_type = "Rainbow"
 
-    def __init__(self, kwargs):
+    def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
         self.counter=0

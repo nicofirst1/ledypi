@@ -6,7 +6,7 @@ from utils import bound_sub, bound_add
 class Strobe(Default):
     data_type = "Strobe"
 
-    def __init__(self, kwargs):
+    def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
 

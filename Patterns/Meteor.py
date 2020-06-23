@@ -7,7 +7,7 @@ from RGB import RGB
 class Meteor(Default):
     data_type = "Meteor"
 
-    def __init__(self, kwargs):
+    def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
         self.size=10

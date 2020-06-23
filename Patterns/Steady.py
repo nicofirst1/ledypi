@@ -6,7 +6,7 @@ from RGB import RGB
 class Steady(Default):
     data_type = "Steady"
 
-    def __init__(self, kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
 

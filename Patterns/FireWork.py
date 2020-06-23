@@ -9,7 +9,7 @@ from utils import bound_sub, circular_step
 class FireWork(Default):
     data_type = "FireWork"
 
-    def __init__(self, kwargs):
+    def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
         self.fires = 5
