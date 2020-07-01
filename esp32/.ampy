@@ -1,6 +1,0 @@
-# Example .ampy file
-# Please fill in your own port, baud rate, and delay
-AMPY_PORT=/dev/ttyUSB0
-#AMPY_BAUD=115200
-# Fix for macOS users' "Could not enter raw repl"; try 2.0 and lower from there:
-AMPY_DELAY=0.5
