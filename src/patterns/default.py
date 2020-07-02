@@ -2,15 +2,13 @@ import inspect
 import threading
 import time
 
-from DotStar_Emulator.emulator.send_test_data import App
-
 from rgb import RGB
 
 
-class Default(App, threading.Thread):
+class Default( threading.Thread):
     data_type = ""
 
-    def __init__(self, rate, color=RGB()):
+    def __init__(self, handler,  rate, pixels, color=RGB()):
         """
         Init for snow effect
         :param args:
@@ -18,10 +16,10 @@ class Default(App, threading.Thread):
 
         rate /= 100
         threading.Thread.__init__(self)
-        super().__init__(rate)
+        self.handler=handler(rate)
         self.rate = rate
 
-        self.strip_length = self.grid_size.x + self.grid_size.y - 1
+        self.strip_length = pixels
         self.alpha = 255
         self.color = color
         self.randomize_color = False
@@ -32,11 +30,11 @@ class Default(App, threading.Thread):
     def set_pixels(self):
         for idx in range(self.strip_length):
             self.color_set(idx, self.pixels[idx]['color'])
-        self.send()
+        self.handler.send()
 
     def color_set(self, index, rgb, **kwargs):
 
-        super().set(index, rgb.c, rgb.b, rgb.g, rgb.r)
+        self.handler.set(index, rgb.c, rgb.b, rgb.g, rgb.r)
 
     def fill(self):
 
@@ -67,7 +65,7 @@ class Default(App, threading.Thread):
 
     def run(self):
         try:
-            while not self.is_stopped:
+            while not self.handler.is_stopped:
                 self.on_loop()
         except KeyboardInterrupt:
             pass

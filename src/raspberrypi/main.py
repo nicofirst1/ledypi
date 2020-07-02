@@ -1,6 +1,6 @@
-from patterns import  Patterns
+from patterns import Patterns
+from raspberrypi.pi_handler import PiHandler
 from rgb import RGB
-from DotStar_Emulator.emulator.send_test_data import App
 
 # Available patterns are:
 # ColorWipe
@@ -20,5 +20,5 @@ rate = 10
 color = RGB(random=True)
 
 # init app and run
-app = pat(handler=App,rate=rate,pixels=64, color=color)
+app = pat(handler=PiHandler, rate=rate, pixels=64, color=color)
 app.run()
