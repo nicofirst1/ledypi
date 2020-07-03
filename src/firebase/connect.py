@@ -19,18 +19,21 @@ if __name__ == '__main__':
 
     if args.mode == "pc":
         from DotStar_Emulator.emulator.send_test_data import App
+
         handler = App
         print("Running from PC")
 
     elif args.mode == "rpi":
         from raspberrypi.pi_handler import PiHandler
+
         handler = PiHandler
         print("Running from RPI")
 
     else:
         raise ValueError(f"Mode '{args.mode}' is not supported")
 
-    fbc = FireBaseConnector(credential_path=args.credential, database_url=args.databaseURL,handler=handler,pixels=args.pixels)
+    fbc = FireBaseConnector(credential_path=args.credential, database_url=args.databaseURL, handler=handler,
+                            pixels=args.pixels)
 
     try:
         while True:

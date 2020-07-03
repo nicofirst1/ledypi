@@ -6,7 +6,7 @@ class Steady(Default):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.pattern_name= "Steady"
+        self.pattern_name = "Steady"
 
     def fill(self):
 

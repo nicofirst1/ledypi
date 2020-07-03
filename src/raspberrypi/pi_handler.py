@@ -1,5 +1,3 @@
-import time
-
 PIN = 18
 
 
@@ -13,7 +11,6 @@ class PiHandler(object):
         self.np.begin()
         self.pixel_count = pixels
         self.is_stopped = False
-
 
     def set(self, index, c, b, g, r):
         from rpi_ws281x import Color

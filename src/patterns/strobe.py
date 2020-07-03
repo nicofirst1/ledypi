@@ -10,7 +10,7 @@ class Strobe(Default):
 
         self.increasing = False
         self.loss = 255
-        self.pattern_name= "Strobe"
+        self.pattern_name = "Strobe"
 
     def fill(self):
 

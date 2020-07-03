@@ -16,7 +16,7 @@ class Chasing(Default):
         self.step = 0
         self.increasing = True
         self.second_color = RGB(random=True)
-        self.pattern_name= "Chasing"
+        self.pattern_name = "Chasing"
 
     def fill(self):
 

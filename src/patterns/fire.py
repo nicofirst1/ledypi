@@ -16,7 +16,7 @@ class Fire(Default):
         self.sparking = 50
         self.alpha = 255
         self.cooldown_list = [0 for _ in range(self.strip_length)]
-        self.pattern_name= "Fire"
+        self.pattern_name = "Fire"
 
     def bound_attrs(self):
         self.sparking = min(self.sparking, 255)

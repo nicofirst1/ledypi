@@ -11,7 +11,7 @@ class Snow(Default):
         self.trail = 5
         self.min_space = 3  # min space between trail end and trail start
         self.counter = 0
-        self.pattern_name= "Snow"
+        self.pattern_name = "Snow"
 
     def fill(self):
 

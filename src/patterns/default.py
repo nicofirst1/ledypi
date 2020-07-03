@@ -5,9 +5,9 @@ import time
 from rgb import RGB
 
 
-class Default( threading.Thread):
+class Default(threading.Thread):
 
-    def __init__(self, handler,  rate, pixels, color=RGB()):
+    def __init__(self, handler, rate, pixels, color=RGB()):
         """
         Init for snow effect
         :param args:
@@ -15,14 +15,14 @@ class Default( threading.Thread):
 
         rate /= 100
         threading.Thread.__init__(self)
-        self.handler=handler(pixels)
+        self.handler = handler(pixels)
         self.rate = rate
 
         self.strip_length = pixels
         self.alpha = 255
         self.color = color
         self.randomize_color = False
-        self.pattern_name=None
+        self.pattern_name = None
 
         self.pixels = {idx: dict(color=self.color) for idx in range(self.strip_length + 1)}
         self.set_pixels()
@@ -65,7 +65,7 @@ class Default( threading.Thread):
 
     def run(self):
 
-        print(f"Started pattern: {self.pattern_name}" )
+        print(f"Started pattern: {self.pattern_name}")
         try:
             while not self.handler.is_stopped:
                 self.on_loop()
@@ -84,4 +84,4 @@ class Default( threading.Thread):
 
     def set_rate(self, rate):
         rate /= 100
-        self.rate=rate
+        self.rate = rate

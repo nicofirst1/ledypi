@@ -16,7 +16,7 @@ class FireWork(Default):
         self.loss = 25
         self.step = 0
         self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.fires)}
-        self.pattern_name= "FireWork"
+        self.pattern_name = "FireWork"
 
     def empty_center(self):
         if self.randomize_color:

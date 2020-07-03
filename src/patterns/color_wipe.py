@@ -10,7 +10,7 @@ class ColorWipe(Default):
 
         self.step = 1
         self.reverse = False
-        self.pattern_name= "ColorWipe"
+        self.pattern_name = "ColorWipe"
 
     def fill(self):
 

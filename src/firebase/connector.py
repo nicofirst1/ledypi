@@ -22,7 +22,7 @@ class FireBaseConnector:
                                       options={'databaseURL': database_url})
 
         self.fb = db.reference('/')
-        self.listener=self.fb.listen(self.listener)
+        self.listener = self.fb.listen(self.listener)
 
         self.rgba = None
         self.random_colors = False
@@ -57,11 +57,10 @@ class FireBaseConnector:
         to_log = f"{event.event_type}\n{event.path}\n{event.data}"
         fire_logger.debug(to_log)
 
-
         if "rate" in event.path:
             rate = self.get_rate(data=event.data)
             self.pattern.set_rate(rate)
-            self.rate=rate
+            self.rate = rate
 
         # stop and restart pattern if required
         elif "cur_pattern" in event.path:

@@ -16,7 +16,7 @@ class Rainbow(Default):
         self.b_phi = 1
         self.g_phi = 2
         self.max_range = 1
-        self.pattern_name= "Rainbow"
+        self.pattern_name = "Rainbow"
         self.set_pixels()
 
     def fill(self):
