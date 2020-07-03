@@ -1,16 +1,19 @@
 import math
+from datetime import datetime
 
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
-
+from logging import getLogger
 from patterns import Patterns
 from rgb import RGB
 
 
+call_logger=getLogger("call_logger")
+
 class FireBaseConnector:
 
-    def __init__(self, credential_path, database_url):
+    def __init__(self, credential_path, database_url, handler,pixels):
         # todo: use read file for certificate, url and init database
         cred = credentials.Certificate(credential_path)
 
@@ -30,8 +33,13 @@ class FireBaseConnector:
         # update rgba
         self.update_rgba()
 
+        self.handler=handler
+        self.pixels= pixels
+
+
         # choose correct pattern and start it
-        self.pattern = Patterns[self.pattern_choice](rate=self.rate, color=self.rgba)
+        p= Patterns[self.pattern_choice]
+        self.pattern = Patterns[self.pattern_choice](rate=self.rate, color=self.rgba, handler=handler, pixels=pixels)
         self.pattern.start()
 
     def listener(self, event):
@@ -40,10 +48,9 @@ class FireBaseConnector:
         :param event: dict
         :return: None
         """
-        print(event.event_type)  # can be 'put' or 'patch'
-        print(event.path)  # relative to the reference, it seems
-        print(event.data)  # new data at /reference/event.path. None if deleted
-        print("#" * 20)
+
+        to_log= f"{event.event_type}\n{event.path}\n{event.data}"
+        call_logger.debug(to_log)
 
         # pass at the start
         if event.path == '/':
@@ -52,12 +59,14 @@ class FireBaseConnector:
         # todo: add attr update for specific pattern
         # stop and restart pattern if required
         elif "cur_pattern" in event.path or "rate" in event.path:
+
+
             # get values
             self.pattern_choice = self.get_cur_pattern()
             self.rate = self.get_rate()
             # stop and restart
             self.pattern.stop()
-            self.pattern = Patterns[self.pattern_choice](rate=self.rate)
+            self.pattern = Patterns[self.pattern_choice](rate=self.rate,handler=self.handler,pixels=self.pixels)
             self.update_rgba()
             self.pattern.start()
             print(1)

@@ -16,7 +16,7 @@ class Default( threading.Thread):
 
         rate /= 100
         threading.Thread.__init__(self)
-        self.handler=handler(rate)
+        self.handler=handler(pixels)
         self.rate = rate
 
         self.strip_length = pixels
@@ -61,7 +61,7 @@ class Default( threading.Thread):
         return changed
 
     def stop(self):
-        self.is_stopped = True
+        self.handler.is_stopped = True
 
     def run(self):
         try:
@@ -70,7 +70,7 @@ class Default( threading.Thread):
         except KeyboardInterrupt:
             pass
 
-        super().close_connetcion()
+        self.handler.close_connection()
 
     def bound_attrs(self):
         """

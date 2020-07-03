@@ -44,6 +44,17 @@ Click Generate New Private Key, then confirm by clicking Generate Key.
 ```
 This will create a _privatekey.json_ file which will be used later.
 
+## Raspberrypi
+On rapsberrypi be sure to have `python==3.7x`, then install the requirements with
+
+```shell script
+pip3 install -r requirements_pi.txt
+```
+Then install the neopixel library with:
+```shell script
+sudo pip3 install rpi_ws281x
+```
+
 # Testing
 If you get a `ModuleNotFoundError` try to set the python path as follows in your terminal window:
 ```shell script
