@@ -16,7 +16,8 @@ class Default(threading.Thread):
         :param args:
         """
 
-        rate /= 100
+        self.rate_divider = 200
+        rate /= self.rate_divider
         threading.Thread.__init__(self)
         self.handler = handler(pixels)
         self.rate = rate
@@ -85,5 +86,5 @@ class Default(threading.Thread):
         raise NotImplementedError()
 
     def set_rate(self, rate):
-        rate /= 100
+        rate /= self.rate_divider
         self.rate = rate
