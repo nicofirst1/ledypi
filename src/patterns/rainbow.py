@@ -11,7 +11,7 @@ class Rainbow(Default):
 
         super().__init__(**kwargs)
         self.counter = 0
-        self.intensity = 255
+        self.color = RGB(white=True)
         self.r_phi = 0
         self.b_phi = 1
         self.g_phi = 2
@@ -47,7 +47,7 @@ class Rainbow(Default):
             g = floor(g)
             b = floor(b)
 
-            self.pixels[idx]['color'] = RGB(r=r, g=g, b=b, a=self.intensity)
+            self.pixels[idx]['color'] = RGB(r=r, g=g, b=b, a=self.color.a)
 
         self.counter += 1
         self.counter %= self.strip_length * 255
