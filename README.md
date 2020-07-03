@@ -1,16 +1,21 @@
 # Setup
-This project uses three main tools:
-1. [DotStar_emulator](https://github.com/chrisrossx/DotStar_Emulator)
-2. [AppInventor](http://appinventor.mit.edu/)
-3. [Firebase](https://console.firebase.google.com/)
+This project uses four main tools:
+1. [DotStar_emulator](https://github.com/chrisrossx/DotStar_Emulator) to simulate the led strip.
+2. [AppInventor](http://appinventor.mit.edu/) for the android app.
+3. [Firebase](https://console.firebase.google.com/) to allow communication between android and pc/raspberry.
+4. [rpi-ws281x](https://github.com/rpi-ws281x/rpi-ws281x-python) to control the leds on the raspberry.
+
+Since the _DotStar_emulator_ cannot be installed on the raspberry and the _rpi-ws281x_ does not work on pc, this two libraries are kept well separated.
 
 In the following I will guide you to the installation and setup required to make everything work
 
 ## Python 3.7
-The project works with python>=3.6, to setup your environment follow the steps:
+The project works with python>=3.7, to setup your environment follow the steps:
 - (Optional) source your environment, 
-- Install the required modules: `pip install -r requirements.txt `
-- As mentioned before, this project uses a custom implementation on the [DotStar_emulator repo](https://github.com/chrisrossx/DotStar_Emulator). Install it with:
+- Install the required modules:
+    - On pc run `pip install -r requirements.txt `
+    - On rpi run `pip3 install -r requirements_pi.txt `
+- To debug install [DotStar_emulator repo](https://github.com/chrisrossx/DotStar_Emulator) on pc with:
 ```
 python DotStar_Emulator/setup.py install
 ```
@@ -44,39 +49,52 @@ Click Generate New Private Key, then confirm by clicking Generate Key.
 ```
 This will create a _privatekey.json_ file which will be used later.
 
-## Raspberrypi
-On rapsberrypi be sure to have `python==3.7x`, then install the requirements with
-
-```shell script
-pip3 install -r requirements_pi.txt
-```
-Then install the neopixel library with:
-```shell script
-sudo pip3 install rpi_ws281x
-```
 
 # Testing
 If you get a `ModuleNotFoundError` try to set the python path as follows in your terminal window:
 ```shell script
 export PYTHONPATH=./src   
 ```
-Both the local and remote test relies on two processes to work, one of which is always the [gui](src/pc/main_gui.py).
+Both the local and remote test relies on two processes to work, one of which is always the [gui](./src/pc/main_gui.py).
 
-### Local 
-To test first run the [gui](src/pc/main_gui.py) and then in a separate process run [patterns](src/pc/test.py)
+### Local PC
+To test first run the [gui](./src/pc/main_gui.py) and then in a separate process run [patterns](./src/pc/test.py)
+```shell script
+python src/pc/main_gui.py
+python src/pc/test.py
+```
+
+### Local RPI
+If you wish to run a local test of the rapsberrypi you don't need the gui process, simply ssh into the rpi and execute the test
+
+```shell script
+python src/rpi/test.py
+```
+
+### Remote 
+
+You can test the remote configuration running the [connect](src/firebase/connect.py) script which takes as **mandatory** inputs 
+the credential json file and the mode (either 'pc' or 'rpi') which specify where the script is being run.
+
+An example might be
 ```shell script
 python src/main_gui.py
-python src/test.py
+python src/firebase/connect.py credential.json pc
 ```
+To run the remote app on your pc together with the gui, or 
 
-### Remote
-To test the app together with the database you will need to have the app running on your phone and start both connection and the main gui in different processes
 ```shell script
-python src/main_gui.py
-python src/firebase/connect.py path2PrivateKey.json
+python src/firebase/connect.py credential.json rpi
 ```
-If the _databaseURL_ is incorrect (by default it is set to `https://ledypie.firebaseio.com/`) you can specify it with 
+To run it on the raspberrypi.
+
+#### Additional params
+The [connect script](src/firebase/connect.py)  accepts two optional arguments:
+- _databaseURL_ : the url of your database (default [value](https://ledypie.firebaseio.com/), more in the [firebase tutorial](https://rominirani.com/tutorial-mit-app-inventor-firebase-4be95051c325)
+- _pixels_ : the number of pixels (default 300).
+
+To connect to a custom databaseURL with 64 leds on the rpi you should run
+
 ```shell script
-python src/firebase/connect.py --databaseURL yourURL path2PrivateKey.json
+python src/firebase/connect.py credential.json rpi --databaseURL https://customURL.firebaseio.com/ --pixels 64
 ```
-Once you are done you can change the patterns from the app on your phone and check the updates in real time on the screen.

@@ -7,7 +7,7 @@ if __name__ == '__main__':
     parser.add_argument('credential', type=str,
                         help='The path to the private key json file for Firebase')
     parser.add_argument('mode', type=str,
-                        help='Where are you running the connection, either pc or rpi',
+                        help='Where are you running the script, either pc or rpi',
                         choices=["pc", "rpi"],
                         )
     parser.add_argument('--databaseURL', type=str, nargs='?', default="https://ledypie.firebaseio.com/",
@@ -24,7 +24,7 @@ if __name__ == '__main__':
         print("Running from PC")
 
     elif args.mode == "rpi":
-        from raspberrypi.pi_handler import PiHandler
+        from rpi.pi_handler import PiHandler
 
         handler = PiHandler
         print("Running from RPI")

@@ -1,7 +1,7 @@
 import argparse
 
 from patterns import Patterns
-from raspberrypi.pi_handler import PiHandler
+from rpi.pi_handler import PiHandler
 from rgb import RGB
 
 # Available patterns are:
