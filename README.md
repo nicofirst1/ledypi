@@ -57,6 +57,7 @@ Since the ws2812b draws 60mA for each led with 5V (check the [specs](https://cdn
 For the connection you can follow [this tutorial](https://tutorials-raspberrypi.com/connect-control-raspberry-pi-ws2812-rgb-led-strips/)  which uses following diagram:
 ![diagram](Resources/diagram.png)
 
+Since there is no connection powering the RaspberryPi, an usb type c power supply is necessary.
 
 # Testing
 If you get a `ModuleNotFoundError` try to set the python path as follows in your terminal window:
