@@ -9,6 +9,18 @@ from patterns.snow import Snow
 from patterns.steady import Steady
 from patterns.strobe import Strobe
 
+import logging
+import sys
+
+pattern_logger = logging.getLogger("pattern_logger")
+pattern_logger.setLevel(logging.DEBUG)
+
+handler = logging.StreamHandler(sys.stdout)
+handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s\n')
+handler.setFormatter(formatter)
+pattern_logger.addHandler(handler)
+
 Patterns = dict(
     ColorWipe=ColorWipe,
     Fading=Fading,

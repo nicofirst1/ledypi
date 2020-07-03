@@ -14,8 +14,6 @@ class ColorWipe(Default):
 
     def fill(self):
 
-        self.color.update_single(a=self.alpha)
-
         step = self.step
         color = self.color
 

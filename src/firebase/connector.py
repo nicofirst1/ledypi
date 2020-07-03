@@ -9,7 +9,6 @@ from patterns import Patterns
 from rgb import RGB
 
 fire_logger = logging.getLogger("fire_logger")
-fire_logger.setLevel(logging.DEBUG)
 
 
 class FireBaseConnector:

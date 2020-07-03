@@ -15,6 +15,5 @@ class Steady(Default):
         else:
             color = self.color
 
-        color.update_single(a=self.alpha)
         for idx in range(self.strip_length):
             self.pixels[idx]['color'] = self.color

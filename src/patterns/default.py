@@ -1,8 +1,11 @@
 import inspect
+import logging
 import threading
 import time
 
 from rgb import RGB
+
+pattern_logger = logging.getLogger("pattern_logger")
 
 
 class Default(threading.Thread):
@@ -19,7 +22,6 @@ class Default(threading.Thread):
         self.rate = rate
 
         self.strip_length = pixels
-        self.alpha = 255
         self.color = color
         self.randomize_color = False
         self.pattern_name = None
@@ -56,7 +58,7 @@ class Default(threading.Thread):
 
         if not changed:
             for k in kwargs.keys():
-                print(f"No such attribute named '{k}' for class {self.__str__()}")
+                pattern_logger.warn(f"No such attribute named '{k}' for class {self.__str__()}")
 
         return changed
 
@@ -65,7 +67,7 @@ class Default(threading.Thread):
 
     def run(self):
 
-        print(f"Started pattern: {self.pattern_name}")
+        pattern_logger.info(f"Started pattern: {self.pattern_name}")
         try:
             while not self.handler.is_stopped:
                 self.on_loop()
@@ -73,7 +75,7 @@ class Default(threading.Thread):
             pass
 
         self.handler.close()
-        print("Stopped pattern")
+        pattern_logger.info("Stopped pattern")
 
     def bound_attrs(self):
         """
