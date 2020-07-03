@@ -1,7 +1,7 @@
 In this directory all the available patters will be stored.
 
 ## Adding a new pattern
-To add a new patter you will need to create a new class which inherits from [Default](./src/patterns/default.py).
+To add a new patter you will need to create a new class which inherits from [Default](src/patterns/default.py).
 
 The new class has to have:
 - `**kwargs` as only argument (check out the other classes).
