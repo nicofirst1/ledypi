@@ -4,6 +4,7 @@ from patterns.fading import Fading
 from patterns.fire import Fire
 from patterns.firework import FireWork
 from patterns.meteor import Meteor
+from patterns.off import Off
 from patterns.rainbow import Rainbow
 from patterns.snow import Snow
 from patterns.steady import Steady
@@ -22,15 +23,16 @@ handler.setFormatter(formatter)
 pattern_logger.addHandler(handler)
 
 Patterns = dict(
+    Chasing=Chasing,
     ColorWipe=ColorWipe,
     Fading=Fading,
     Fire=Fire,
     FireWork=FireWork,
     Meteor=Meteor,
+    Off=Off,
     Rainbow=Rainbow,
     Snow=Snow,
     Steady=Steady,
     Strobe=Strobe,
-    Chasing=Chasing,
 
 )
