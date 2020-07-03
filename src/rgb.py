@@ -171,6 +171,13 @@ class RGB:
 
         return False
 
+    def copy(self):
+        """
+        Return a copy of self
+        :return:
+        """
+        return RGB(r=self.r,g=self.g,b=self.b,a=self.a)
+
     @staticmethod
     def assertion(val):
         assert val <= 255 and val >= 0

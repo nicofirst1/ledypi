@@ -12,7 +12,6 @@ class FireWork(Default):
 
         super().__init__(**kwargs)
         self.fires = 5
-        self.use_add = False
         self.loss = 25
         self.step = 0
         self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.fires)}

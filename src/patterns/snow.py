@@ -1,3 +1,5 @@
+from copy import copy
+
 from patterns.default import Default
 from rgb import RGB
 
@@ -24,10 +26,13 @@ class Snow(Default):
 
         intensity = self.color.a
         loss = intensity // self.trail  # loss of intensity for trail
+        color=copy(self.color)
 
         for jdx in reversed(range(num_of_trail)):
             for idx in range(jdx + self.counter, self.strip_length + jdx + self.counter, num_of_trail):
-                self.pixels[idx % self.strip_length]['color'] = RGB(r=255, g=255, b=255, a=intensity)
+
+                color.update_single(a=intensity)
+                self.pixels[idx % self.strip_length]['color'] = color.copy()
 
             if not intensity - loss < 0:
                 intensity -= loss
