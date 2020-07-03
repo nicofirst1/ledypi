@@ -2,11 +2,15 @@ PIN = 18
 
 
 class PiHandler(object):
-    data_type = None
+    """
+    Hanlder fot the rapberrypi and led control
+    """
 
     def __init__(self, pixels):
+        # the imports must be hidden since they won't work on pc
         from rpi_ws281x import PixelStrip
 
+        # init the pixel strip
         self.np = PixelStrip(pixels, PIN)
         self.np.begin()
         self.pixel_count = pixels
@@ -16,9 +20,11 @@ class PiHandler(object):
         from rpi_ws281x import Color
 
         if index is not None and index < self.pixel_count:
+            # scale the rgb value by the intensity
             r = scale(r, c)
             g = scale(g, c)
             b = scale(b, c)
+            # create color and set it
             color = Color(r, g, b)
             self.np.setPixelColor(index, color)
 

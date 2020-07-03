@@ -17,15 +17,15 @@ from rgb import RGB
 # Chasing
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-p', '--pattern', action='store_true', type=str, help='Pattern')
-    parser.add_argument('-r', '--rate', action='store_true', type=int, help='rate')
+    parser.add_argument('--pattern', action='store_true', type=str, help='Pattern')
+    parser.add_argument('--rate', action='store_true', type=int, help='rate', default=100)
+    parser.add_argument('--pixels', action='store_true', type=int, help='rate',default=300)
     args = parser.parse_args()
 
     # choose pattern, rate and color
     pat = Patterns[args.pattern]
-    rate = args.rate
     color = RGB(random=True)
 
     # init app and run
-    app = pat(handler=PiHandler, rate=rate, pixels=300, color=color)
+    app = pat(handler=PiHandler, rate=args.rate, pixels=args.pixels, color=color)
     app.run()

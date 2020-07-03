@@ -17,6 +17,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    # import hte correct handler depending on the mode
     if args.mode == "pc":
         from DotStar_Emulator.emulator.send_test_data import App
 
@@ -32,9 +33,10 @@ if __name__ == '__main__':
     else:
         raise ValueError(f"Mode '{args.mode}' is not supported")
 
+    # init the firebase connector
     fbc = FireBaseConnector(credential_path=args.credential, database_url=args.databaseURL, handler=handler,
                             pixels=args.pixels)
-
+    # keep the thread alive
     try:
         while True:
             pass
