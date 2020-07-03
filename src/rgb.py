@@ -18,7 +18,7 @@ class RGB:
         'r': red value
         'g': green value
         'b': blue value
-        'c': intensity value
+        'a': intensity value
 
         If one of the above is missing then it will be set to zero, e.g. RGB() is black.
         Other setting can override
@@ -54,11 +54,11 @@ class RGB:
         else:
             self.b = 0
 
-        if "c" in kwargs.keys():
-            self.assertion(kwargs["c"])
-            self.c = kwargs["c"]
+        if "a" in kwargs.keys():
+            self.assertion(kwargs["a"])
+            self.a = kwargs["a"]
         else:
-            self.c = 0
+            self.a = 0
 
         if "rgb" in kwargs.keys():
             self.assertion(kwargs["rgb"].r)
@@ -67,19 +67,19 @@ class RGB:
             self.r = kwargs["rgb"].r
             self.g = kwargs["rgb"].g
             self.b = kwargs["rgb"].b
-            self.c = kwargs["rgb"].c
+            self.a = kwargs["rgb"].a
 
         if "random" in kwargs.keys():
             self.r = randint(0, 255)
             self.g = randint(0, 255)
             self.b = randint(0, 255)
-            self.c = 255
+            self.a = 255
 
         if 'white' in kwargs.keys():
             self.r = 255
             self.g = 255
             self.b = 255
-            self.c = 255
+            self.a = 255
 
     def fade(self, fade_val, minimum=10):
         """
@@ -108,7 +108,7 @@ class RGB:
 
     def is_black(self):
 
-        if self.c > 0:
+        if self.a > 0:
             if self.r > 0 or self.g > 0 or self.b > 0:
                 return False
 
@@ -120,7 +120,7 @@ class RGB:
     def update_single(self, **kwargs):
         """
         Update values separately
-        :param kwargs: can be [r,g,b,c]
+        :param kwargs: can be [r,g,b,a]
         :return:
         """
 
@@ -132,14 +132,14 @@ class RGB:
                 self.b = v
             elif k == "g":
                 self.g = v
-            elif k == "c":
-                self.c = v
+            elif k == "a":
+                self.a = v
 
     def update_color(self, color):
         self.r = color.r
         self.g = color.g
         self.b = color.b
-        self.c = color.c
+        self.a = color.a
 
     def same_color(self, rgb2):
         if self.r == rgb2.r and self.g == rgb2.g and self.b == rgb2.b:
@@ -147,23 +147,23 @@ class RGB:
 
         return False
 
-    def add_values(self, r, g, b, c):
+    def add_values(self, r, g, b, a):
         self.assertion(r)
         self.assertion(g)
         self.assertion(b)
-        self.assertion(c)
+        self.assertion(a)
 
         self.r = bound_add(self.r, r)
         self.g = bound_add(self.g, g)
         self.b = bound_add(self.b, b)
-        self.c = bound_add(self.c, c)
+        self.a = bound_add(self.a, a)
 
     def add_colors(self, rgb):
 
         self.r = bound_add(self.r, rgb.r)
         self.g = bound_add(self.g, rgb.g)
         self.b = bound_add(self.b, rgb.b)
-        # self.c = bound_add(self.c, rgb.c)
+        # self.a = bound_add(self.a, rgb.a)
 
     def is_gray(self):
         if self.r == self.g == self.b:

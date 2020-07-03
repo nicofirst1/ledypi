@@ -6,7 +6,6 @@ from rgb import RGB
 
 
 class Default( threading.Thread):
-    data_type = ""
 
     def __init__(self, handler,  rate, pixels, color=RGB()):
         """
@@ -23,6 +22,7 @@ class Default( threading.Thread):
         self.alpha = 255
         self.color = color
         self.randomize_color = False
+        self.pattern_name=None
 
         self.pixels = {idx: dict(color=self.color) for idx in range(self.strip_length + 1)}
         self.set_pixels()
@@ -34,7 +34,7 @@ class Default( threading.Thread):
 
     def color_set(self, index, rgb, **kwargs):
 
-        self.handler.set(index, rgb.c, rgb.b, rgb.g, rgb.r)
+        self.handler.set(index, rgb.a, rgb.b, rgb.g, rgb.r)
 
     def fill(self):
 
@@ -64,13 +64,16 @@ class Default( threading.Thread):
         self.handler.is_stopped = True
 
     def run(self):
+
+        print(f"Started pattern: {self.pattern_name}" )
         try:
             while not self.handler.is_stopped:
                 self.on_loop()
         except KeyboardInterrupt:
             pass
 
-        self.handler.close_connection()
+        self.handler.close()
+        print("Stopped pattern")
 
     def bound_attrs(self):
         """
@@ -78,3 +81,7 @@ class Default( threading.Thread):
         :return:
         """
         raise NotImplementedError()
+
+    def set_rate(self, rate):
+        rate /= 100
+        self.rate=rate

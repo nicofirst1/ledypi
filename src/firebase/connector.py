@@ -1,26 +1,28 @@
+import logging
 import math
-from datetime import datetime
 
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
-from logging import getLogger
+
 from patterns import Patterns
 from rgb import RGB
 
+fire_logger = logging.getLogger("fire_logger")
+fire_logger.setLevel(logging.DEBUG)
 
-call_logger=getLogger("call_logger")
 
 class FireBaseConnector:
 
-    def __init__(self, credential_path, database_url, handler,pixels):
+    def __init__(self, credential_path, database_url, handler, pixels):
         # todo: use read file for certificate, url and init database
         cred = credentials.Certificate(credential_path)
 
         firebase_admin.initialize_app(credential=cred,
                                       options={'databaseURL': database_url})
+
         self.fb = db.reference('/')
-        self.fb.listen(self.listener)
+        self.listener=self.fb.listen(self.listener)
 
         self.rgba = None
         self.random_colors = False
@@ -33,14 +35,17 @@ class FireBaseConnector:
         # update rgba
         self.update_rgba()
 
-        self.handler=handler
-        self.pixels= pixels
-
+        self.handler = handler
+        self.pixels = pixels
 
         # choose correct pattern and start it
-        p= Patterns[self.pattern_choice]
         self.pattern = Patterns[self.pattern_choice](rate=self.rate, color=self.rgba, handler=handler, pixels=pixels)
         self.pattern.start()
+
+    def close(self):
+        self.pattern.stop()
+        fire_logger.info("Closing firebase connection, this make take a few seconds...")
+        self.listener.close()
 
     def listener(self, event):
         """
@@ -49,27 +54,25 @@ class FireBaseConnector:
         :return: None
         """
 
-        to_log= f"{event.event_type}\n{event.path}\n{event.data}"
-        call_logger.debug(to_log)
+        to_log = f"{event.event_type}\n{event.path}\n{event.data}"
+        fire_logger.debug(to_log)
 
-        # pass at the start
-        if event.path == '/':
-            pass
 
-        # todo: add attr update for specific pattern
+        if "rate" in event.path:
+            rate = self.get_rate(data=event.data)
+            self.pattern.set_rate(rate)
+            self.rate=rate
+
         # stop and restart pattern if required
-        elif "cur_pattern" in event.path or "rate" in event.path:
-
-
+        elif "cur_pattern" in event.path:
             # get values
             self.pattern_choice = self.get_cur_pattern()
             self.rate = self.get_rate()
             # stop and restart
             self.pattern.stop()
-            self.pattern = Patterns[self.pattern_choice](rate=self.rate,handler=self.handler,pixels=self.pixels)
+            self.pattern = Patterns[self.pattern_choice](rate=self.rate, handler=self.handler, pixels=self.pixels)
             self.update_rgba()
             self.pattern.start()
-            print(1)
 
         # update rgba
         elif "RGBA" in event.path:
@@ -80,9 +83,7 @@ class FireBaseConnector:
             key = event.path.split("/")[-1]
             self.ps_attrs_getter(key, event.data)
 
-
-
-        else:
+        elif event.path != '/':
             raise NotImplementedError(f"No such field for {event.path}")
 
     def ps_attrs_getter(self, key, data):
@@ -167,7 +168,7 @@ class FireBaseConnector:
         a = floor_int(a)
 
         # update attr
-        self.rgba = RGB(r=r, g=g, b=b, c=a)
+        self.rgba = RGB(r=r, g=g, b=b, a=a)
 
         # extract random value and convert to bool
         random = rgba.get("random") == "true"

@@ -3,7 +3,6 @@ from rgb import RGB
 
 
 class ColorWipe(Default):
-    data_type = "ColorWipe"
 
     def __init__(self, **kwargs):
 
@@ -11,10 +10,11 @@ class ColorWipe(Default):
 
         self.step = 1
         self.reverse = False
+        self.pattern_name= "ColorWipe"
 
     def fill(self):
 
-        self.color.update_single(c=self.alpha)
+        self.color.update_single(a=self.alpha)
 
         step = self.step
         color = self.color

@@ -31,3 +31,9 @@ if __name__ == '__main__':
         raise ValueError(f"Mode '{args.mode}' is not supported")
 
     fbc = FireBaseConnector(credential_path=args.credential, database_url=args.databaseURL,handler=handler,pixels=args.pixels)
+
+    try:
+        while True:
+            pass
+    except KeyboardInterrupt:
+        fbc.close()

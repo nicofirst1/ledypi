@@ -11,6 +11,7 @@ class Snow(Default):
         self.trail = 5
         self.min_space = 3  # min space between trail end and trail start
         self.counter = 0
+        self.pattern_name= "Snow"
 
     def fill(self):
 
@@ -25,7 +26,7 @@ class Snow(Default):
 
         for jdx in reversed(range(num_of_trail)):
             for idx in range(jdx + self.counter, self.strip_length + jdx + self.counter, num_of_trail):
-                self.pixels[idx % self.strip_length]['color'] = RGB(r=255, g=255, b=255, c=intensity)
+                self.pixels[idx % self.strip_length]['color'] = RGB(r=255, g=255, b=255, a=intensity)
 
             if not intensity - loss < 0:
                 intensity -= loss

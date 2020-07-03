@@ -7,7 +7,6 @@ from utils import bound_sub
 
 
 class Fire(Default):
-    data_type = "Fire"
 
     def __init__(self, **kwargs):
 
@@ -17,6 +16,7 @@ class Fire(Default):
         self.sparking = 50
         self.alpha = 255
         self.cooldown_list = [0 for _ in range(self.strip_length)]
+        self.pattern_name= "Fire"
 
     def bound_attrs(self):
         self.sparking = min(self.sparking, 255)
@@ -48,8 +48,8 @@ def heat_to_rgb(temperature):
     heatramp <<= 2
 
     if t192 > 0x80:
-        return RGB(r=255, g=255, b=heatramp, c=255)
+        return RGB(r=255, g=255, b=heatramp, a=255)
     elif t192 > 0x40:
-        return RGB(r=255, g=heatramp, b=0, c=255)
+        return RGB(r=255, g=heatramp, b=0, a=255)
     else:
-        return RGB(r=heatramp, g=0, b=0, c=255)
+        return RGB(r=heatramp, g=0, b=0, a=255)

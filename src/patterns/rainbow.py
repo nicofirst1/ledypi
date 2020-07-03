@@ -6,7 +6,6 @@ from utils import scale
 
 
 class Rainbow(Default):
-    data_type = "Rainbow"
 
     def __init__(self, **kwargs):
 
@@ -17,6 +16,7 @@ class Rainbow(Default):
         self.b_phi = 1
         self.g_phi = 2
         self.max_range = 1
+        self.pattern_name= "Rainbow"
         self.set_pixels()
 
     def fill(self):
@@ -47,7 +47,7 @@ class Rainbow(Default):
             g = floor(g)
             b = floor(b)
 
-            self.pixels[idx]['color'] = RGB(r=r, g=g, b=b, c=self.intensity)
+            self.pixels[idx]['color'] = RGB(r=r, g=g, b=b, a=self.intensity)
 
         self.counter += 1
         self.counter %= self.strip_length * 255

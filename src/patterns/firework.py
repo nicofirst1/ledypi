@@ -7,7 +7,6 @@ from utils import bound_sub, circular_step
 
 
 class FireWork(Default):
-    data_type = "FireWork"
 
     def __init__(self, **kwargs):
 
@@ -17,6 +16,7 @@ class FireWork(Default):
         self.loss = 25
         self.step = 0
         self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.fires)}
+        self.pattern_name= "FireWork"
 
     def empty_center(self):
         if self.randomize_color:
@@ -35,7 +35,7 @@ class FireWork(Default):
         center_copy = deepcopy(self.centers)
 
         # for every center in the list
-        for c, attr in center_copy.items():
+        for a, attr in center_copy.items():
 
             # get the color and the tail
             color = attr["color"]
@@ -44,8 +44,8 @@ class FireWork(Default):
 
             # estimate the center intesity and update
             ci = bound_sub(255, loss_weight * self.loss * step)
-            color.update_single(c=ci)
-            self.add_update_pixel(c, color)
+            color.update_single(a=ci)
+            self.add_update_pixel(a, color)
 
             idx = 1
 
@@ -54,15 +54,15 @@ class FireWork(Default):
                 # for 1 to the current step
                 for idx in range(idx, step + 1):
                     # get previous and next led
-                    p = c - idx
-                    n = c + idx
+                    p = a - idx
+                    n = a + idx
                     p %= self.strip_length
                     n %= self.strip_length
 
                     # estimate intensity and update
                     # ci is= 255 - the loss times the current step and the index (farther points from center are newer)
                     ci = bound_sub(255, self.loss * (loss_weight * step + 1 - idx))
-                    color.update_single(c=ci)
+                    color.update_single(a=ci)
 
                     self.add_update_pixel(p, color)
                     self.add_update_pixel(n, color)
@@ -85,7 +85,7 @@ class FireWork(Default):
                         # estimate ci as before
                         ci = bound_sub(255, self.loss * (loss_weight * step + 1 - idx))
                         # update
-                        color.update_single(c=ci)
+                        color.update_single(a=ci)
                         self.add_update_pixel(p, color)
                         self.add_update_pixel(n, color)
                         # if ci is zero remove point from tail
@@ -95,7 +95,7 @@ class FireWork(Default):
                 # if the center is faded and it has no more tail
                 else:
                     # remove the center
-                    self.centers.pop(c)
+                    self.centers.pop(a)
 
                     if len(self.centers) < self.fires:
 
@@ -112,9 +112,9 @@ class FireWork(Default):
             # is the center has been removed then dont update
             if not has_popped:
                 try:
-                    self.centers[c]["tail"] = attr["tail"]
+                    self.centers[a]["tail"] = attr["tail"]
                     step = circular_step(step, self.strip_length)
-                    self.centers[c]["step"] = step
+                    self.centers[a]["step"] = step
                 except KeyError:
                     pass
 

@@ -60,10 +60,10 @@ If you get a `ModuleNotFoundError` try to set the python path as follows in your
 ```shell script
 export PYTHONPATH=./src   
 ```
-Both the local and remote test relies on two processes to work, one of which is always the [gui](src/main_gui.py).
+Both the local and remote test relies on two processes to work, one of which is always the [gui](src/pc/main_gui.py).
 
 ### Local 
-To test first run the [gui](src/main_gui.py) and then in a separate process run [patterns](src/test.py)
+To test first run the [gui](src/pc/main_gui.py) and then in a separate process run [patterns](src/pc/test.py)
 ```shell script
 python src/main_gui.py
 python src/test.py

@@ -4,7 +4,6 @@ from patterns.default import Default
 
 
 class Meteor(Default):
-    data_type = "Meteor"
 
     def __init__(self, **kwargs):
 
@@ -13,6 +12,7 @@ class Meteor(Default):
         self.trail_decay = 64
         self.random_decay = True
         self.step = 0
+        self.pattern_name= "Meteor"
 
     def bound_attrs(self):
         self.size = min(self.size, self.strip_length)

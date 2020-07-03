@@ -7,7 +7,6 @@ from utils import bound_sub, bound_add
 
 
 class Fading(Default):
-    data_type = "Fading"
 
     def __init__(self, **kwargs):
 
@@ -19,6 +18,7 @@ class Fading(Default):
 
         # assert there are no more points than leds
         self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.point_number)}
+        self.pattern_name = "Fading"
 
     def empty_center(self):
         """
@@ -46,7 +46,7 @@ class Fading(Default):
         self.point_number = min(self.point_number, self.strip_length)
 
         # for every center in the list
-        for c, attr in center_copy.items():
+        for a, attr in center_copy.items():
 
             # get attributes
             color = attr["color"]
@@ -57,7 +57,7 @@ class Fading(Default):
 
             # if point has to wait more then wait
             if delay > 0:
-                self.centers[c]['delay'] -= 1
+                self.centers[a]['delay'] -= 1
                 continue
 
             # if increasing and there is still room for increasing do it
@@ -74,17 +74,17 @@ class Fading(Default):
                 increasing = False
 
             # update and set color
-            color.update_single(c=alpha)
-            self.pixels[c]['color'] = color
+            color.update_single(a=alpha)
+            self.pixels[a]['color'] = color
 
             # update for original dict too
-            self.centers[c]['alpha'] = alpha
-            self.centers[c]['increasing'] = increasing
+            self.centers[a]['alpha'] = alpha
+            self.centers[a]['increasing'] = increasing
 
             # if is done
             if done:
                 # pop center
-                self.centers.pop(c)
+                self.centers.pop(a)
 
                 # if centers are less than supposed, add other
                 if len(self.centers) < self.point_number:

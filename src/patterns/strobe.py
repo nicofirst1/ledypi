@@ -3,7 +3,6 @@ from utils import bound_sub, bound_add
 
 
 class Strobe(Default):
-    data_type = "Strobe"
 
     def __init__(self, **kwargs):
 
@@ -11,19 +10,20 @@ class Strobe(Default):
 
         self.increasing = False
         self.loss = 255
+        self.pattern_name= "Strobe"
 
     def fill(self):
 
-        c = self.color.c
+        a = self.color.a
 
-        if 0 <= c < 255 and self.increasing:
-            c = bound_add(c, self.loss, maximum=255)
-        elif 0 < c <= 255 and not self.increasing:
-            c = bound_sub(c, self.loss, minimum=0)
+        if 0 <= a < 255 and self.increasing:
+            a = bound_add(a, self.loss, maximum=255)
+        elif 0 < a <= 255 and not self.increasing:
+            a = bound_sub(a, self.loss, minimum=0)
         else:
             self.increasing = not self.increasing
 
-        self.color.update_single(c=c)
+        self.color.update_single(a=a)
 
         for idx in range(self.strip_length):
             self.pixels[idx]['color'] = self.color
