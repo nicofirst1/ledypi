@@ -1,5 +1,6 @@
 import logging
 import math
+import time
 
 import firebase_admin
 from firebase_admin import credentials
@@ -9,6 +10,35 @@ from patterns import Patterns
 from rgb import RGB
 
 fire_logger = logging.getLogger("fire_logger")
+
+# since the firebase updater will call the listener a lot
+# during the slider value change, we need a way to skip too frequent updates.
+# with the frequency function the call to the listener will be
+# skipped if there was a previous call less than '__call_resolution' seconds before
+
+__last_call = time.time()
+__call_resolution = 0.1
+
+
+def frequency(listener):
+    """
+    Decoratorr to skip call to the firebase listener
+    :param listener:
+    :return:
+    """
+
+    def wrap(*args):
+        # get the global time of the last call
+        global __last_call
+        # check that the last call was made after tot secs
+        if time.time() - __last_call > __call_resolution:
+            # if yes call the listener and update time
+            ret = listener(*args)
+            __last_call = time.time()
+            return ret
+        # else skip
+
+    return wrap
 
 
 class FireBaseConnector:
@@ -46,6 +76,7 @@ class FireBaseConnector:
         fire_logger.info("Closing firebase connection, this make take a few seconds...")
         self.listener.close()
 
+    @frequency
     def listener(self, event):
         """
         Main listener, called when db is updated
