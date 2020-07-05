@@ -1,4 +1,3 @@
-from patterns.chasing import Chasing
 from patterns.color_wipe import ColorWipe
 from patterns.fading import Fading
 from patterns.fire import Fire
@@ -23,7 +22,6 @@ handler.setFormatter(formatter)
 pattern_logger.addHandler(handler)
 
 Patterns = dict(
-    Chasing=Chasing,
     ColorWipe=ColorWipe,
     Fading=Fading,
     Fire=Fire,
