@@ -1,6 +1,6 @@
 # Usage
 LedyPi is a project about LEDs and RasperryPi.
-The scope of this project is to have an easy way to implement custom patterns on a led script in Python which can then be controlled trought the ssh or on the android app.
+The scope of this project is to have an easy way to implement custom patterns on a led script in Python which can then be controlled trough the ssh or on the android app.
 
 Here's a video tutorial showing how the app works on my strip.
 
