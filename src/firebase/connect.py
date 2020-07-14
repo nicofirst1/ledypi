@@ -1,23 +1,20 @@
 import argparse
+import signal
+import sys
 
 from firebase.connector import FireBaseConnector
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Parse private key json file.')
-    parser.add_argument('credential', type=str,
-                        help='The path to the private key json file for Firebase')
-    parser.add_argument('mode', type=str,
-                        help='Where are you running the script, either pc or rpi',
-                        choices=["pc", "rpi"],
-                        )
-    parser.add_argument('--databaseURL', type=str, nargs='?', default="https://ledypie.firebaseio.com/",
-                        help='The Firebase database url')
-    parser.add_argument('--pixels', type=int, nargs='?', default="300",
-                        help='Number of pixels')
 
-    args = parser.parse_args()
 
-    # import hte correct handler depending on the mode
+
+def connect(args):
+
+    def signal_handler(signal, frame):
+        fbc.close()
+        # your code here
+        sys.exit(0)
+
+    # import the correct handler depending on the mode
     if args.mode == "pc":
         from DotStar_Emulator.emulator.send_test_data import App
 
@@ -36,9 +33,32 @@ if __name__ == '__main__':
     # init the firebase connector
     fbc = FireBaseConnector(credential_path=args.credential, database_url=args.databaseURL, handler=handler,
                             pixels=args.pixels)
+
+
+    # add signal handler for interruption
+    signal.signal(signal.SIGINT, signal_handler)
+
     # keep the thread alive
     try:
         while True:
             pass
     except KeyboardInterrupt:
         fbc.close()
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='Parse private key json file.')
+    parser.add_argument('credential', type=str,
+                        help='The path to the private key json file for Firebase')
+    parser.add_argument('mode', type=str,
+                        help='Where are you running the script, either pc or rpi',
+                        choices=["pc", "rpi"],
+                        )
+    parser.add_argument('--databaseURL', type=str, nargs='?', default="https://ledypie.firebaseio.com/",
+                        help='The Firebase database url')
+    parser.add_argument('--pixels', type=int, nargs='?', default="300",
+                        help='Number of pixels')
+
+    args = parser.parse_args()
+
+    connect(args)
