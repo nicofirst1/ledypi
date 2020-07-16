@@ -22,7 +22,7 @@ The project works with python>=3.7, to setup your environment follow the steps:
 - (Optional) source your environment, 
 - Install the required modules:
     - On pc run `pip install -r requirements.txt `
-    - On rpi run `pip3 install -r requirements_pi.txt `
+    - On rpi run `sudo pip3 install -r requirements_pi.txt `
 - To debug install [DotStar_emulator repo](https://github.com/chrisrossx/DotStar_Emulator) on pc with:
 ```
 python DotStar_Emulator/setup.py install
