@@ -17,6 +17,14 @@ class Rainbow(Default):
         self.g_phi = 2
         self.max_range = 1
         self.pattern_name = "Rainbow"
+
+        self.modifiers = dict(
+            r_phi=self.r_phi,
+            b_phi=self.b_phi,
+            g_phi=self.g_phi,
+            max_range=self.max_range,
+        )
+
         self.set_pixels()
 
     def fill(self):

@@ -16,6 +16,11 @@ class Snow(Default):
         self.pattern_name = "Snow"
         self.color=RGB(white=True)
 
+        self.modifiers = dict(
+            trail=self.trail,
+            min_space=self.min_space,
+        )
+
     def fill(self):
 
         # get the number of trails the strip can have

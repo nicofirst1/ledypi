@@ -7,26 +7,43 @@ from rgb import RGB
 
 pattern_logger = logging.getLogger("pattern_logger")
 
+# the rate is passed as a value>=1 second which is too slow
+RATE_DIVISOR=200
 
 class Default(threading.Thread):
+    """
+    The default class for patterns
+    """
 
     def __init__(self, handler, rate, pixels, color=RGB()):
         """
-        Init for snow effect
-        :param args:
+
+        :param handler: The handler for the led strip, either a DotStar_Emulator.emulator.send_test_data.App or a rpi.pi_handler.PiHandler
+        :param rate:(float) the rate for the pixel update
+        :param pixels: (int) the number of pixels
+        :param color: (default RGB), the initial color for the leds
         """
 
-        self.rate_divider = 200
-        rate /= self.rate_divider
+        rate /= RATE_DIVISOR
+
+        # init the thread and the handler
         threading.Thread.__init__(self)
         self.handler = handler(pixels)
         self.rate = rate
 
+
         self.strip_length = pixels
         self.color = color
+        # boolan value to randomize color
         self.randomize_color = False
+
+        # string for patter name
         self.pattern_name = None
 
+        # dictionary storing the modifiers to be implemented in the web app
+        self.modifiers=dict()
+
+        # init and set the pixels to the default color
         self.pixels = {idx: dict(color=self.color) for idx in range(self.strip_length + 1)}
         self.set_pixels()
 
@@ -86,5 +103,5 @@ class Default(threading.Thread):
         raise NotImplementedError()
 
     def set_rate(self, rate):
-        rate /= self.rate_divider
+        rate /= RATE_DIVISOR
         self.rate = rate

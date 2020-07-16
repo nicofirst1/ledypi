@@ -14,6 +14,12 @@ class Meteor(Default):
         self.step = 0
         self.pattern_name = "Meteor"
 
+        self.modifiers = dict(
+            size=self.size,
+            trail_decay=self.trail_decay,
+            random_decay=self.random_decay
+        )
+
     def bound_attrs(self):
         self.size = min(self.size, self.strip_length)
 

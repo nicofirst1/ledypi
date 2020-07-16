@@ -23,3 +23,8 @@ iteration to change the attributes of the pixels which will be then written wih 
 
 ### Adding to init
 To make the new pattern available to the database add it in the [init file](./src/patterns/__init__.py) as the value of the Pattern dictionary. 
+
+
+### Modifiers
+The _modifiers_ dict in the default class must be overridden with the attributes of your implementation that yuo wish to be on the web application.
+Please follow the examples in the pre-implemented patterns.

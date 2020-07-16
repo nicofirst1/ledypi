@@ -12,6 +12,10 @@ class Strobe(Default):
         self.loss = 255
         self.pattern_name = "Strobe"
 
+        self.modifiers = dict(
+            loss=self.loss,
+        )
+
     def fill(self):
 
         a = self.color.a
