@@ -57,7 +57,9 @@ Click Generate New Private Key, then confirm by clicking Generate Key.
 ```
 This will create a _privatekey.json_ file which will be used later.
 
-## Raspberry Diagram
+## Raspberry 
+
+### Diagram
 Im currently using a _Raspberry Pi 4 Model B Rev 1.2_ with a [ws2812b led strip](https://www.amazon.com/CHINLY-Individually-Addressable-Waterproof-waterproof/dp/B01LSF4Q0A/ref=sr_1_7?dchild=1&keywords=ws2812b&qid=1593792574&sr=8-7) counting 300 leds on 5 meters.
 
 Since the ws2812b draws 60mA for each led with 5V (check the [specs](https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf)) I am powering the led strip using a [5v 100W power supply](https://www.amazon.com/BTF-LIGHTING-Aluminum-WS2812B-LED8806-Modules/dp/B01D8FLWGE/ref=sr_1_13?dchild=1&keywords=5v+20A+power+supply&qid=1593792785&sr=8-13) which should allow each pixel full brightness.
@@ -66,6 +68,9 @@ For the connection you can follow [this tutorial](https://tutorials-raspberrypi.
 ![diagram](Resources/diagram.png)
 
 Since there is no connection powering the RaspberryPi, an usb type c power supply is necessary.
+
+### Starting script
+Check the [script README](scripts/README.md) to set learn how to start/stop the app with one script (usefull when you want it to start on boot) and for syncing the pc repo with your rpi.
 
 # Testing
 If you get a `ModuleNotFoundError` try to set the python path as follows in your terminal window:

@@ -32,7 +32,7 @@ def connect(args):
 
     # init the firebase connector
     fbc = FireBaseConnector(credential_path=args.credential, database_url=args.databaseURL, handler=handler,
-                            pixels=args.pixels)
+                            pixels=args.pixels, debug=args.debug)
 
 
     # add signal handler for interruption
@@ -58,6 +58,9 @@ if __name__ == '__main__':
                         help='The Firebase database url')
     parser.add_argument('--pixels', type=int, nargs='?', default="300",
                         help='Number of pixels')
+
+    parser.add_argument('--debug', nargs='?',
+                        help='If to start in debug mode')
 
     args = parser.parse_args()
 

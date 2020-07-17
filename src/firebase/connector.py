@@ -43,9 +43,12 @@ def frequency(listener):
 
 class FireBaseConnector:
 
-    def __init__(self, credential_path, database_url, handler, pixels):
+    def __init__(self, credential_path, database_url, handler, pixels, debug=None):
         # todo: use read file for certificate, url and init database
         cred = credentials.Certificate(credential_path)
+
+        if debug is not None:
+            fire_logger.setLevel(logging.DEBUG)
 
         firebase_admin.initialize_app(credential=cred,
                                       options={'databaseURL': database_url})
