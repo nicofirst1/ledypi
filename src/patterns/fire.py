@@ -13,9 +13,10 @@ class Fire(Default):
         super().__init__(**kwargs)
 
         self.cooling = 2
-        self.sparking = 50
+        self.sparking = 80
         self.cooldown_list = [0 for _ in range(self.strip_length)]
         self.pattern_name = "Fire"
+        self.mid=self.strip_length//2
 
         self.modifiers=dict(
             cooling=self.cooling,
@@ -34,12 +35,17 @@ class Fire(Default):
             cooldown = randint(0, ceil(((self.cooldown_list[idx] * 10) / self.strip_length)) + self.cooling)
             self.cooldown_list[idx] = bound_sub(self.cooldown_list[idx], cooldown, minimum=0)
 
-        for idx in range(self.strip_length - 1, 2, -1):
-            self.cooldown_list[idx] = (self.cooldown_list[idx - 1] + self.cooldown_list[idx - 2] + self.cooldown_list[
-                idx - 2]) / 3
+        for idx in range(self.strip_length - 1, self.mid, -1):
+            v= (self.cooldown_list[idx - 1] + 2 * self.cooldown_list[idx - 2]) / 3
+            self.cooldown_list[idx] = v
+
+        for idx in range(0, self.mid - 1, +1):
+            v= (self.cooldown_list[idx + 1] + 2 * self.cooldown_list[idx + 2]) / 3
+            self.cooldown_list[idx] = v
 
         if randint(0, 255) < self.sparking:
-            y = randint(0, 7)
+            # sparking starting point
+            y = randint(self.mid-3, self.mid+3)
             self.cooldown_list[y] = self.cooldown_list[y] + randint(160, 255)
 
         for idx in range(self.strip_length):
