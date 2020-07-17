@@ -12,11 +12,11 @@ from rgb import RGB
 # Rainbow
 # Snow
 # Steady
-# Strobe
+# Pulse
 # Chasing
 
 # choose pattern, rate and color
-pat = Patterns['Chasing']
+pat = Patterns['Pulse']
 rate = 10
 color = RGB(random=True)
 

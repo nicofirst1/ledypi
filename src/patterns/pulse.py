@@ -2,18 +2,18 @@ from patterns.default import Default
 from utils import bound_sub, bound_add
 
 
-class Strobe(Default):
+class Pulse(Default):
 
     def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
 
         self.increasing = False
-        self.loss = 255
-        self.pattern_name = "Strobe"
+        self.speed = 255
+        self.pattern_name = "Pulse"
 
         self.modifiers = dict(
-            loss=self.loss,
+            loss=self.speed,
         )
 
     def fill(self):
@@ -21,9 +21,9 @@ class Strobe(Default):
         a = self.color.a
 
         if 0 <= a < 255 and self.increasing:
-            a = bound_add(a, self.loss, maximum=255)
+            a = bound_add(a, self.speed, maximum=255)
         elif 0 < a <= 255 and not self.increasing:
-            a = bound_sub(a, self.loss, minimum=0)
+            a = bound_sub(a, self.speed, minimum=0)
         else:
             self.increasing = not self.increasing
 

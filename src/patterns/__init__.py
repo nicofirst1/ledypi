@@ -7,7 +7,7 @@ from patterns.off import Off
 from patterns.rainbow import Rainbow
 from patterns.snow import Snow
 from patterns.steady import Steady
-from patterns.strobe import Strobe
+from patterns.pulse import Pulse
 
 import logging
 import sys
@@ -31,6 +31,6 @@ Patterns = dict(
     Rainbow=Rainbow,
     Snow=Snow,
     Steady=Steady,
-    Strobe=Strobe,
+    Pulse=Pulse,
 
 )
