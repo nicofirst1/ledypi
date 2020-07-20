@@ -72,6 +72,9 @@ Since there is no connection powering the RaspberryPi, an usb type c power suppl
 ### Starting script
 Check the [script README](scripts/README.md) to set learn how to start/stop the app with one script (usefull when you want it to start on boot) and for syncing the pc repo with your rpi.
 
+### Reactive Music
+To work with the reactive music part follow the instructions on the [official repo](https://github.com/nicofirst1/audio-reactive-led-strip#installation-for-raspberry-pi), just skip the neopixel ones.
+
 # Testing
 If you get a `ModuleNotFoundError` try to set the python path as follows in your terminal window:
 ```shell script

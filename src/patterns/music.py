@@ -38,6 +38,17 @@ class Music(Default):
 
         self.visualizer=self.visualizations_dict['spectrum']
 
+    @property
+    def rate(self):
+        return 0.01
+
+    @rate.setter
+    def rate(self, value):
+        pass
+
+
+
+
     def fill(self):
 
         try:
@@ -54,6 +65,7 @@ class Music(Default):
 
         except TypeError:
             pass
+
 
 
 def _update_pi(input):
