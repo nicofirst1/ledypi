@@ -1,4 +1,3 @@
-import threading
 import time
 
 import numpy as np
@@ -8,7 +7,6 @@ from scipy.ndimage import gaussian_filter1d
 import config
 import dsp
 from patterns.default import Default
-from rgb import RGB
 from visualization import mel_gain, mel_smoothing, fft_window, visualize_spectrum, \
     visualize_energy, visualize_scroll
 
@@ -18,7 +16,7 @@ samples_per_frame = int(config.MIC_RATE / config.FPS)
 y_roll = np.random.rand(config.N_ROLLING_HISTORY, samples_per_frame) / 1e16
 _gamma = np.load(config.GAMMA_TABLE_PATH)
 """Gamma lookup table used for nonlinear brightness correction"""
-
+frames_per_buffer = int(config.MIC_RATE / config.FPS)
 
 class Music(Default):
 
@@ -26,21 +24,32 @@ class Music(Default):
         super().__init__(**kwargs)
         self.pattern_name = "Music"
 
-        self.streamer = AudioStream()
-        self.streamer.setup()
-        self.streamer.start()
-
         self.visualizations_dict = dict(
             spectrum=visualize_spectrum,
             energy=visualize_energy,
             scroll=visualize_scroll,
         )
 
-        self.visualizer = self.visualizations_dict['energy']
+        self.visualizer = self.visualizations_dict['spectrum']
 
         self.modifiers = dict(
             visualizer=self.visualizer,
         )
+
+        self.p = None
+        self.stream = None
+        self.setup()
+
+    def setup(self):
+        """
+        Setup stream
+        """
+        self.p = pyaudio.PyAudio()
+        self.stream = self.p.open(format=pyaudio.paInt16,
+                                  channels=1,
+                                  rate=config.MIC_RATE,
+                                  input=True,
+                                  frames_per_buffer=frames_per_buffer)
 
     @property
     def rate(self):
@@ -50,10 +59,30 @@ class Music(Default):
     def rate(self, value):
         pass
 
+    def read_audio(self):
+        overflows = 0
+        prev_ovf_time = time.time()
+        try:
+            y = np.fromstring(self.stream.read(frames_per_buffer, exception_on_overflow=False), dtype=np.int16)
+            y = y.astype(np.float32)
+            self.stream.read(self.stream.get_read_available(), exception_on_overflow=False)
+            return y
+        except IOError:
+            overflows += 1
+            if time.time() > prev_ovf_time + 1:
+                prev_ovf_time = time.time()
+                print('Audio buffer has overflowed {} times'.format(overflows))
+
     def fill(self):
+        """
+        Read from audio stream and set pixels
+        """
+
+
+        output=self.read_audio()
 
         try:
-            pixels = microphone_update(self.streamer.data, self.visualizer)
+            pixels = microphone_update(output, self.visualizer)
             # Truncate values and cast to integer
             pixels = np.clip(pixels, 0, 255).astype(int)
             # Optional gamma correction
@@ -61,14 +90,28 @@ class Music(Default):
 
             r, g, b = pixels
             for idx in range(len(r)):
-                rgb = RGB(r=r[idx], g=g[idx], b=b[idx], a=255)
-                self.pixels[idx]['color'] = rgb
+                self.pixels[idx]['color'] = (r[idx], g[idx], b[idx], 255)
 
         except TypeError:
             pass
 
 
+
+    def stop(self):
+        """
+        Call super method and close audio stream
+        """
+        super(Music, self).stop()
+
+        self.stream.stop_stream()
+        self.stream.close()
+        self.p.terminate()
+
+
 def microphone_update(audio_samples, visualizer):
+    """
+    Function adapted from audio-reactive-led-strip
+    """
     global y_roll
     # Normalize samples between 0 and 1
     y = audio_samples / 2.0 ** 15
@@ -104,45 +147,3 @@ def microphone_update(audio_samples, visualizer):
         output = visualizer(mel)
 
     return output
-
-
-class AudioStream(threading.Thread):
-
-    def __init__(self):
-        super(AudioStream, self).__init__()
-        self.data = []
-        self.stop_flag = False
-        self.p = None
-        self.stream = None
-        self.frames_per_buffer = int(config.MIC_RATE / config.FPS)
-
-    def setup(self):
-        self.p = pyaudio.PyAudio()
-        self.stream = self.p.open(format=pyaudio.paInt16,
-                                  channels=1,
-                                  rate=config.MIC_RATE,
-                                  input=True,
-                                  frames_per_buffer=self.frames_per_buffer)
-
-    def stop(self):
-        self.stop_flag = True
-
-    def run(self):
-
-        overflows = 0
-        prev_ovf_time = time.time()
-        while not self.stop_flag:
-            try:
-                y = np.fromstring(self.stream.read(self.frames_per_buffer, exception_on_overflow=False), dtype=np.int16)
-                y = y.astype(np.float32)
-                self.stream.read(self.stream.get_read_available(), exception_on_overflow=False)
-                self.data = y
-            except IOError:
-                overflows += 1
-                if time.time() > prev_ovf_time + 1:
-                    prev_ovf_time = time.time()
-                    print('Audio buffer has overflowed {} times'.format(overflows))
-
-        self.stream.stop_stream()
-        self.stream.close()
-        self.p.terminate()
