@@ -60,18 +60,13 @@ class Music(Default):
         pass
 
     def read_audio(self):
-        overflows = 0
-        prev_ovf_time = time.time()
         try:
             y = np.fromstring(self.stream.read(frames_per_buffer, exception_on_overflow=False), dtype=np.int16)
             y = y.astype(np.float32)
             self.stream.read(self.stream.get_read_available(), exception_on_overflow=False)
             return y
         except IOError:
-            overflows += 1
-            if time.time() > prev_ovf_time + 1:
-                prev_ovf_time = time.time()
-                print('Audio buffer has overflowed {} times'.format(overflows))
+            print('Audio buffer has overflowed')
 
     def fill(self):
         """
