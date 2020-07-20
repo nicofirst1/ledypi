@@ -16,7 +16,7 @@ from rgb import RGB
 # Chasing
 
 # choose pattern, rate and color
-pat = Patterns['Pulse']
+pat = Patterns['Music']
 rate = 10
 color = RGB(random=True)
 

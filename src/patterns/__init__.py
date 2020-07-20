@@ -3,6 +3,7 @@ from patterns.fading import Fading
 from patterns.fire import Fire
 from patterns.firework import FireWork
 from patterns.meteor import Meteor
+from patterns.music import Music
 from patterns.off import Off
 from patterns.rainbow import Rainbow
 from patterns.snow import Snow
@@ -32,5 +33,6 @@ Patterns = dict(
     Snow=Snow,
     Steady=Steady,
     Pulse=Pulse,
+    Music=Music,
 
 )
