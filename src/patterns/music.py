@@ -9,7 +9,7 @@ import config
 import dsp
 from patterns.default import Default
 from rgb import RGB
-from visualization import mel_gain, mel_smoothing, fft_window, visualization_effect, visualize_spectrum, \
+from visualization import mel_gain, mel_smoothing, fft_window, visualize_spectrum, \
     visualize_energy, visualize_scroll
 
 # Number of audio samples to read every time frame
@@ -41,9 +41,13 @@ class Music(Default):
     def fill(self):
 
         try:
-            output=microphone_update(self.streamer.data,self.visualizer)
-            output= _update_pi(output)
-            r, g, b = output
+            pixels=microphone_update(self.streamer.data,self.visualizer)
+            # Truncate values and cast to integer
+            pixels = np.clip(pixels, 0, 255).astype(int)
+            # Optional gamma correction
+            pixels = _gamma[pixels]
+
+            r, g, b = pixels
             for idx in range(len(r)):
                 rgb = RGB(r=r[idx], g=g[idx], b=b[idx], a=255)
                 self.pixels[idx]['color'] = rgb
