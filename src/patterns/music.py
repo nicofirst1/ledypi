@@ -30,29 +30,30 @@ class Music(Default):
         self.streamer.setup()
         self.streamer.start()
 
-        self.visualizations_dict=dict(
+        self.visualizations_dict = dict(
             spectrum=visualize_spectrum,
             energy=visualize_energy,
             scroll=visualize_scroll,
         )
 
-        self.visualizer=self.visualizations_dict['spectrum']
+        self.visualizer = self.visualizations_dict['energy']
+
+        self.modifiers = dict(
+            visualizer=self.visualizer,
+        )
 
     @property
     def rate(self):
-        return 0.01
+        return 0
 
     @rate.setter
     def rate(self, value):
         pass
 
-
-
-
     def fill(self):
 
         try:
-            pixels=microphone_update(self.streamer.data,self.visualizer)
+            pixels = microphone_update(self.streamer.data, self.visualizer)
             # Truncate values and cast to integer
             pixels = np.clip(pixels, 0, 255).astype(int)
             # Optional gamma correction
@@ -67,23 +68,7 @@ class Music(Default):
             pass
 
 
-
-def _update_pi(input):
-    """Writes new LED values to the Raspberry Pi's LED strip
-
-    Raspberry Pi uses the rpi_ws281x to control the LED strip directly.
-    This function updates the LED strip with new values.
-    """
-    # Truncate values and cast to integer
-    pixels = np.clip(input, 0, 255).astype(int)
-    # Optional gamma correction
-    pixels = _gamma[pixels] if config.SOFTWARE_GAMMA_CORRECTION else np.copy(pixels)
-
-
-    return pixels
-
-
-def microphone_update(audio_samples,visualizer):
+def microphone_update(audio_samples, visualizer):
     global y_roll
     # Normalize samples between 0 and 1
     y = audio_samples / 2.0 ** 15
@@ -127,9 +112,9 @@ class AudioStream(threading.Thread):
         super(AudioStream, self).__init__()
         self.data = []
         self.stop_flag = False
-        self.p=None
-        self.stream=None
-        self.frames_per_buffer= int(config.MIC_RATE / config.FPS)
+        self.p = None
+        self.stream = None
+        self.frames_per_buffer = int(config.MIC_RATE / config.FPS)
 
     def setup(self):
         self.p = pyaudio.PyAudio()
