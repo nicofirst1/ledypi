@@ -27,6 +27,7 @@ The project works with python>=3.7, to setup your environment follow the steps:
 ```
 python DotStar_Emulator/setup.py install
 ```
+If you get a gcc error see [this](https://stackoverflow.com/questions/20023131/cannot-install-pyaudio-gcc-error).
 
 ## App Inventor
 The MIT [AppInventor](http://appinventor.mit.edu/) is a tool to simply create apps with a building block programming paradigm. 
@@ -80,12 +81,12 @@ If you get a `ModuleNotFoundError` try to set the python path as follows in your
 ```shell script
 export PYTHONPATH=./src   
 ```
-Both the local and remote test relies on two processes to work, one of which is always the [gui](./src/pc/main_gui.py).
+Both the local and remote test relies on two processes to work, one of which is always the [gui](src/pc/gui.py).
 
 ### Local PC
-To test first run the [gui](./src/pc/main_gui.py) and then in a separate process run [patterns](./src/pc/test.py)
+To test first run the [gui](src/pc/gui.py) and then in a separate process run [patterns](./src/pc/test.py)
 ```shell script
-python src/pc/main_gui.py
+python src/pc/gui.py
 python src/pc/test.py
 ```
 
@@ -103,7 +104,7 @@ the credential json file and the mode (either 'pc' or 'rpi') which specify where
 
 An example might be
 ```shell script
-python src/main_gui.py
+python src/gui.py
 python src/firebase/connect.py credential.json pc
 ```
 To run the remote app on your pc together with the gui, or 
