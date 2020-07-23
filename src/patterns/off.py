@@ -9,6 +9,5 @@ class Off(Default):
         self.pattern_name = "Off"
 
     def fill(self):
-
         for idx in range(self.strip_length):
             self.pixels[idx]['color'] = RGB()

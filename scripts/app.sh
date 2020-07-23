@@ -1,7 +1,7 @@
 #!/bin/sh
 
 path2repo="/home/pi/ledypi" # change this to the location of the repo
-pixels=600                        # change here the number of pixels
+pixels=600                  # change here the number of pixels
 
 pythonpath="$path2repo/src:$path2repo/audio-reactive-led-strip/python"
 export PYTHONPATH="$pythonpath"

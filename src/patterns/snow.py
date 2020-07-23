@@ -14,7 +14,7 @@ class Snow(Default):
         self.min_space = 3  # min space between trail end and trail start
         self.counter = 0
         self.pattern_name = "Snow"
-        self.color=RGB(white=True)
+        self.color = RGB(white=True)
 
         self.modifiers = dict(
             trail=self.trail,
@@ -31,11 +31,10 @@ class Snow(Default):
 
         intensity = self.color.a
         loss = intensity // self.trail  # loss of intensity for trail
-        color=copy(self.color)
+        color = copy(self.color)
 
         for jdx in reversed(range(num_of_trail)):
             for idx in range(jdx + self.counter, self.strip_length + jdx + self.counter, num_of_trail):
-
                 color.update_single(a=intensity)
                 self.pixels[idx % self.strip_length]['color'] = color.copy()
 

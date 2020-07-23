@@ -1,8 +1,8 @@
 import argparse
 
 from patterns import Patterns
-from rpi.pi_handler import PiHandler
 from rgb import RGB
+from rpi.pi_handler import PiHandler
 
 # Available patterns are:
 # ColorWipe
@@ -18,8 +18,8 @@ from rgb import RGB
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('pattern', type=str, help='Pattern')
-    parser.add_argument('--rate',  type=int, help='rate', default=10)
-    parser.add_argument('--pixels',  type=int, help='rate',default=600)
+    parser.add_argument('--rate', type=int, help='rate', default=10)
+    parser.add_argument('--pixels', type=int, help='rate', default=600)
     args = parser.parse_args()
 
     # choose pattern, rate and color

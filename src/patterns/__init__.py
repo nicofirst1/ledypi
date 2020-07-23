@@ -1,3 +1,6 @@
+import logging
+import sys
+
 from patterns.color_wipe import ColorWipe
 from patterns.fading import Fading
 from patterns.fire import Fire
@@ -5,13 +8,10 @@ from patterns.firework import FireWork
 from patterns.meteor import Meteor
 from patterns.music import Music
 from patterns.off import Off
+from patterns.pulse import Pulse
 from patterns.rainbow import Rainbow
 from patterns.snow import Snow
 from patterns.steady import Steady
-from patterns.pulse import Pulse
-
-import logging
-import sys
 
 pattern_logger = logging.getLogger("pattern_logger")
 pattern_logger.setLevel(logging.DEBUG)

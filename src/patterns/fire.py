@@ -16,9 +16,9 @@ class Fire(Default):
         self.sparking = 80
         self.cooldown_list = [0 for _ in range(self.strip_length)]
         self.pattern_name = "Fire"
-        self.mid=self.strip_length//2
+        self.mid = self.strip_length // 2
 
-        self.modifiers=dict(
+        self.modifiers = dict(
             cooling=self.cooling,
             sparking=self.sparking
         )
@@ -36,16 +36,16 @@ class Fire(Default):
             self.cooldown_list[idx] = bound_sub(self.cooldown_list[idx], cooldown, minimum=0)
 
         for idx in range(self.strip_length - 1, self.mid, -1):
-            v= (self.cooldown_list[idx - 1] + 2 * self.cooldown_list[idx - 2]) / 3
+            v = (self.cooldown_list[idx - 1] + 2 * self.cooldown_list[idx - 2]) / 3
             self.cooldown_list[idx] = v
 
         for idx in range(0, self.mid - 1, +1):
-            v= (self.cooldown_list[idx + 1] + 2 * self.cooldown_list[idx + 2]) / 3
+            v = (self.cooldown_list[idx + 1] + 2 * self.cooldown_list[idx + 2]) / 3
             self.cooldown_list[idx] = v
 
         if randint(0, 255) < self.sparking:
             # sparking starting point
-            y = randint(self.mid-3, self.mid+3)
+            y = randint(self.mid - 3, self.mid + 3)
             self.cooldown_list[y] = self.cooldown_list[y] + randint(160, 255)
 
         for idx in range(self.strip_length):
