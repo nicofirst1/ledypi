@@ -176,7 +176,7 @@ class RGB:
         Return a copy of self
         :return:
         """
-        return RGB(r=self.r,g=self.g,b=self.b,a=self.a)
+        return RGB(r=self.r, g=self.g, b=self.b, a=self.a)
 
     @staticmethod
     def assertion(val):

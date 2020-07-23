@@ -20,7 +20,7 @@ class Fading(Default):
         self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.point_number)}
         self.pattern_name = "Fading"
 
-        self.modifiers=dict(
+        self.modifiers = dict(
             point_number=self.point_number,
             rate_start=self.rate_start,
             rate_end=self.rate_end

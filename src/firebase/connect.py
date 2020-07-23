@@ -5,10 +5,7 @@ import sys
 from firebase.connector import FireBaseConnector
 
 
-
-
 def connect(args):
-
     def signal_handler(signal, frame):
         fbc.close()
         # your code here
@@ -33,7 +30,6 @@ def connect(args):
     # init the firebase connector
     fbc = FireBaseConnector(credential_path=args.credential, database_url=args.databaseURL, handler=handler,
                             pixels=args.pixels, debug=args.debug)
-
 
     # add signal handler for interruption
     signal.signal(signal.SIGINT, signal_handler)

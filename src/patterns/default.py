@@ -8,7 +8,8 @@ from rgb import RGB
 pattern_logger = logging.getLogger("pattern_logger")
 
 # the rate is passed as a value>=1 second which is too slow
-RATE_DIVISOR=200
+RATE_DIVISOR = 200
+
 
 class Default(threading.Thread):
     """
@@ -31,7 +32,6 @@ class Default(threading.Thread):
         self.handler = handler(pixels)
         self.rate = rate
 
-
         self.strip_length = pixels
         self.color = color
         # boolan value to randomize color
@@ -41,7 +41,7 @@ class Default(threading.Thread):
         self.pattern_name = None
 
         # dictionary storing the modifiers to be implemented in the web app
-        self.modifiers=dict()
+        self.modifiers = dict()
 
         # init and set the pixels to the default color
         self.pixels = {idx: dict(color=self.color) for idx in range(self.strip_length + 1)}
@@ -54,7 +54,13 @@ class Default(threading.Thread):
 
     def color_set(self, index, rgb, **kwargs):
 
-        self.handler.set(index, rgb.a, rgb.b, rgb.g, rgb.r)
+        if isinstance(rgb, RGB):
+            self.handler.set(index, rgb.a, rgb.b, rgb.g, rgb.r)
+        elif isinstance(rgb, tuple):
+            r, g, b, a = rgb
+            self.handler.set(index, a, b, g, r)
+        else:
+            raise ValueError(f"Class {rgb.__class__} not recognized")
 
     def fill(self):
 

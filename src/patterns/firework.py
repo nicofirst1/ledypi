@@ -17,7 +17,7 @@ class FireWork(Default):
         self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.fires)}
         self.pattern_name = "FireWork"
 
-        self.modifiers=dict(
+        self.modifiers = dict(
             fires=self.fires,
             loss=self.loss
         )
