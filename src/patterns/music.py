@@ -1,22 +1,13 @@
-import time
-
 import numpy as np
 import pyaudio
-from scipy.ndimage import gaussian_filter1d
 
-import config
-import dsp
+from config import CONFIGS
 from patterns.default import Default
-from visualization import mel_gain, mel_smoothing, fft_window, visualize_spectrum, \
-    visualize_energy, visualize_scroll
+from visualization import Visualizer
 
-# Number of audio samples to read every time frame
-samples_per_frame = int(config.MIC_RATE / config.FPS)
-# Array containing the rolling audio sample window
-y_roll = np.random.rand(config.N_ROLLING_HISTORY, samples_per_frame) / 1e16
-_gamma = np.load(config.GAMMA_TABLE_PATH)
+_gamma = np.load(CONFIGS['gamma_table_path'])
 """Gamma lookup table used for nonlinear brightness correction"""
-frames_per_buffer = int(config.MIC_RATE / config.FPS)
+
 
 class Music(Default):
 
@@ -24,20 +15,30 @@ class Music(Default):
         super().__init__(**kwargs)
         self.pattern_name = "Music"
 
-        self.visualizations_dict = dict(
-            spectrum=visualize_spectrum,
-            energy=visualize_energy,
-            scroll=visualize_scroll,
+        CONFIGS['n_pixels'] = self.strip_length
+
+        # init visualizer
+        self.vis = Visualizer(CONFIGS)
+
+        # dict used to set the visualizer effect
+        self.effect_dict = dict(
+            spectrum=self.vis.visualize_spectrum,
+            energy=self.vis.visualize_energy,
+            scroll=self.vis.visualize_scroll,
         )
 
-        self.visualizer = self.visualizations_dict['spectrum']
+        # name of the effect to be used
+        self.effect = 'spectrum'
 
         self.modifiers = dict(
-            visualizer=self.visualizer,
+            visualizer=self.effect,
         )
 
+        # attributes for the mic
         self.p = None
         self.stream = None
+        self.frames_per_buffer = int(CONFIGS['mic_rate'] / CONFIGS['fps'])
+
         self.setup()
 
     def setup(self):
@@ -47,12 +48,32 @@ class Music(Default):
         self.p = pyaudio.PyAudio()
         self.stream = self.p.open(format=pyaudio.paInt16,
                                   channels=1,
-                                  rate=config.MIC_RATE,
+                                  rate=CONFIGS['mic_rate'],
                                   input=True,
-                                  frames_per_buffer=frames_per_buffer)
+                                  frames_per_buffer=self.frames_per_buffer)
+
+    @property
+    def effect(self):
+        return self._effect
+
+    @effect.setter
+    def effect(self, value):
+        """
+        Set the effect to a certain value and change the visualization effect in the vis calss
+        """
+        try:
+            ef = self.effect_dict[value]
+            self.vis.visualization_effect = ef
+            self._effect = value
+
+        except KeyError as e:
+            print(f"Error for key {value}\n{e}")
 
     @property
     def rate(self):
+        """
+        Rate should always be zero here9
+        """
         return 0
 
     @rate.setter
@@ -60,8 +81,12 @@ class Music(Default):
         pass
 
     def read_audio(self):
+        """
+        Read audio and return it
+        """
         try:
-            y = np.fromstring(self.stream.read(frames_per_buffer, exception_on_overflow=False), dtype=np.int16)
+            y = np.fromstring(self.stream.read(self.frames_per_buffer, exception_on_overflow=False),
+                              dtype=np.int16)
             y = y.astype(np.float32)
             self.stream.read(self.stream.get_read_available(), exception_on_overflow=False)
             return y
@@ -72,12 +97,12 @@ class Music(Default):
         """
         Read from audio stream and set pixels
         """
-
-
-        output=self.read_audio()
+        # read audio input, can also be none when the mic has not started yet
+        output = self.read_audio()
 
         try:
-            pixels = microphone_update(output, self.visualizer)
+            # use visualization
+            pixels, _ = self.vis.audio_to_rgb(output)
             # Truncate values and cast to integer
             pixels = np.clip(pixels, 0, 255).astype(int)
             # Optional gamma correction
@@ -90,8 +115,6 @@ class Music(Default):
         except TypeError:
             pass
 
-
-
     def stop(self):
         """
         Call super method and close audio stream
@@ -101,44 +124,3 @@ class Music(Default):
         self.stream.stop_stream()
         self.stream.close()
         self.p.terminate()
-
-
-def microphone_update(audio_samples, visualizer):
-    """
-    Function adapted from audio-reactive-led-strip
-    """
-    global y_roll
-    # Normalize samples between 0 and 1
-    y = audio_samples / 2.0 ** 15
-    # Construct a rolling window of audio samples
-    y_roll[:-1] = y_roll[1:]
-    y_roll[-1, :] = np.copy(y)
-    y_data = np.concatenate(y_roll, axis=0).astype(np.float32)
-
-    vol = np.max(np.abs(y_data))
-    if vol < config.MIN_VOLUME_THRESHOLD:
-        print('No audio input. Volume below threshold. Volume:', vol)
-        output = np.tile(0, (3, config.N_PIXELS))
-
-    else:
-        # Transform audio input into the frequency domain
-        N = len(y_data)
-        N_zeros = 2 ** int(np.ceil(np.log2(N))) - N
-        # Pad with zeros until the next power of two
-        y_data *= fft_window
-        y_padded = np.pad(y_data, (0, N_zeros), mode='constant')
-        YS = np.abs(np.fft.rfft(y_padded)[:N // 2])
-        # Construct a Mel filterbank from the FFT data
-        mel = np.atleast_2d(YS).T * dsp.mel_y.T
-        # Scale data to values more suitable for visualization
-        # mel = np.sum(mel, axis=0)
-        mel = np.sum(mel, axis=0)
-        mel = mel ** 2.0
-        # Gain normalization
-        mel_gain.update(np.max(gaussian_filter1d(mel, sigma=1.0)))
-        mel /= mel_gain.value
-        mel = mel_smoothing.update(mel)
-        # Map filterbank output onto LED strip
-        output = visualizer(mel)
-
-    return output
