@@ -1,6 +1,3 @@
 [submodule "DotStar_Emulator"]
 	path = DotStar_Emulator
 	url = https://github.com/nicofirst1/DotStar_Emulator.git
-[submodule "audio-reactive-led-strip"]
-	path = audio-reactive-led-strip
-	url = https://github.com/nicofirst1/audio-reactive-led-strip
