@@ -18,7 +18,7 @@ There are more than 10 _standard_ pattern to choose from with a steady logic, th
 On top of these fixed patters there are two interactive patters whose behavior can completely change based on the user input"
 
 ### Music Reactive (click gif for video)
-[![audio demo](Resources/audio_demo.gif)](https://youtu.be/7PXDBr3uZmA)
+[![audio demo](Resources/audio_demo.gif)](https://youtu.be/7PXDBr3uZmA) 
 
 This pattern uses a microphone to visualize the music on your led strip. There are three different type of visualization:
 - Spectrum: split the strip on subsequent frequency bands and visualize the amplitude as a mix of rgb values
