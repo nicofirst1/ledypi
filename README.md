@@ -6,12 +6,37 @@ Here's a video tutorial showing how the app works on my strip.
 
 [![Tutorial](http://img.youtube.com/vi/k1sSvwABXCE/0.jpg)](http://www.youtube.com/watch?v=k1sSvwABXCE )
 
-## Audio Demo (click gif for video)
-[![audio demo](Resources/audio_demo.gif)](https://youtu.be/7PXDBr3uZmA)
-
-
 # Installation 
 For the installation check out the related [README](INSTALL.md).
+
+# Patterns
+
+## Logic fixed
+There are more than 10 _standard_ pattern to choose from with a steady logic, that is a fixed behavior.
+
+## Interactive
+On top of these fixed patters there are two interactive patters whose behavior can completely change based on the user input"
+
+### Music Reactive (click gif for video)
+[![audio demo](Resources/audio_demo.gif)](https://youtu.be/7PXDBr3uZmA)
+
+This pattern uses a microphone to visualize the music on your led strip. There are three different type of visualization:
+- Spectrum: split the strip on subsequent frequency bands and visualize the amplitude as a mix of rgb values
+- Energy: use an energy function to plot the sound on the leds
+- Scroll: record the audio amplitude on a scrolling timeline.
+
+### Equation
+You can input a custom equation for the rgb values. Such equation can depend on:
+- time: a time-step is kept so to evolve the function through time
+- index: the position of the ledstrip can also be used
+
+For example the following patters is given with:
+- red = _cos(t)_
+- green = _sin(t)_
+- blue = _idx_
+
+[![equation demo](Resources/equation_demo.gif)]
+
 
 # Testing
 If you get a `ModuleNotFoundError` try to set the python path as follows in your terminal window:

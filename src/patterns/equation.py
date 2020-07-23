@@ -26,9 +26,9 @@ class Equation(Default):
         self.fns = {}
 
         # r,g,b functions in string format
-        self.r_eq = "idx^1000"
-        self.g_eq = "idx"
-        self.b_eq = "1/idx"
+        self.r_eq = "cos(t)"
+        self.g_eq = "sin(t)"
+        self.b_eq = "idx"
 
         # time step
         self.t = 1
