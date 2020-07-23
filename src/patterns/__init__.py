@@ -2,6 +2,7 @@ import logging
 import sys
 
 from patterns.color_wipe import ColorWipe
+from patterns.equation import Equation
 from patterns.fading import Fading
 from patterns.fire import Fire
 from patterns.firework import FireWork
@@ -34,5 +35,6 @@ Patterns = dict(
     Steady=Steady,
     Pulse=Pulse,
     Music=Music,
+    Equation=Equation,
 
 )
