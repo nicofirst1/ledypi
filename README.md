@@ -46,14 +46,9 @@ The modular desing allows you to add the logic you wish by overriding a single m
 - 14 pre-made patterns
 - Customizable attributes for each one
 - [Music reactive](#music-reactive-click-gif-for-video) 
-- Android app for control 
+- [Android app](AppInventor) for control 
 - Firebase database
 - Debug mode available 
-
-Here's a video tutorial showing how the app works on my strip.
-
-
-
 
 # Patterns
 Each pattern inherits from a [base class](src/patterns/default.py) with its own logic. This allows anyone to implement his own pattern simply by overriding a method (see more on the [readme](patterns/README.md)).
@@ -107,7 +102,7 @@ For example the following patters is given with:
 ![equation demo](Resources/equation_demo.gif)
 
 # Installation 
-For the installation check out the related [INSTALL](INSTALL.md).
+For the installation check out the related [INSTALL markdown](INSTALL.md).
 
 # Testing
 If you get a `ModuleNotFoundError` try to set the python path as follows in your terminal window:
