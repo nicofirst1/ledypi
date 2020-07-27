@@ -1,9 +1,8 @@
 <h1 align="center">
   <br>
-  <img src="Resources/logo.png" alt="Markdownify" width="200"></a>
+    <img src="Resources/logo.png"  width="250"></a>
   <br>
   Ledypi
-  <br>
 </h1>
 
 <h4 align="center">Control you led strip with  RaspberryPi, Python and Android</a>.</h4>
@@ -24,7 +23,7 @@
   <a href="#Patterns">Patterns</a> •
   <a href="#Installation">Installation</a> •
   <a href="#Testing">Testing</a> •
-  <a href="#Support">Support</a>
+  <a href="#Contributing">Contributing</a>
 </p>
 
 <h4 align="center">
@@ -42,7 +41,7 @@
 
 # Key Features
 Choose from more than 10 pre-made patterns and implement your own.
-The modular desing of the control class allows you to add the logioc you wish by ovverriding a single method, then you can choose the pattern either trough ssh or on the android app.
+The modular desing allows you to add the logic you wish by overriding a single method, then you can choose the pattern either trough ssh or on the android app.
 
 - 14 pre-made patterns
 - Customizable attributes for each one
@@ -51,31 +50,33 @@ The modular desing of the control class allows you to add the logioc you wish by
 - Firebase database
 - Debug mode available 
 
-
 Here's a video tutorial showing how the app works on my strip.
 
 
 
 
 # Patterns
-Each pattern inherits from a [base class](src/patterns/default.py) with its own logic. This allows the anyone to implement his own pattern simply by overriding a method (see more on the [readme](patterns/README.md)).
+Each pattern inherits from a [base class](src/patterns/default.py) with its own logic. This allows anyone to implement his own pattern simply by overriding a method (see more on the [readme](patterns/README.md)).
 
 Moreover each pattern can be customized by changing the values of its attributes, more ahead.
 
 ## Fixed logic
 There are more than 10 _standard_ pattern to choose from with a steady logic, that is a fixed behavior.
 
-### Water
+<h3 >Water</h3>
+
 Bring the ocean home with the ocean pattern. You can choose the deepness with the parameters
 
 ![water demo](Resources/water_demo.gif)
 
-### Fire
+<h3 >Fire</h3>
+
 If you're cold then try the fire pattern.
 
 ![water demo](Resources/fire_demo.gif)
 
-### Game of life 
+<h3 >Game of Life</h3>
+
 Watch how life evolves with the famous [game of life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) algorithm.
 
 ![gof demo](Resources/gof_demo.gif)
@@ -96,7 +97,7 @@ This pattern uses a microphone to visualize the music on your led strip. There a
 ### Equation
 You can input a custom equation for the rgb values. Such equation can depend on:
 - time: a time-step is kept so to evolve the function through time
-- index: the position of the ledstrip can also be used
+- index: the position of the led-strip can also be used
 
 For example the following patters is given with:
 - red = _cos(t)_
@@ -106,7 +107,7 @@ For example the following patters is given with:
 ![equation demo](Resources/equation_demo.gif)
 
 # Installation 
-For the installation check out the related [README](INSTALL.md).
+For the installation check out the related [INSTALL](INSTALL.md).
 
 # Testing
 If you get a `ModuleNotFoundError` try to set the python path as follows in your terminal window:
@@ -123,7 +124,7 @@ python src/pc/test.py
 ```
 
 ### Local RPI
-If you wish to run a local test of the rapsberrypi you don't need the gui process, simply ssh into the rpi and execute the test
+If you wish to run a local test of the RaspberryPi you don't need the gui process, simply ssh into the rpi and execute the test
 
 ```shell script
 python src/rpi/test.py
@@ -144,7 +145,7 @@ To run the remote app on your pc together with the gui, or
 ```shell script
 python src/firebase/connect.py credential.json rpi
 ```
-To run it on the raspberrypi.
+To run it on the RaspberryPi.
 
 #### Additional params
 The [connect script](src/firebase/connect.py)  accepts two optional arguments:
@@ -157,8 +158,13 @@ To connect to a custom databaseURL with 64 leds on the rpi you should run
 python src/firebase/connect.py credential.json rpi --databaseURL https://customURL.firebaseio.com/ --pixels 64
 ```
 
-# Support
-todo
+# Contributing
+If you wish to support this project just fork it and add your pattern
+
 <a href="https://paypal.me/dizzi17">
-  <img src="https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&amp;style=flat">
+  <img src="https://img.shields.io/badge/-donate-0079C1.svg?style=for-the-badge&logo=paypal">
+</a>
+&nbsp;&nbsp
+<a href="https://www.linkedin.com/in/nicol%C3%B2-brandizzi-04091b153/">
+  <img src="https://img.shields.io/badge/-LinkedIn-2867b2.svg?style=for-the-badge&logo=linkedin">
 </a>
