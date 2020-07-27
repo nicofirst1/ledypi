@@ -9,4 +9,4 @@ for f in "${files[@]}"; do
   excludes+=(--exclude "$f")
 done
 
-rsync --progress -av "${excludes[@]}" -r $1 pi@$pi_ip:$repo_location
+rsync --progress -av "${excludes[@]}" -r $1 pi@$pi_ip:$2
