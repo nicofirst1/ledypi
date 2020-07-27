@@ -57,6 +57,8 @@ class GameOfLife(Default):
         # check if the number of alive players has not changed in an entire execution
         if self.num_alives[1:] == self.num_alives[:-1]:
             self.alive = Alive(self.strip_length)
+            # shut down 
+            self.color_all((0,0,0,0))
             pattern_logger.debug("Game of Life reset")
 
     def color_idx(self, idx):

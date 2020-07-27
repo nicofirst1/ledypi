@@ -52,6 +52,11 @@ class Default(threading.Thread):
             self.color_set(idx, self.pixels[idx]['color'])
         self.handler.send()
 
+    def color_all(self, color):
+        for idx in self.strip_length:
+            self.pixels[idx]['color']=color
+
+
     def color_set(self, index, rgb, **kwargs):
 
         if isinstance(rgb, RGB):
