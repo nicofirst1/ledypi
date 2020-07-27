@@ -10,19 +10,27 @@ Here's a video tutorial showing how the app works on my strip.
 For the installation check out the related [README](INSTALL.md).
 
 # Patterns
+Each pattern inherits from a [base class](src/patterns/default.py) with its own logic. This allows the anyone to implement his own pattern simply by overriding a method (see more on the [readme](patterns/README.md)).
 
-## Logic fixed
+Moreover each pattern can be customized by changing the values of its attributes, more ahead.
+
+## Fixed logic
 There are more than 10 _standard_ pattern to choose from with a steady logic, that is a fixed behavior.
 
 ### Water
 Bring the ocean home with the ocean pattern. You can choose the deepness with the parameters
 
-[![water demo](Resources/water_demo.gif)]
+![water demo](Resources/water_demo.gif)
+
+### Fire
+If you're cold then try the fire pattern.
+
+![water demo](Resources/fire_demo.gif)
 
 ### Game of life 
 Watch how life evolves with the famous [game of life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) algorithm.
 
-[![gof demo](Resources/gof_demo.gif)]
+![gof demo](Resources/gof_demo.gif)
 
 
 
@@ -47,7 +55,7 @@ For example the following patters is given with:
 - green = _sin(t)_
 - blue = _idx_
 
-[![equation demo](Resources/equation_demo.gif)]
+![equation demo](Resources/equation_demo.gif)
 
 
 # Testing
