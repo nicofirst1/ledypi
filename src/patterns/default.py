@@ -56,9 +56,11 @@ class Default(threading.Thread):
 
         if isinstance(rgb, RGB):
             self.handler.set(index, rgb.a, rgb.b, rgb.g, rgb.r)
-        elif isinstance(rgb, tuple):
+        elif isinstance(rgb, tuple) or isinstance(rgb, list):
+            assert len(rgb)==4, "The length of the color should be 4"
             r, g, b, a = rgb
             self.handler.set(index, a, b, g, r)
+
         else:
             raise ValueError(f"Class {rgb.__class__} not recognized")
 
@@ -91,7 +93,7 @@ class Default(threading.Thread):
 
     def run(self):
 
-        pattern_logger.info(f"Started pattern: {self.pattern_name}")
+        pattern_logger.info(f"Started pattern: {self.pattern_name} with rate: {self.rate}")
         try:
             while not self.handler.is_stopped:
                 self.on_loop()
