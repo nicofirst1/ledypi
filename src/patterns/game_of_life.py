@@ -20,7 +20,7 @@ class GameOfLife(Default):
         self.pattern_name = "GameOfLife"
         self.alive = Alive(size=self.strip_length)
         self.num_alives = [0] * self.strip_length
-
+        self.randomize_color=True
         self.modifiers = dict(
         )
 
@@ -38,32 +38,40 @@ class GameOfLife(Default):
             # Any live cell with fewer than two live neighbours dies, as if by underpopulation.
             if cur and n < 2:
                 self.alive[idx] = 0
+                self.color_idx(idx)
+
             # Any live cell with more than three live neighbours dies, as if by overpopulation.
             elif cur and n > 3:
                 self.alive[idx] = 0
+                self.color_idx(idx)
+
             # Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.
             elif not cur and n == 3:
                 self.alive[idx] = 1
+                self.color_idx(idx)
+
             # Any live cell with two or three live neighbours lives on to the next generation.
             else:
                 pass
-            # if the current one is alive then color it
-            if self.alive[idx]:
-                if self.randomize_color:
-                    self.pixels[idx]['color'] = RGB(random=True)
-                else:
-                    self.pixels[idx]['color'] = self.color
-            # else kill it
-            else:
-                self.pixels[idx]['color'] = (0, 0, 0, 0)
 
         # check if the number of alive players has not changed in an entire execution
         if self.num_alives[1:] == self.num_alives[:-1]:
             self.alive = Alive(self.strip_length)
             pattern_logger.debug("Game of Life reset")
 
+    def color_idx(self, idx):
+        # if the current one is alive then color it
+        if self.alive[idx]:
+            if self.randomize_color:
+                self.pixels[idx]['color'] = RGB(random=True)
+            else:
+                self.pixels[idx]['color'] = self.color
+        # else kill it
+        else:
+            self.pixels[idx]['color'] = (0, 0, 0, 0)
 
 class Alive(list):
+
     """
     Custom extension of the list class, implements easier slicing for circular buffer
     """
