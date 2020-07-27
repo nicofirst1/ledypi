@@ -1,10 +1,11 @@
 blinker==1.4
 CacheControl==0.12.6
 cachetools==4.1.0
-certifi==2020.4.5.2
+certifi==2020.6.20
 chardet==3.0.4
+colour==0.1.5
 DotStar-Emulator==0.2
-equation==1.2.1
+Equation==1.2.1
 firebase-admin==4.3.0
 google-api-core==1.21.0
 google-api-python-client==1.9.3
