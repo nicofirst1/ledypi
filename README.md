@@ -1,13 +1,61 @@
-# Usage
-LedyPi is a project about LEDs and RasperryPi.
-The scope of this project is to have an easy way to implement custom patterns on a led script in Python which can then be controlled trough the ssh or on the android app.
+<h1 align="center">
+  <br>
+  <img src="Resources/logo.png" alt="Markdownify" width="200"></a>
+  <br>
+  Ledypi
+  <br>
+</h1>
+
+<h4 align="center">Control you led strip with  RaspberryPi, Python and Android</a>.</h4>
+
+<p align="center">
+  <a href="https://www.python.org/">
+    <img src="https://forthebadge.com/images/badges/made-with-python.svg"
+         a>
+  </a>
+  <a href="https://forthebadge.com/images/badges/built-with-love.svg">
+      <img src="https://forthebadge.com/images/badges/built-with-love.svg">
+  </a>
+
+</p>
+
+<p align="center">
+  <a href="#key-features">Key Features</a> •
+  <a href="#Patterns">Patterns</a> •
+  <a href="#Installation">Installation</a> •
+  <a href="#Testing">Testing</a> •
+  <a href="#Support">Support</a>
+</p>
+
+<h4 align="center">
+  Click video for tutorial 
+</h4>
+
+<p align="center" 
+    href="http://www.youtube.com/watch?v=k1sSvwABXCE">
+    <img src="Resources/tutorial_demo.gif">
+</p>
+
+
+
+
+
+# Key Features
+Choose from more than 10 pre-made patterns and implement your own.
+The modular desing of the control class allows you to add the logioc you wish by ovverriding a single method, then you can choose the pattern either trough ssh or on the android app.
+
+- 14 pre-made patterns
+- Customizable attributes for each one
+- [Music reactive](#music-reactive-click-gif-for-video) 
+- Android app for control 
+- Firebase database
+- Debug mode available 
+
 
 Here's a video tutorial showing how the app works on my strip.
 
-[![Tutorial](http://img.youtube.com/vi/k1sSvwABXCE/0.jpg)](http://www.youtube.com/watch?v=k1sSvwABXCE )
 
-# Installation 
-For the installation check out the related [README](INSTALL.md).
+
 
 # Patterns
 Each pattern inherits from a [base class](src/patterns/default.py) with its own logic. This allows the anyone to implement his own pattern simply by overriding a method (see more on the [readme](patterns/README.md)).
@@ -57,6 +105,8 @@ For example the following patters is given with:
 
 ![equation demo](Resources/equation_demo.gif)
 
+# Installation 
+For the installation check out the related [README](INSTALL.md).
 
 # Testing
 If you get a `ModuleNotFoundError` try to set the python path as follows in your terminal window:
@@ -106,3 +156,9 @@ To connect to a custom databaseURL with 64 leds on the rpi you should run
 ```shell script
 python src/firebase/connect.py credential.json rpi --databaseURL https://customURL.firebaseio.com/ --pixels 64
 ```
+
+# Support
+todo
+<a href="https://paypal.me/dizzi17">
+  <img src="https://img.shields.io/badge/$-donate-ff69b4.svg?maxAge=2592000&amp;style=flat">
+</a>
