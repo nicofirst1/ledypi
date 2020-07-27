@@ -6,6 +6,7 @@ from patterns.equation import Equation
 from patterns.fading import Fading
 from patterns.fire import Fire
 from patterns.firework import FireWork
+from patterns.game_of_life import GameOfLife
 from patterns.meteor import Meteor
 from patterns.music import Music
 from patterns.off import Off
@@ -40,5 +41,5 @@ Patterns = dict(
     Equation=Equation,
     Water=Water,
     Perlin=Perlin,
-
+    GameOfLife=GameOfLife,
 )
