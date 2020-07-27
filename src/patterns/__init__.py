@@ -13,6 +13,7 @@ from patterns.pulse import Pulse
 from patterns.rainbow import Rainbow
 from patterns.snow import Snow
 from patterns.steady import Steady
+from patterns.water import Water
 
 pattern_logger = logging.getLogger("pattern_logger")
 pattern_logger.setLevel(logging.DEBUG)
@@ -36,5 +37,6 @@ Patterns = dict(
     Pulse=Pulse,
     Music=Music,
     Equation=Equation,
+    Water=Water,
 
 )
