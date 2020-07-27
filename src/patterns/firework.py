@@ -3,7 +3,7 @@ from random import randint
 
 from patterns.default import Default
 from rgb import RGB
-from utils import bound_sub, circular_step
+from utils.color import bound_sub, circular_step
 
 
 class FireWork(Default):

@@ -2,7 +2,7 @@ import math
 from copy import deepcopy
 from random import randint
 
-from utils import bound_add
+from utils.color import bound_add
 
 
 class RGB:

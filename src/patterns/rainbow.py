@@ -2,7 +2,7 @@ from math import sin, pi, floor
 
 from patterns.default import Default
 from rgb import RGB
-from utils import scale
+from utils.color import scale
 
 
 class Rainbow(Default):

@@ -1,5 +1,5 @@
 from patterns.default import Default
-from utils import bound_sub, bound_add
+from utils.color import bound_sub, bound_add
 
 
 class Pulse(Default):

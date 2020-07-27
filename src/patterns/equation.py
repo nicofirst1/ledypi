@@ -3,7 +3,7 @@ import logging
 from Equation import Expression
 
 from patterns.default import Default
-from utils import scale
+from utils.color import scale
 
 pattern_logger = logging.getLogger("pattern_logger")
 
