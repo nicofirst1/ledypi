@@ -102,12 +102,12 @@ For example the following patters is given with:
 ![equation demo](Resources/equation_demo.gif)
 
 # Installation 
-For the installation check out the related [INSTALL markdown](INSTALL.md).
+For the installation check out the related [INSTALL markdown/](INSTALL.md).
 
 # Testing
-If you get a `ModuleNotFoundError` try to set the python path as follows in your terminal window:
+If you get a `ModuleNotFoundError` source the python path with
 ```shell script
-export PYTHONPATH=./src   
+source scripts/app.sh  
 ```
 Both the local and remote test relies on two processes to work, one of which is always the [gui](src/pc/gui.py).
 
@@ -122,7 +122,7 @@ python src/pc/test.py
 If you wish to run a local test of the RaspberryPi you don't need the gui process, simply ssh into the rpi and execute the test
 
 ```shell script
-python src/rpi/test.py
+python src/rpi/test.py PatternName 
 ```
 
 ### Remote 
@@ -154,7 +154,7 @@ python src/firebase/connect.py credential.json rpi --databaseURL https://customU
 ```
 
 # Contributing
-If you wish to support this project just fork it and add your pattern
+If you wish to support this project just fork it and add your pattern following the [readme](src/patterns/README.md).
 
 <a href="https://paypal.me/dizzi17">
   <img src="https://img.shields.io/badge/-donate-0079C1.svg?style=for-the-badge&logo=paypal">
