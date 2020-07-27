@@ -14,6 +14,18 @@ For the installation check out the related [README](INSTALL.md).
 ## Logic fixed
 There are more than 10 _standard_ pattern to choose from with a steady logic, that is a fixed behavior.
 
+### Water
+Bring the ocean home with the ocean pattern. You can choose the deepness with the parameters
+
+[![water demo](Resources/water_demo.gif)]
+
+### Game of life 
+Watch how life evolves with the famous [game of life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) algorithm.
+
+[![gof demo](Resources/gof_demo.gif)]
+
+
+
 ## Interactive
 On top of these fixed patters there are two interactive patters whose behavior can completely change based on the user input"
 
