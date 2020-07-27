@@ -9,6 +9,7 @@ from patterns.firework import FireWork
 from patterns.meteor import Meteor
 from patterns.music import Music
 from patterns.off import Off
+from patterns.perlin import Perlin
 from patterns.pulse import Pulse
 from patterns.rainbow import Rainbow
 from patterns.snow import Snow
@@ -38,5 +39,6 @@ Patterns = dict(
     Music=Music,
     Equation=Equation,
     Water=Water,
+    Perlin=Perlin,
 
 )
