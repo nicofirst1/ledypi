@@ -28,6 +28,7 @@ keyrings.alt==3.1.1
 msgpack==1.0.0
 numpy==1.16.2
 olefile==0.46
+opensimplex==0.3
 Pillow==7.2.0
 protobuf==3.12.2
 pyasn1==0.4.8
