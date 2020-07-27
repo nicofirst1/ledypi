@@ -8,6 +8,10 @@ class Off(Default):
         super().__init__(**kwargs)
         self.pattern_name = "Off"
 
+    @property
+    def rate(self):
+        return 1000000
+
     def fill(self):
         for idx in range(self.strip_length):
             self.pixels[idx]['color'] = RGB()

@@ -7,6 +7,13 @@ from utils.color import bound_sub, bound_add
 
 
 class Fading(Default):
+    """
+    Lights up multiple pixels with random color.
+    The parameters are:
+        point_number: number of maximum colored point at the same time
+        rate_start: delay to light up completely a pixel
+        rate_end: delay to shut offcompletely a pixel
+    """
 
     def __init__(self, **kwargs):
 

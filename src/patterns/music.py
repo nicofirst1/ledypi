@@ -10,6 +10,9 @@ _gamma = np.load(CONFIGS['gamma_table_path'])
 
 
 class Music(Default):
+    """
+    Music reactive leds
+    """
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -3,6 +3,9 @@ from rgb import RGB
 
 
 class ColorWipe(Default):
+    """
+    Gradually fill the strip with the chosen color. Once the strip is full, gradually empty it
+    """
 
     def __init__(self, **kwargs):
 

@@ -4,6 +4,12 @@ from patterns.default import Default
 
 
 class Meteor(Default):
+    """
+    Lights a cluster of pixels moving forward with a trail
+        size: the size of the meteor
+        trail_decay: the max size of the decay
+        random_decay: if to use random or steady decay
+    """
 
     def __init__(self, **kwargs):
 

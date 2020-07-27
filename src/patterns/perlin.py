@@ -8,6 +8,9 @@ from utils.color import scale
 
 
 class Perlin(Default):
+    """
+    Use perlin noise together with rgb mapping
+    """
 
     def __init__(self, **kwargs):
 

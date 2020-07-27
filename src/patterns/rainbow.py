@@ -6,6 +6,9 @@ from utils.color import scale
 
 
 class Rainbow(Default):
+    """
+    Use sin to define a three-wave curve to show the rainbow colors
+    """
 
     def __init__(self, **kwargs):
 

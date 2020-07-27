@@ -5,6 +5,11 @@ from rgb import RGB
 
 
 class Snow(Default):
+    """
+    Define n moving clusters with a trail
+        trail: the length of the trail
+        min_space: the minimum space between the clusters
+    """
     data_type = "Snow"
 
     def __init__(self, **kwargs):

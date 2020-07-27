@@ -3,6 +3,9 @@ from rgb import RGB
 
 
 class Steady(Default):
+    """
+    Steady color
+    """
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

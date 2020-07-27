@@ -8,6 +8,9 @@ from utils.color import bound_add, scale
 
 
 class Water(Default):
+    """
+    Use perlin noise with blue mapping to simulate water
+    """
 
     def __init__(self, **kwargs):
 

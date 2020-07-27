@@ -3,6 +3,9 @@ from utils.color import bound_sub, bound_add
 
 
 class Pulse(Default):
+    """
+    Turno on\off the strip with a specific speed
+    """
 
     def __init__(self, **kwargs):
 

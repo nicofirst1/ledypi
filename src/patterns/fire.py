@@ -7,6 +7,9 @@ from utils.color import bound_sub
 
 
 class Fire(Default):
+    """
+    Fire pattern
+    """
 
     def __init__(self, **kwargs):
 

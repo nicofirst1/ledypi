@@ -7,6 +7,9 @@ from utils.color import bound_sub, circular_step
 
 
 class FireWork(Default):
+    """
+    Simulate teh firing of multiple fireworks which propagate and vanish
+    """
 
     def __init__(self, **kwargs):
 
