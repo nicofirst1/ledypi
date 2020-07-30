@@ -61,6 +61,7 @@ class FireBaseConnector:
 
         # update db with patterns
         self.fb.update(dict(patterns='.'.join(Patterns)))
+        self.init_attributes()
         # get pattern,rate
         self.pattern_choice = self.get_cur_pattern()
         self.rate = self.get_rate()
@@ -78,6 +79,37 @@ class FireBaseConnector:
         self.pattern.stop()
         fire_logger.info("Closing firebase connection, this make take a few seconds...")
         self.listener.close()
+
+    def init_attributes(self):
+        """
+        Add all the attributes from the default modifier dictionary to the remote database
+        """
+        # get the attributes from the remote
+        data = self.get("pattern_attributes")
+        pattern_attributes = {}
+
+        # for every pattern in the pattern dict
+        for k, pt in Patterns.items():
+            remote_att = {}
+            # get the remote attributes
+            try:
+                remote_att = data[k]
+            except Exception:
+                fire_logger.warning(f"Patter '{k}' not found in pattern dict")
+
+            # set the remote ones by default
+            pattern_attributes[k] = remote_att
+
+            # get the local ones and find differences
+            local_att = pt(handler=None, rate=1, pixels=1).modifiers
+            to_add = set(local_att.keys()) - set(remote_att.keys())
+
+            # for every difference update with the local one
+            for at in to_add:
+                pattern_attributes[k][at] = local_att[at]
+
+        # update the database
+        self.fb.update(dict(pattern_attributes=pattern_attributes))
 
     @frequency
     def listener(self, event):
