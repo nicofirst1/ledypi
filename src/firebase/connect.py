@@ -2,7 +2,7 @@ import argparse
 import signal
 import sys
 
-from firebase.connector import FireBaseConnector
+from firebase.controller import FireBaseController
 
 
 def connect(args):
@@ -28,8 +28,8 @@ def connect(args):
         raise ValueError(f"Mode '{args.mode}' is not supported")
 
     # init the firebase connector
-    fbc = FireBaseConnector(credential_path=args.credential, database_url=args.databaseURL, handler=handler,
-                            pixels=args.pixels, debug=args.debug)
+    fbc = FireBaseController(credential_path=args.credential, database_url=args.databaseURL, handler=handler,
+                             pixels=args.pixels, debug=args.debug)
 
     # add signal handler for interruption
     signal.signal(signal.SIGINT, signal_handler)
