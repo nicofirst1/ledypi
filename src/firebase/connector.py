@@ -17,7 +17,7 @@ class FireBaseConnector(Thread):
     Allows for the modification of the pattern and attributes
     """
 
-    def __init__(self, credential_path, database_url, debug=None):
+    def __init__(self, credential_path, database_url="https://ledypie.firebaseio.com/", debug=None):
 
         # init thread class
         super().__init__()
@@ -71,17 +71,19 @@ class FireBaseConnector(Thread):
         # for every pattern in the pattern dict
         for k, pt in Patterns.items():
             remote_att = {}
+            # get the local ones and find differences
+            local_att = pt(handler=None, rate=1, pixels=1).modifiers
             # get the remote attributes
             try:
                 remote_att = data[k]
             except Exception:
-                fire_logger.warning(f"Patter '{k}' not found in pattern dict")
+                if len(local_att)>0:
+                    fire_logger.warning(f"Patter '{k}' not found in pattern dict")
 
             # set the remote ones by default
             pattern_attributes[k] = remote_att
 
-            # get the local ones and find differences
-            local_att = pt(handler=None, rate=1, pixels=1).modifiers
+
             to_add = set(local_att.keys()) - set(remote_att.keys())
 
             # for every difference update with the local one
@@ -90,6 +92,8 @@ class FireBaseConnector(Thread):
 
         # update the database
         self.fb.update(dict(pattern_attributes=pattern_attributes))
+
+        return pattern_attributes
 
     def get(self, key, default=None):
         """
