@@ -4,6 +4,3 @@
 [submodule "audio-reactive-led-strip"]
 	path = audio-reactive-led-strip
 	url = https://github.com/nicofirst1/audio-reactive-led-strip
-[submodule "ledypi_remote"]
-	path = ledypi_remote
-	url = https://github.com/nicofirst1/ledypi_remote
