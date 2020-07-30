@@ -1,3 +1,5 @@
+from logging import getLogger
+
 import numpy as np
 import pyaudio
 
@@ -8,6 +10,7 @@ from visualization import Visualizer
 _gamma = np.load(CONFIGS['gamma_table_path'])
 """Gamma lookup table used for nonlinear brightness correction"""
 
+music_logger=getLogger("music_logger")
 
 class Music(Default):
     """
@@ -42,7 +45,10 @@ class Music(Default):
         self.stream = None
         self.frames_per_buffer = int(CONFIGS['mic_rate'] / CONFIGS['fps'])
 
-        self.setup()
+        try:
+            self.setup()
+        except OSError:
+            music_logger.warning(f"Could not initialize the audio stream")
 
     def setup(self):
         """
@@ -54,6 +60,8 @@ class Music(Default):
                                   rate=CONFIGS['mic_rate'],
                                   input=True,
                                   frames_per_buffer=self.frames_per_buffer)
+
+        music_logger.info("Audio stream initialized")
 
     @property
     def effect(self):
@@ -127,3 +135,4 @@ class Music(Default):
         self.stream.stop_stream()
         self.stream.close()
         self.p.terminate()
+        music_logger.info("Audio stream stopped")
