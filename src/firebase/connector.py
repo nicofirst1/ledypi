@@ -7,18 +7,22 @@ from firebase_admin import db
 
 from patterns import Patterns
 from rgb import RGB
-
+from threading import Thread
 fire_logger = logging.getLogger("fire_logger")
 
 
-class FireBaseConnector:
+class FireBaseConnector(Thread):
     """
     Firebase connecting class.
     Allows for the modification of the pattern and attributes
     """
 
     def __init__(self, credential_path, database_url, debug=None):
-        # todo: use read file for certificate, url and init database
+
+        # init thread class
+        super().__init__()
+        self.stop=False
+
         cred = credentials.Certificate(credential_path)
 
         if debug is not None:
@@ -41,8 +45,20 @@ class FireBaseConnector:
         # update rgba
         self.update_rgba()
 
+    def run(self) -> None:
+
+        try:
+            while not self.stop:
+                pass
+        except KeyboardInterrupt:
+           pass
+
+        self.close()
+
+
     def close(self):
         fire_logger.info("Closing firebase connection, this make take a few seconds...")
+        self.stop=True
 
     def init_attributes(self):
         """

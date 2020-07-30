@@ -8,8 +8,7 @@ from firebase.controller import FireBaseController
 def connect(args):
     def signal_handler(signal, frame):
         fbc.close()
-        # your code here
-        sys.exit(0)
+
 
     # import the correct handler depending on the mode
     if args.mode == "pc":
@@ -30,16 +29,11 @@ def connect(args):
     # init the firebase connector
     fbc = FireBaseController(credential_path=args.credential, database_url=args.databaseURL, handler=handler,
                              pixels=args.pixels, debug=args.debug)
+    fbc.start()
 
     # add signal handler for interruption
     signal.signal(signal.SIGINT, signal_handler)
 
-    # keep the thread alive
-    try:
-        while True:
-            pass
-    except KeyboardInterrupt:
-        fbc.close()
 
 
 if __name__ == '__main__':
