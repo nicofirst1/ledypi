@@ -49,7 +49,7 @@ if __name__ == '__main__':
     parser.add_argument('--pixels', type=int, nargs='?', default="300",
                         help='Number of pixels')
 
-    parser.add_argument('--debug', nargs='?',
+    parser.add_argument('--debug', nargs='?', const=True,
                         help='If to start in debug mode')
 
     args = parser.parse_args()
