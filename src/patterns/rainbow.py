@@ -28,7 +28,6 @@ class Rainbow(Default):
             max_range=self.max_range,
         )
 
-        self.set_pixels()
 
     def fill(self):
 

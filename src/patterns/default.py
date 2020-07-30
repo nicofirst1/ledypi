@@ -29,7 +29,7 @@ class Default(threading.Thread):
 
         # init the thread and the handler
         threading.Thread.__init__(self)
-        self.handler = handler(pixels)
+        self.handler = handler
         self.rate = rate
 
         self.strip_length = pixels
@@ -45,7 +45,6 @@ class Default(threading.Thread):
 
         # init and set the pixels to the default color
         self.pixels = {idx: dict(color=self.color) for idx in range(self.strip_length + 1)}
-        self.set_pixels()
 
     def set_pixels(self):
         for idx in range(self.strip_length):
@@ -97,6 +96,9 @@ class Default(threading.Thread):
         self.handler.is_stopped = True
 
     def run(self):
+        # init handler and set pixels
+        self.handler=self.handler(self.pixels)
+        self.set_pixels()
 
         pattern_logger.info(f"Started pattern: {self.pattern_name} with rate: {self.rate}")
         try:
