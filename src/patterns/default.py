@@ -105,7 +105,7 @@ class Default(threading.Thread):
             while not self.handler.is_stopped:
                 self.on_loop()
         except KeyboardInterrupt:
-            pass
+            pattern_logger.info("Pattern has been interrupted")
 
         self.handler.close()
         pattern_logger.info("Stopped pattern")
