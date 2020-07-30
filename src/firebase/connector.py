@@ -1,13 +1,15 @@
 import logging
 import math
+import operator
+from functools import reduce
+from threading import Thread
 
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 
 from patterns import Patterns
-from rgb import RGB
-from threading import Thread
+
 fire_logger = logging.getLogger("fire_logger")
 
 
@@ -21,7 +23,7 @@ class FireBaseConnector(Thread):
 
         # init thread class
         super().__init__()
-        self.stop=False
+        self.stop = False
 
         cred = credentials.Certificate(credential_path)
 
@@ -32,18 +34,38 @@ class FireBaseConnector(Thread):
                                       options={'databaseURL': database_url})
 
         self.fb = db.reference('/')
+        self.listener = self.fb.listen(self.listener)
 
         self.rgba = None
         self.random_colors = False
 
         # update db with patterns
+        self.local_db = None
+
         self.fb.update(dict(patterns='.'.join(Patterns)))
         self.init_attributes()
-        # get pattern,rate
-        self.pattern_choice = self.get_cur_pattern()
-        self.rate = self.get_rate()
         # update rgba
-        self.update_rgba()
+        self.floor_rgba()
+
+    def listener(self, event):
+        """
+        Update the local db on every change
+        :param event:
+        :return:
+        """
+
+        # if the local db has not been initialized yet, do it
+        if self.local_db is None:
+            self.local_db = event.data
+            return
+
+        # get all the keys, remove empty
+        keys = event.path.split("/")
+        keys = [elem for elem in keys if elem]
+        # update local db
+        set_in_dict(self.local_db, keys, event.data)
+
+        self.floor_rgba()
 
     def run(self) -> None:
 
@@ -51,14 +73,13 @@ class FireBaseConnector(Thread):
             while not self.stop:
                 pass
         except KeyboardInterrupt:
-           pass
+            fire_logger.info("FireBaseConnector has been interrupted")
 
         self.close()
 
-
     def close(self):
         fire_logger.info("Closing firebase connection, this make take a few seconds...")
-        self.stop=True
+        self.stop = True
 
     def init_attributes(self):
         """
@@ -66,6 +87,10 @@ class FireBaseConnector(Thread):
         """
         # get the attributes from the remote
         data = self.get("pattern_attributes")
+
+        if data is None:
+            data = {}
+
         pattern_attributes = {}
 
         # for every pattern in the pattern dict
@@ -76,13 +101,12 @@ class FireBaseConnector(Thread):
             # get the remote attributes
             try:
                 remote_att = data[k]
-            except Exception:
-                if len(local_att)>0:
+            except KeyError:
+                if len(local_att) > 0:
                     fire_logger.warning(f"Patter '{k}' not found in pattern dict")
 
             # set the remote ones by default
             pattern_attributes[k] = remote_att
-
 
             to_add = set(local_att.keys()) - set(remote_att.keys())
 
@@ -131,37 +155,31 @@ class FireBaseConnector(Thread):
 
         return data.replace('"', '')
 
-    def update_rgba(self):
+    def floor_rgba(self):
         """
         Update RGBA values taking them from the database
         :return:
         """
 
         # get data from db
-        rgba = self.get("RGBA")
+        rgba = self.local_db["RGBA"]
 
-        # extract values
-        r = rgba.get("r")
-        g = rgba.get("g")
-        b = rgba.get("b")
-        a = rgba.get("a")
+        # remove points
+        rgba = {k: v.split('.')[0] if '.' in v else v for k, v in rgba.items()}
 
-        # convert them to ints
-        r = floor_int(r)
-        g = floor_int(g)
-        b = floor_int(b)
-        a = floor_int(a)
-
-        # update attr
-        self.rgba = RGB(r=r, g=g, b=b, a=a)
-
-        # extract random value and convert to bool
-        self.random_colors = rgba.get("random") == "true"
-
-        # todo : return update
+        # update
+        self.local_db["RGBA"] = rgba
 
 
 def floor_int(value):
     value = float(value)
     value = math.floor(value)
     return int(value)
+
+
+def get_from_dictr(data_dict, map_list):
+    return reduce(operator.getitem, map_list, data_dict)
+
+
+def set_in_dict(data_dict, map_list, value):
+    get_from_dictr(data_dict, map_list[:-1])[map_list[-1]] = value

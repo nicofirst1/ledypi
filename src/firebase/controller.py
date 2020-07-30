@@ -3,6 +3,7 @@ import time
 
 from firebase.connector import FireBaseConnector, floor_int
 from patterns import Patterns
+from rgb import RGB
 
 fire_logger = logging.getLogger("fire_logger")
 
@@ -48,7 +49,7 @@ class FireBaseController(FireBaseConnector):
         # add listener to firebase
         self.listener = self.fb.listen(self.listener)
         # update rgba
-        self.update_rgba()
+        self.floor_rgba()
 
         self.handler = handler
         self.pixels = pixels
@@ -70,6 +71,8 @@ class FireBaseController(FireBaseConnector):
         :return: None
         """
 
+        super(FireBaseController, self).listener()
+
         to_log = f"{event.event_type}\n{event.path}\n{event.data}"
         fire_logger.debug(to_log)
 
@@ -86,12 +89,12 @@ class FireBaseController(FireBaseConnector):
             # stop and restart
             self.pattern.stop()
             self.pattern = Patterns[self.pattern_choice](rate=self.rate, handler=self.handler, pixels=self.pixels)
-            self.update_rgba()
+            self.floor_rgba()
             self.pattern.start()
 
         # update rgba
         elif "RGBA" in event.path:
-            self.update_rgba()
+            self.floor_rgba()
 
         # update pattern attributes
         elif "pattern_attributes" in event.path:
@@ -125,16 +128,32 @@ class FireBaseController(FireBaseConnector):
         # update
         self.pattern.update_args(**{key: data})
 
-    def update_rgba(self):
+    def floor_rgba(self):
         """
         Update RGBA values taking them from the database
         :return:
         """
-        super(FireBaseController, self).update_rgba()
+
+        def init_rgba(rgba):
+            r = rgba['r']
+            g = rgba['g']
+            b = rgba['b']
+            a = rgba['a']
+
+            r = int(r)
+            g = int(g)
+            b = int(b)
+            a = int(a)
+
+            return RGB(r=r,g=g,b=b,a=a)
+
+        super(FireBaseController, self).floor_rgba()
         # if method is called before pattern initialization skip
         try:
             # update pattern values
-            self.pattern.update_args(randomize_color=self.random_colors)
-            self.pattern.update_args(color=self.rgba)
+            random=self.local_db["RGBA"]['random']
+            rgba=init_rgba(self.local_db["RGBA"])
+            self.pattern.update_args(randomize_color=bool(random))
+            self.pattern.update_args(color=rgba)
         except AttributeError:
             pass
