@@ -1,6 +1,7 @@
 import logging
 import math
 import operator
+import time
 from functools import reduce
 from threading import Thread
 
@@ -33,8 +34,7 @@ class FireBaseConnector(Thread):
         firebase_admin.initialize_app(credential=cred,
                                       options={'databaseURL': database_url})
 
-        self.fb = db.reference('/')
-        self.listener = self.fb.listen(self.listener)
+        self.root = db.reference('/')
 
         self.rgba = None
         self.random_colors = False
@@ -42,8 +42,15 @@ class FireBaseConnector(Thread):
         # update db with patterns
         self.local_db = None
 
-        self.fb.update(dict(patterns='.'.join(Patterns)))
+        self.root.update(dict(patterns='.'.join(Patterns)))
         self.init_attributes()
+        self.init_rgba()
+        self.init_other()
+        self.pattern_attributes = db.reference('/pattern_attributes')
+
+        self.listener = self.root.listen(self.listener)
+        time.sleep(1)
+
         # update rgba
         self.floor_rgba()
 
@@ -59,9 +66,11 @@ class FireBaseConnector(Thread):
             self.local_db = event.data
             return
 
+        if event.event_type == "patch": return
+
         # get all the keys, remove empty
         keys = event.path.split("/")
-        keys = [elem for elem in keys if elem]
+        keys.pop(0)
         # update local db
         set_in_dict(self.local_db, keys, event.data)
 
@@ -81,15 +90,113 @@ class FireBaseConnector(Thread):
         fire_logger.info("Closing firebase connection, this make take a few seconds...")
         self.stop = True
 
+    def check_diff(self, request):
+
+        # check for pattern difference
+        rq_pattern = request.get("cur_pattern")
+        if not rq_pattern == "" and rq_pattern != self.local_db.get("cur_pattern"):
+            # if yes update both local and remote
+            self.root.update(dict(cur_pattern=rq_pattern))
+            self.local_db["cur_pattern"] = rq_pattern
+
+        # check for rate difference
+        rq_rate = request.get("rate")
+        rq_rate=int(rq_rate)
+        if rq_rate != self.local_db.get("rate"):
+            # if yes update both local and remote
+            self.root.update(dict(rate=rq_rate))
+            self.local_db["rate"] = rq_rate
+
+        # map random switch from on/missing to true/false
+        if "random" in request.keys():
+            request['random'] = True
+        else:
+            request['random'] = False
+
+        # check for rgba difference
+        to_update = {}
+        for k, v in self.local_db['RGBA'].items():
+            rq = int(request.get(k))
+            if v != rq:
+                to_update[k] = rq
+
+        if len(to_update) > 0:
+            to_update = dict(list(self.local_db["RGBA"].items()) + list(to_update.items()))
+            self.root.update(dict(RGBA=to_update))
+            self.local_db["RGBA"] = to_update
+
+        # update pattern attributes
+        to_update = {}
+
+        for k, v in self.local_db['pattern_attributes'][rq_pattern].items():
+            try:
+                if request[k] != v:
+                    to_update[k] = request[k]
+            except KeyError:
+                continue
+
+        if len(to_update) > 0:
+            to_update = dict(list(self.local_db['pattern_attributes'][rq_pattern].items()) + list(to_update.items()))
+            self.pattern_attributes.update(dict(rq_pattern=to_update))
+            self.local_db["pattern_attributes"][rq_pattern] = to_update
+
+    def init_other(self):
+        """
+        Add rate, cur_pattern and patterns to the database if not present
+        :return:
+        """
+
+        to_update={}
+        # check rate
+        val = self.get("rate", None)
+        if val is None:
+            to_update['rate'] = 10
+
+        # check cur_pattern
+        val = self.get("cur_pattern", None)
+        if val is None:
+            to_update['cur_pattern'] = "Steady"
+
+        # check patterns
+        val = self.get("patterns", None)
+        if val is None:
+            to_update['patterns'] = ".".join(Patterns.keys())
+
+        if len(to_update)>0:
+            self.root.update(to_update)
+
+
+    def init_rgba(self):
+        """
+        Add RGBA to the database if not present
+        :return:
+        """
+
+        data = self.get("RGBA", {})
+
+        RGBA = dict(
+            r=255, g=255, b=255, a=100, random=0
+        )
+
+        to_update = {}
+        for k, v in RGBA.items():
+
+            try:
+                if data[k] != v:
+                    to_update[k] = data[k]
+            except KeyError:
+                to_update[k] = v
+
+        if len(to_update) > 0:
+            to_update = dict(list(RGBA.items()) + list(to_update.items()))
+            self.root.update(dict(RGBA=to_update))
+
     def init_attributes(self):
         """
         Add all the attributes from the default modifier dictionary to the remote database
         """
         # get the attributes from the remote
-        data = self.get("pattern_attributes")
-
-        if data is None:
-            data = {}
+        data = self.get("pattern_attributes", {})
 
         pattern_attributes = {}
 
@@ -115,7 +222,7 @@ class FireBaseConnector(Thread):
                 pattern_attributes[k][at] = local_att[at]
 
         # update the database
-        self.fb.update(dict(pattern_attributes=pattern_attributes))
+        self.root.update(dict(pattern_attributes=pattern_attributes))
 
         return pattern_attributes
 
@@ -126,7 +233,7 @@ class FireBaseConnector(Thread):
         :param default: obj, default value to return if key is not found
         :return: the key
         """
-        gets = self.fb.get()
+        gets = self.root.get()
 
         if key in gets.keys():
             return gets[key]
@@ -165,7 +272,8 @@ class FireBaseConnector(Thread):
         rgba = self.local_db["RGBA"]
 
         # remove points
-        rgba = {k: v.split('.')[0] if '.' in v else v for k, v in rgba.items()}
+        # todo: check if android can go with int
+        # rgba = {k: v.split('.')[0] if '.' in v else v for k, v in rgba.items()}
 
         # update
         self.local_db["RGBA"] = rgba
@@ -182,4 +290,8 @@ def get_from_dictr(data_dict, map_list):
 
 
 def set_in_dict(data_dict, map_list, value):
-    get_from_dictr(data_dict, map_list[:-1])[map_list[-1]] = value
+    try:
+        get_from_dictr(data_dict, map_list[:-1])[map_list[-1]] = value
+    except KeyError:
+        for k, v in value.items():
+            get_from_dictr(data_dict, map_list[:-1])[k] = v

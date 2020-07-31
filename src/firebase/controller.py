@@ -47,7 +47,7 @@ class FireBaseController(FireBaseConnector):
 
         super().__init__(credential_path=credential_path, database_url=database_url, debug=debug)
         # add listener to firebase
-        self.listener = self.fb.listen(self.listener)
+        self.listener = self.root.listen(self.listener)
         # update rgba
         self.floor_rgba()
 
