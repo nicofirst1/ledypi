@@ -24,30 +24,27 @@ class FireBaseConnector(Thread):
 
         # init thread class
         super().__init__()
-        self.stop = False
 
-        cred = credentials.Certificate(credential_path)
+        # define local attributes
+        self.stop = False
+        self.rgba = None
+        self.random_colors = False
+        self.local_db = None
 
         if debug is not None:
             fire_logger.setLevel(logging.DEBUG)
 
+        # connect to firebase
+        cred = credentials.Certificate(credential_path)
         firebase_admin.initialize_app(credential=cred,
                                       options={'databaseURL': database_url})
 
+        # update db and get references
         self.root = db.reference('/')
-
-        self.rgba = None
-        self.random_colors = False
-
-        # update db with patterns
-        self.local_db = None
-
-        self.root.update(dict(patterns='.'.join(Patterns)))
-        self.init_attributes()
-        self.init_rgba()
-        self.init_other()
+        self.init_db()
         self.pattern_attributes = db.reference('/pattern_attributes')
 
+        # add listener and sleep to wait for the first call where self.local_db is initialized
         self.listener = self.root.listen(self.listener)
         time.sleep(1)
 
@@ -77,6 +74,10 @@ class FireBaseConnector(Thread):
         self.floor_rgba()
 
     def run(self) -> None:
+        """
+        Run the firebasa connection in a separate thread
+        :return:
+        """
 
         try:
             while not self.stop:
@@ -90,141 +91,188 @@ class FireBaseConnector(Thread):
         fire_logger.info("Closing firebase connection, this make take a few seconds...")
         self.stop = True
 
-    def check_diff(self, request):
-
-        # check for pattern difference
-        rq_pattern = request.get("cur_pattern")
-        if not rq_pattern == "" and rq_pattern != self.local_db.get("cur_pattern"):
-            # if yes update both local and remote
-            self.root.update(dict(cur_pattern=rq_pattern))
-            self.local_db["cur_pattern"] = rq_pattern
-
-        # check for rate difference
-        rq_rate = request.get("rate")
-        rq_rate=int(rq_rate)
-        if rq_rate != self.local_db.get("rate"):
-            # if yes update both local and remote
-            self.root.update(dict(rate=rq_rate))
-            self.local_db["rate"] = rq_rate
-
-        # map random switch from on/missing to true/false
-        if "random" in request.keys():
-            request['random'] = True
-        else:
-            request['random'] = False
-
-        # check for rgba difference
-        to_update = {}
-        for k, v in self.local_db['RGBA'].items():
-            rq = int(request.get(k))
-            if v != rq:
-                to_update[k] = rq
-
-        if len(to_update) > 0:
-            to_update = dict(list(self.local_db["RGBA"].items()) + list(to_update.items()))
-            self.root.update(dict(RGBA=to_update))
-            self.local_db["RGBA"] = to_update
-
-        # update pattern attributes
-        to_update = {}
-
-        for k, v in self.local_db['pattern_attributes'][rq_pattern].items():
-            try:
-                if request[k] != v:
-                    to_update[k] = request[k]
-            except KeyError:
-                continue
-
-        if len(to_update) > 0:
-            to_update = dict(list(self.local_db['pattern_attributes'][rq_pattern].items()) + list(to_update.items()))
-            self.pattern_attributes.update(dict(rq_pattern=to_update))
-            self.local_db["pattern_attributes"][rq_pattern] = to_update
-
-    def init_other(self):
+    def update_db(self, request):
         """
-        Add rate, cur_pattern and patterns to the database if not present
+        Check the differences between the request and the local db, if there are then update local and remote db
+        :param request: dict, current values
+        :return: None
+        """
+
+        def pattern():
+            """
+            Check differences on the current pattern
+            :return:
+            """
+            # check for pattern difference
+            rq_pattern = request.get("cur_pattern")
+            if not rq_pattern == "" and rq_pattern != self.local_db.get("cur_pattern"):
+                # if yes update both local and remote
+                self.root.update(dict(cur_pattern=rq_pattern))
+                self.local_db["cur_pattern"] = rq_pattern
+
+        def rate():
+            """
+            Check differences on the rate
+            :return:
+            """
+
+            # check for rate difference
+            rq_rate = request.get("rate")
+            rq_rate = int(rq_rate)
+            if rq_rate != self.local_db.get("rate"):
+                # if yes update both local and remote
+                self.root.update(dict(rate=rq_rate))
+                self.local_db["rate"] = rq_rate
+
+        def rgba():
+            """
+            Check differences on the rgba
+            :return:
+            """
+            # map random switch from on/missing to true/false
+            if "random" in request.keys():
+                request['random'] = True
+            else:
+                request['random'] = False
+
+            # check for rgba difference
+            to_update = {}
+            for k, v in self.local_db['RGBA'].items():
+                rq = int(request.get(k))
+                if v != rq:
+                    to_update[k] = rq
+
+            if len(to_update) > 0:
+                to_update = update_dict_no_override(self.local_db['RGBA'], to_update)
+                self.root.update(dict(RGBA=to_update))
+                self.local_db["RGBA"] = to_update
+
+        def pattern_attributes():
+            """
+            Check differences on the pattern attributes
+            :return:
+            """
+            # update pattern attributes
+            to_update = {}
+            rq_pattern = request.get("cur_pattern")
+
+            for k, v in self.local_db['pattern_attributes'][rq_pattern].items():
+                try:
+                    # cast to bool or int
+                    if isinstance(v, bool) :
+                        request[k]= request[k]=='true'
+                    elif isinstance(v, int): request[k]=int(request[k])
+
+                    if request[k] != v:
+                        to_update[k] = request[k]
+                except KeyError:
+                    continue
+
+            if len(to_update) > 0:
+                to_update = update_dict_no_override(self.local_db['pattern_attributes'][rq_pattern], to_update)
+                self.pattern_attributes.update({rq_pattern:to_update})
+                self.local_db["pattern_attributes"][rq_pattern] = to_update
+
+        # check the differences for the following entries
+        pattern()
+        rate()
+        rgba()
+        pattern_attributes()
+
+    def init_db(self):
+        """
+        Initialize all the components of the database if not present
         :return:
         """
 
-        to_update={}
-        # check rate
-        val = self.get("rate", None)
-        if val is None:
-            to_update['rate'] = 10
+        def init_other():
+            """
+            Add rate, cur_pattern and patterns to the database if not present
+            :return:
+            """
 
-        # check cur_pattern
-        val = self.get("cur_pattern", None)
-        if val is None:
-            to_update['cur_pattern'] = "Steady"
+            to_update = {}
+            # check rate
+            val = self.get("rate", None)
+            if val is None:
+                to_update['rate'] = 10
 
-        # check patterns
-        val = self.get("patterns", None)
-        if val is None:
-            to_update['patterns'] = ".".join(Patterns.keys())
+            # check cur_pattern
+            val = self.get("cur_pattern", None)
+            if val is None:
+                to_update['cur_pattern'] = "Steady"
 
-        if len(to_update)>0:
-            self.root.update(to_update)
+            # check patterns
+            val = self.get("patterns", None)
+            if val is None:
+                to_update['patterns'] = ".".join(Patterns.keys())
 
+            if len(to_update) > 0:
+                self.root.update(to_update)
 
-    def init_rgba(self):
-        """
-        Add RGBA to the database if not present
-        :return:
-        """
+        def init_rgba():
+            """
+            Add RGBA to the database if not present
+            :return:
+            """
 
-        data = self.get("RGBA", {})
+            data = self.get("RGBA", {})
 
-        RGBA = dict(
-            r=255, g=255, b=255, a=100, random=0
-        )
+            # define standard RGBA components
+            RGBA = dict(r=255, g=255, b=255, a=100, random=0)
 
-        to_update = {}
-        for k, v in RGBA.items():
+            to_update = {}
+            for k, v in RGBA.items():
+                # try to check if the value is updated
+                try:
+                    if data[k] != v:
+                        to_update[k] = data[k]
+                except KeyError:
+                    to_update[k] = v
 
-            try:
-                if data[k] != v:
-                    to_update[k] = data[k]
-            except KeyError:
-                to_update[k] = v
+            # if there are updates push them
+            if len(to_update) > 0:
+                to_update = update_dict_no_override(RGBA, to_update)
+                self.root.update(dict(RGBA=to_update))
 
-        if len(to_update) > 0:
-            to_update = dict(list(RGBA.items()) + list(to_update.items()))
-            self.root.update(dict(RGBA=to_update))
+        def init_pattern_attributes():
+            """
+            Add all the attributes from the default modifier dictionary to the remote database
+            """
+            # get the attributes from the remote
+            data = self.get("pattern_attributes", {})
 
-    def init_attributes(self):
-        """
-        Add all the attributes from the default modifier dictionary to the remote database
-        """
-        # get the attributes from the remote
-        data = self.get("pattern_attributes", {})
+            pattern_attributes = {}
 
-        pattern_attributes = {}
+            # for every pattern in the pattern dict
+            for k, pt in Patterns.items():
+                remote_att = {}
+                # get the local ones and find differences
+                local_att = pt(handler=None, rate=1, pixels=1).modifiers
+                # get the remote attributes
+                try:
+                    remote_att = data[k]
+                except KeyError:
+                    if len(local_att) > 0:
+                        fire_logger.warning(f"Patter '{k}' not found in pattern dict")
 
-        # for every pattern in the pattern dict
-        for k, pt in Patterns.items():
-            remote_att = {}
-            # get the local ones and find differences
-            local_att = pt(handler=None, rate=1, pixels=1).modifiers
-            # get the remote attributes
-            try:
-                remote_att = data[k]
-            except KeyError:
-                if len(local_att) > 0:
-                    fire_logger.warning(f"Patter '{k}' not found in pattern dict")
+                # set the remote ones by default
+                pattern_attributes[k] = remote_att
 
-            # set the remote ones by default
-            pattern_attributes[k] = remote_att
+                to_add = set(local_att.keys()) - set(remote_att.keys())
 
-            to_add = set(local_att.keys()) - set(remote_att.keys())
+                # for every difference update with the local one
+                for at in to_add:
+                    pattern_attributes[k][at] = local_att[at]
 
-            # for every difference update with the local one
-            for at in to_add:
-                pattern_attributes[k][at] = local_att[at]
+            # update the database
+            self.root.update(dict(pattern_attributes=pattern_attributes))
 
-        # update the database
-        self.root.update(dict(pattern_attributes=pattern_attributes))
+            return pattern_attributes
 
-        return pattern_attributes
+        init_other()
+        init_rgba()
+        init_pattern_attributes()
 
     def get(self, key, default=None):
         """
@@ -285,13 +333,20 @@ def floor_int(value):
     return int(value)
 
 
-def get_from_dictr(data_dict, map_list):
+def get_from_dict(data_dict, map_list):
     return reduce(operator.getitem, map_list, data_dict)
 
 
 def set_in_dict(data_dict, map_list, value):
     try:
-        get_from_dictr(data_dict, map_list[:-1])[map_list[-1]] = value
+        get_from_dict(data_dict, map_list[:-1])[map_list[-1]] = value
     except KeyError:
         for k, v in value.items():
-            get_from_dictr(data_dict, map_list[:-1])[k] = v
+            get_from_dict(data_dict, map_list[:-1])[k] = v
+
+
+def update_dict_no_override(additional_dict, base_dict):
+    """
+    Update the base dict with the new pairs from additional_dict. If there are some same keys then keep the ones on base_dict
+    """
+    return dict(list(additional_dict.items()) + list(base_dict.items()))
