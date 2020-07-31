@@ -4,3 +4,5 @@
 [submodule "audio-reactive-led-strip"]
 	path = audio-reactive-led-strip
 	url = https://github.com/nicofirst1/audio-reactive-led-strip
+[submodule "ledyweb"]
+	url = https://github.com/nicofirst1/ledyweb
