@@ -38,6 +38,7 @@ class Music(Default):
 
         self.modifiers = dict(
             visualizer=self.effect,
+            __visualizer=list(self.effect_dict.keys())
         )
 
         # attributes for the mic
