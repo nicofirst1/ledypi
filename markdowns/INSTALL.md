@@ -39,6 +39,20 @@ Click on 'My Projects' on the top left
 Import project (.aia) from my computer ...
 And select the ledypie.aia file
 ```
+Once imported you need to se the firebase URL and Token in 
+
+```
+Click on th "Designer" button on the top left
+In the "Components" window scroll down unti you see  "FireBaseDB1" and click on it
+Set both the "FirebaseToken" and "FirebaseURL"
+```
+Now you need to se the firebase url in the blocks too
+```
+Click on th "Blocks" button on the top left
+Find the orange global initializer called "fire_base_url"
+Set it to your url
+```
+
 You can check the [README](../AppInventor/README.md) in the AppInventor directory for a detailed explanation of the app.
 
 ### Firebase
@@ -46,8 +60,7 @@ The communication between the app and python works through the [Firebase](https:
 
 #### Database creation and linking 
 To create a Firebase database and link it to the app use [this tutorial](https://rominirani.com/tutorial-mit-app-inventor-firebase-4be95051c325).
-Be aware the FireBaseDB is already present in the app, so you don't need to instantiate a new one, simply fill out the _FirebaseToken_ and _FirebaseURL_
-
+Be aware the FireBaseDB is already present in the app, so you don't need to instantiate a new one, simply fill out the _FirebaseToken_ and _FirebaseURL_ as described above.
 #### Generating private key file
 To connect the database with the python application you will need to generate a private key file as follows
 ```
