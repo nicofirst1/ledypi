@@ -47,7 +47,7 @@ class FireBaseConnector(Thread):
 
         # add listener and sleep to wait for the first call where self.local_db is initialized
         self.listener = self.root.listen(self.listener_method)
-
+        time.sleep(1)
 
     def listener_method(self, event):
         """
@@ -157,12 +157,15 @@ class FireBaseConnector(Thread):
             to_update = {}
             rq_pattern = request.get("cur_pattern")
 
+            if self.local_db['pattern_attributes'][rq_pattern]=="NA":return
+
             for k, v in self.local_db['pattern_attributes'][rq_pattern].items():
                 try:
                     # cast to bool or int
-                    if isinstance(v, bool) :
-                        request[k]= request[k]=='true'
-                    elif isinstance(v, int): request[k]=int(request[k])
+                    if isinstance(v, bool):
+                        request[k] = request[k] == 'true'
+                    elif isinstance(v, int):
+                        request[k] = int(request[k])
 
                     if request[k] != v:
                         to_update[k] = request[k]
@@ -171,7 +174,7 @@ class FireBaseConnector(Thread):
 
             if len(to_update) > 0:
                 to_update = update_dict_no_override(self.local_db['pattern_attributes'][rq_pattern], to_update)
-                self.pattern_attributes.update({rq_pattern:to_update})
+                self.pattern_attributes.update({rq_pattern: to_update})
                 self.local_db["pattern_attributes"][rq_pattern] = to_update
 
         # check the differences for the following entries
@@ -202,11 +205,6 @@ class FireBaseConnector(Thread):
             val = self.get("cur_pattern", None)
             if val is None:
                 to_update['cur_pattern'] = "Steady"
-
-            # check patterns
-            val = self.get("patterns", None)
-            if val is None:
-                to_update['patterns'] = ".".join(Patterns.keys())
 
             if len(to_update) > 0:
                 self.root.update(to_update)
@@ -250,9 +248,15 @@ class FireBaseConnector(Thread):
                 remote_att = {}
                 # get the local ones and find differences
                 local_att = pt(handler=None, rate=1, pixels=1).modifiers
+
+                if len(local_att)==0:
+                    pattern_attributes[k]="NA"
+                    continue
+
                 # get the remote attributes
                 try:
                     remote_att = data[k]
+
                 except KeyError:
                     if len(local_att) > 0:
                         fire_logger.warning(f"Patter '{k}' not found in pattern dict")
@@ -298,7 +302,7 @@ class FireBaseConnector(Thread):
         if data is None:
             data = self.get('rate')
         else:
-            data=data['rate']
+            data = data['rate']
 
         return floor_int(data)
 
@@ -310,9 +314,9 @@ class FireBaseConnector(Thread):
         """
 
         if data is None:
-            data=self.get("RGBA")
+            data = self.get("RGBA")
 
-        return RGB(r=data["r"], g=data['g'],b=data['b'],a=data['a'], random=data['random'])
+        return RGB(r=data["r"], g=data['g'], b=data['b'], a=data['a'], random=data['random'])
 
     def get_cur_pattern(self, data=None):
         """

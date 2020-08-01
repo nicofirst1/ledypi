@@ -17,5 +17,6 @@
 - add comments [X]
 - remove patterns [X]
 - add readme []
+- remove redundant text input for list of choices []
 #### template
 - []
