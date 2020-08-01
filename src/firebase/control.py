@@ -1,14 +1,12 @@
 import argparse
 import signal
-import sys
 
 from firebase.controller import FireBaseController
 
 
-def connect(args):
+def control(args):
     def signal_handler(signal, frame):
         fbc.close()
-
 
     # import the correct handler depending on the mode
     if args.mode == "pc":
@@ -35,7 +33,6 @@ def connect(args):
     signal.signal(signal.SIGINT, signal_handler)
 
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Parse private key json file.')
     parser.add_argument('credential', type=str,
@@ -54,4 +51,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    connect(args)
+    control(args)

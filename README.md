@@ -129,7 +129,7 @@ python src/rpi/test.py PatternName
 
 ### Remote 
 
-You can test the remote configuration running the [connect](src/firebase/connect.py) script which takes as **mandatory** inputs 
+You can test the remote configuration running the [connect](src/firebase/control.py) script which takes as **mandatory** inputs 
 the credential json file and the mode (either 'pc' or 'rpi') which specify where the script is being run.
 
 An example might be
@@ -145,7 +145,7 @@ python src/firebase/connect.py credential.json rpi
 To run it on the RaspberryPi.
 
 #### Additional params
-The [connect script](src/firebase/connect.py)  accepts two optional arguments:
+The [connect script](src/firebase/control.py)  accepts two optional arguments:
 - _databaseURL_ : the url of your database (default [value](https://ledypie.firebaseio.com/), more in the [firebase tutorial](https://rominirani.com/tutorial-mit-app-inventor-firebase-4be95051c325)
 - _pixels_ : the number of pixels (default 300).
 
