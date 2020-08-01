@@ -10,6 +10,7 @@ from firebase_admin import credentials
 from firebase_admin import db
 
 from patterns import Patterns
+from rgb import RGB
 
 fire_logger = logging.getLogger("fire_logger")
 
@@ -45,13 +46,10 @@ class FireBaseConnector(Thread):
         self.pattern_attributes = db.reference('/pattern_attributes')
 
         # add listener and sleep to wait for the first call where self.local_db is initialized
-        self.listener = self.root.listen(self.listener)
-        time.sleep(1)
+        self.listener = self.root.listen(self.listener_method)
 
-        # update rgba
-        self.floor_rgba()
 
-    def listener(self, event):
+    def listener_method(self, event):
         """
         Update the local db on every change
         :param event:
@@ -61,7 +59,7 @@ class FireBaseConnector(Thread):
         # if the local db has not been initialized yet, do it
         if self.local_db is None:
             self.local_db = event.data
-            return
+            return False
 
         if event.event_type == "patch": return
 
@@ -72,6 +70,8 @@ class FireBaseConnector(Thread):
         set_in_dict(self.local_db, keys, event.data)
 
         self.floor_rgba()
+
+        return True
 
     def run(self) -> None:
         """
@@ -88,8 +88,9 @@ class FireBaseConnector(Thread):
         self.close()
 
     def close(self):
-        fire_logger.info("Closing firebase connection, this make take a few seconds...")
+        self.listener.close()
         self.stop = True
+        fire_logger.info("Closing firebase connection, this make take a few seconds...")
 
     def update_db(self, request):
         """
@@ -296,8 +297,22 @@ class FireBaseConnector(Thread):
        """
         if data is None:
             data = self.get('rate')
+        else:
+            data=data['rate']
 
         return floor_int(data)
+
+    def get_rgba(self, data=None):
+        """
+        Return rgb class from the database
+        :param data: dict, optional database
+        :return: RGB class
+        """
+
+        if data is None:
+            data=self.get("RGBA")
+
+        return RGB(r=data["r"], g=data['g'],b=data['b'],a=data['a'], random=data['random'])
 
     def get_cur_pattern(self, data=None):
         """

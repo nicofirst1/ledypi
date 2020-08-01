@@ -45,18 +45,22 @@ class FireBaseController(FireBaseConnector):
 
     def __init__(self, credential_path, database_url, handler, pixels, debug=None):
 
+        # dummy pattern to avoid exception
+        self.pattern = Patterns['Steady'](rate=10,handler=handler, pixels=pixels)
+
         super().__init__(credential_path=credential_path, database_url=database_url, debug=debug)
-        # add listener to firebase
-        self.listener = self.root.listen(self.listener)
-        # update rgba
-        self.floor_rgba()
+
 
         self.handler = handler
         self.pixels = pixels
 
         # choose correct pattern and start it
-        self.pattern = Patterns[self.pattern_choice](rate=self.rate, color=self.rgba, handler=handler, pixels=pixels)
+        cur_pattern=self.get_cur_pattern()
+        rate=self.get_rate()
+        rgba=self.get_rgba()
+        self.pattern = Patterns[cur_pattern](rate=rate, color=rgba, handler=handler, pixels=pixels)
         self.pattern.start()
+
 
     def close(self):
         super().close()
@@ -64,47 +68,49 @@ class FireBaseController(FireBaseConnector):
         self.listener.close()
 
     @frequency
-    def listener(self, event):
+    def listener_method(self, event):
         """
         Main listener, called when db is updated
         :param event: dict
         :return: None
         """
 
-        super(FireBaseController, self).listener()
+        super(FireBaseController, self).listener_method(event)
 
         to_log = f"{event.event_type}\n{event.path}\n{event.data}"
         fire_logger.debug(to_log)
 
-        if "rate" in event.path:
+        k=event.data.keys()
+        k=list(k)
+
+        if "rate" in k:
             rate = self.get_rate(data=event.data)
             self.pattern.set_rate(rate)
             self.rate = rate
 
         # stop and restart pattern if required
-        elif "cur_pattern" in event.path:
+        elif "cur_pattern" in k:
             # get values
-            self.pattern_choice = self.get_cur_pattern()
-            self.rate = self.get_rate()
+            pattern_choice = self.get_cur_pattern()
+            rate = self.get_rate()
+            rgba= self.get_rgba()
             # stop and restart
             self.pattern.stop()
-            self.pattern = Patterns[self.pattern_choice](rate=self.rate, handler=self.handler, pixels=self.pixels)
-            self.floor_rgba()
+            self.pattern = Patterns[pattern_choice](rate=rate, color=rgba, handler=self.handler, pixels=self.pixels)
             self.pattern.start()
 
         # update rgba
-        elif "RGBA" in event.path:
-            self.floor_rgba()
+        elif "RGBA" in k:
+            self.floor_rgba(event.data)
 
         # update pattern attributes
         elif "pattern_attributes" in event.path:
-            key = event.path.split("/")[-1]
-            self.ps_attrs_getter(key, event.data)
+            self.ps_attrs_getter(event.data)
 
-        elif event.path != '/':
+        else:
             raise NotImplementedError(f"No such field for {event.path}")
 
-    def ps_attrs_getter(self, key, data):
+    def ps_attrs_getter(self, data):
         """
         Converts and updates values from db
         :param key: str, name of db variable AND of class attribute
@@ -112,23 +118,15 @@ class FireBaseController(FireBaseConnector):
         :return:
         """
 
-        # get the original type from the pattern
-        t = type(self.pattern.__dict__[key])
+        # check that the values to modify are indeed of the current pattern
+        pattern= next(iter(data))
+        assert self.pattern.pattern_name == pattern
+        # remove pattern name
+        data=data[pattern]
+        # and update pattern
+        self.pattern.update_args(**data)
 
-        # convert it
-        if t == float:
-            data = float(data)
-        elif t == int:
-            data = floor_int(data)
-        elif t == bool:
-            data = data == "true"
-        else:
-            raise NotImplementedError(f"No data conversion implemented for key: '{key}' of type '{t}'")
-
-        # update
-        self.pattern.update_args(**{key: data})
-
-    def floor_rgba(self):
+    def floor_rgba(self, data):
         """
         Update RGBA values taking them from the database
         :return:
@@ -147,12 +145,11 @@ class FireBaseController(FireBaseConnector):
 
             return RGB(r=r,g=g,b=b,a=a)
 
-        super(FireBaseController, self).floor_rgba()
         # if method is called before pattern initialization skip
         try:
             # update pattern values
-            random=self.local_db["RGBA"]['random']
-            rgba=init_rgba(self.local_db["RGBA"])
+            random= data["RGBA"]['random']
+            rgba=init_rgba(data["RGBA"])
             self.pattern.update_args(randomize_color=bool(random))
             self.pattern.update_args(color=rgba)
         except AttributeError:
