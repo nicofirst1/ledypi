@@ -12,8 +12,10 @@
 - add patterns with no attributes in the drop down menu []
 
 # Android app
-- make additional settings parametric []
-- fix android app to be compatible with new connector[]
+- make additional settings parametric [X]
+- fix android app to be compatible with new connector[X]
 - add comments [X]
+- remove patterns [X]
+- add readme []
 #### template
 - []
