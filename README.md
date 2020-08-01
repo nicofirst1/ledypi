@@ -104,7 +104,7 @@ For example the following patters is given with:
 ![equation demo](Resources/equation_demo.gif)
 
 # Installation 
-For the installation check out the related [INSTALL markdown/](INSTALL.md).
+For the installation check out the related [INSTALL markdown/](markdowns/INSTALL.md).
 
 # Testing
 If you get a `ModuleNotFoundError` source the python path with

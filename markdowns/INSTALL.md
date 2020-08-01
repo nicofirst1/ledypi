@@ -25,13 +25,13 @@ If you get a gcc error see [this](https://stackoverflow.com/questions/20023131/c
 
 ### Audio reactive
 To install the custom fork [audio-reactive-led-strip](https://github.com/nicofirst1/audio-reactive-led-strip) you'll need to 
-follow the instructions in the [README](audio-reactive-led-strip/README.md)
+follow the instructions in the [README](../audio-reactive-led-strip/README.md)
                        
 
 ## App Inventor
 The MIT [AppInventor](http://appinventor.mit.edu/) is a tool to simply create apps with a building block programming paradigm. 
 The first thing you'll need to do is make an account.
-Then you can import the app from the [ledypie.aia](AppInventor/ledypie.aia) file:
+Then you can import the app from the [ledypie.aia](../AppInventor/ledypie.aia) file:
 ```
 Click on 'Create Apps!'
 Login
@@ -39,7 +39,7 @@ Click on 'My Projects' on the top left
 Import project (.aia) from my computer ...
 And select the ledypie.aia file
 ```
-You can check the [README](AppInventor/README.md) in the AppInventor directory for a detailed explanation of the app.
+You can check the [README](../AppInventor/README.md) in the AppInventor directory for a detailed explanation of the app.
 
 ### Firebase
 The communication between the app and python works through the [Firebase](https://console.firebase.google.com/) database.
@@ -65,12 +65,12 @@ Im currently using a _Raspberry Pi 4 Model B Rev 1.2_ with a [ws2812b led strip]
 Since the ws2812b draws 60mA for each led with 5V (check the [specs](https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf)) I am powering the led strip using a [5v 100W power supply](https://www.amazon.com/BTF-LIGHTING-Aluminum-WS2812B-LED8806-Modules/dp/B01D8FLWGE/ref=sr_1_13?dchild=1&keywords=5v+20A+power+supply&qid=1593792785&sr=8-13) which should allow each pixel full brightness.
 
 For the connection you can follow [this tutorial](https://tutorials-raspberrypi.com/connect-control-raspberry-pi-ws2812-rgb-led-strips/)  which uses following diagram:
-![diagram](Resources/diagram.png)
+![diagram](../Resources/diagram.png)
 
 Since there is no connection powering the RaspberryPi, an usb type c power supply is necessary.
 
 ### Starting script
-Check the [script README](scripts/README.md) to set learn how to start/stop the app with one script (useful when you want it to start on boot) and for syncing the pc repo with your rpi.
+Check the [script README](../scripts/README.md) to set learn how to start/stop the app with one script (useful when you want it to start on boot) and for syncing the pc repo with your rpi.
 
 ### Reactive Music
 To work with the reactive music part use:
