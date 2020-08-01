@@ -10,7 +10,6 @@ class Snow(Default):
         trail: the length of the trail
         min_space: the minimum space between the clusters
     """
-    data_type = "Snow"
 
     def __init__(self, **kwargs):
 
