@@ -26,9 +26,9 @@ class Equation(Default):
         self.fns = {}
 
         # r,g,b functions in string format
-        self.r_eq = "cos(t)"
-        self.g_eq = "sin(t)"
-        self.b_eq = "idx"
+        self.red_equation = "cos(t)"
+        self.green_equation = "sin(t)"
+        self.blue_equation = "idx"
 
         # time step
         self.t = 1
@@ -37,37 +37,37 @@ class Equation(Default):
         self.max_range = self.strip_length * 1000
 
         self.modifiers = dict(
-            red_equation=self.r_eq,
-            blue_equation=self.g_eq,
-            green_equation=self.b_eq,
+            red_equation=self.red_equation,
+            blue_equation=self.blue_equation,
+            green_equation=self.green_equation,
         )
 
     @property
-    def r_eq(self):
+    def red_equation(self):
         return self._r_eq
 
-    @r_eq.setter
-    def r_eq(self, value):
+    @red_equation.setter
+    def red_equation(self, value):
         assert isinstance(value, str), pattern_logger.warning("The equation value is not a string")
         self.fns['r_fn'] = Expression(value, ["t", "idx"])
         self._r_eq = value
 
     @property
-    def g_eq(self):
+    def green_equation(self):
         return self._g_eq
 
-    @g_eq.setter
-    def g_eq(self, value):
+    @green_equation.setter
+    def green_equation(self, value):
         assert isinstance(value, str), pattern_logger.warning("The equation value is not a string")
         self.fns['g_fn'] = Expression(value, ["t", "idx"])
         self._g_eq = value
 
     @property
-    def b_eq(self):
+    def blue_equation(self):
         return self._b_eq
 
-    @b_eq.setter
-    def b_eq(self, value):
+    @blue_equation.setter
+    def blue_equation(self, value):
         assert isinstance(value, str), pattern_logger.warning("The equation value is not a string")
         self.fns['b_fn'] = Expression(value, ["t", "idx"])
         self._b_eq = value
