@@ -31,14 +31,13 @@
 </h4>
 
 <p align="center" 
-    href="http://www.youtube.com/watch?v=k1sSvwABXCE">
-    <img src="Resources/tutorial_demo.gif">
+    href="https://youtu.be/c0NvfBiJOkw">
+    <img src="Resources/ledyweb_tutorial.gif">
 </p>
 
 
 <br>
 <br>
-
 
 
 # Key Features
@@ -51,6 +50,10 @@ The modular desing allows you to add the logic you wish by overriding a single m
 - [Android app](AppInventor) for control 
 - Firebase database
 - Debug mode available 
+
+On [develop branch](https://github.com/nicofirst1/ledypi/tree/develop):
+- [LedyWeb](https://github.com/nicofirst1/ledyweb) online controller 
+- Dynamic android app
 
 # Patterns
 Each pattern inherits from a [base class](src/patterns/default.py) with its own logic. This allows anyone to implement his own pattern simply by overriding a method (see more on the [readme](patterns/README.md)).
