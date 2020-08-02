@@ -12,6 +12,8 @@
 - make additional setting appear on reload (index) [X]
 - add patterns with no attributes in the drop down menu [X]
 - remove additional settings for pattern with no settings [X]
+- add components update on database change []
+
 
 # Android app
 - make additional settings parametric [X]
@@ -20,5 +22,6 @@
 - remove patterns [X]
 - add readme []
 - remove redundant text input for list of choices []
+- add components update on database change []
 #### template
 - []
