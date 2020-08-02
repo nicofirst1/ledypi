@@ -97,7 +97,7 @@ class Default(threading.Thread):
 
     def run(self):
         # init handler and set pixels
-        self.handler=self.handler(self.pixels)
+        self.handler=self.handler(self.strip_length)
         self.set_pixels()
 
         pattern_logger.info(f"Started pattern: {self.pattern_name} with rate: {self.rate}")
