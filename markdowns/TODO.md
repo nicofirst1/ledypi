@@ -6,6 +6,9 @@
 - add range for modifiers []
 - fix random button [X]
 
+## Raspberry
+- fix closing []
+
 # LedyWeb
 - fix readme [X]
 - fix double call in get_form_values [X]

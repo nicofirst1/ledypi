@@ -97,9 +97,10 @@ class FireBaseConnector(Thread):
         self.close()
 
     def close(self):
+        fire_logger.info("Closing firebase connection, this make take a few seconds...")
         self.listener.close()
         self.stop = True
-        fire_logger.info("Closing firebase connection, this make take a few seconds...")
+        fire_logger.info("Firebase connection closed")
 
     def update_db(self, request):
         """
