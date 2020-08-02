@@ -34,7 +34,17 @@ class Perlin(Default):
 
     @y_div.setter
     def y_div(self, value):
+        if value == 0: value = 0.0001
         self._y_div = self.strip_length // value
+
+    @property
+    def x_div(self):
+        return self._x_div
+
+    @x_div.setter
+    def x_div(self, value):
+        if value == 0: value = 0.0001
+        self._x_div = value
 
     def fill(self):
 

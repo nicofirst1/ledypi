@@ -39,7 +39,17 @@ class Water(Default):
 
     @y_div.setter
     def y_div(self, value):
+        if value==0: value=0.001
         self._y_div = value
+
+    @property
+    def x_div(self):
+        return self._x_div
+
+    @x_div.setter
+    def x_div(self, value):
+        if value == 0: value = 0.001
+        self._x_div = value
 
     def fill(self):
 
