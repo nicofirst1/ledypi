@@ -13,7 +13,7 @@ fire_logger = logging.getLogger("fire_logger")
 # skipped if there was a previous call less than '__call_resolution' seconds before
 
 __last_call = time.time()
-__call_resolution = 0.1
+__call_resolution = 0.01
 
 
 def frequency(listener):
