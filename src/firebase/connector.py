@@ -21,18 +21,25 @@ class FireBaseConnector(Thread):
     Allows for the modification of the pattern and attributes
     """
 
-    def __init__(self, credential_path, database_url="https://ledypie.firebaseio.com/", debug=None):
+    def __init__(self, credential_path, database_url="https://ledypie.firebaseio.com/", debug=False, tracker=None):
+        """
+        :param credential_path: str, path to the firebase credential json file
+        :param database_url: str, URL of the firebase
+        :param debug: bool, set to true to allow debug output
+        :param tracker: func, function to be called when the database has been updated with new values
+        """
 
         # init thread class
         super().__init__()
 
         # define local attributes
+        self.tracker = tracker if tracker is not None else lambda:None
         self.stop = False
         self.rgba = None
         self.random_colors = False
         self.local_db = None
 
-        if debug is not None:
+        if debug:
             fire_logger.setLevel(logging.DEBUG)
 
         # connect to firebase
@@ -66,10 +73,12 @@ class FireBaseConnector(Thread):
         # get all the keys, remove empty
         keys = event.path.split("/")
         keys.pop(0)
-        # update local db
-        set_in_dict(self.local_db, keys, event.data)
 
-        self.floor_rgba()
+        # check if there is a difference
+        if get_from_dict(self.local_db,keys)!= event.data:
+            # update local db
+            set_in_dict(self.local_db, keys, event.data)
+            self.tracker()
 
         return True
 
@@ -333,21 +342,7 @@ class FireBaseConnector(Thread):
 
         return data.replace('"', '')
 
-    def floor_rgba(self):
-        """
-        Update RGBA values taking them from the database
-        :return:
-        """
 
-        # get data from db
-        rgba = self.local_db["RGBA"]
-
-        # remove points
-        # todo: check if android can go with int
-        # rgba = {k: v.split('.')[0] if '.' in v else v for k, v in rgba.items()}
-
-        # update
-        self.local_db["RGBA"] = rgba
 
 
 def floor_int(value):

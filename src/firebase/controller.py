@@ -1,7 +1,7 @@
 import logging
 import time
 
-from firebase.connector import FireBaseConnector, floor_int
+from firebase.connector import FireBaseConnector
 from patterns import Patterns
 from rgb import RGB
 
