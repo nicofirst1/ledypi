@@ -131,7 +131,7 @@ class FireBaseConnector(Thread):
             :return:
             """
             # map random switch from on/missing to true/false
-            if "random" in request.keys():
+            if request['random'] == "true":
                 request['random'] = True
             else:
                 request['random'] = False
@@ -139,7 +139,11 @@ class FireBaseConnector(Thread):
             # check for rgba difference
             to_update = {}
             for k, v in self.local_db['RGBA'].items():
-                rq = int(request.get(k))
+                rq = request.get(k)
+                if isinstance(rq, bool):
+                    rq = bool(rq)
+                else:
+                    rq = int(request.get(k))
                 if v != rq:
                     to_update[k] = rq
 
@@ -157,7 +161,7 @@ class FireBaseConnector(Thread):
             to_update = {}
             rq_pattern = request.get("cur_pattern")
 
-            if self.local_db['pattern_attributes'][rq_pattern]=="NA":return
+            if self.local_db['pattern_attributes'][rq_pattern] == "NA": return
 
             for k, v in self.local_db['pattern_attributes'][rq_pattern].items():
                 try:
@@ -249,8 +253,8 @@ class FireBaseConnector(Thread):
                 # get the local ones and find differences
                 local_att = pt(handler=None, rate=1, pixels=1).modifiers
 
-                if len(local_att)==0:
-                    pattern_attributes[k]="NA"
+                if len(local_att) == 0:
+                    pattern_attributes[k] = "NA"
                     continue
 
                 # get the remote attributes
