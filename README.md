@@ -40,6 +40,10 @@
 <br>
 
 
+# Update
+
+Check out the [develop branch](https://github.com/nicofirst1/ledypi/tree/develop) for the LedyWeb update.
+
 
 # Key Features
 Choose from more than 10 pre-made patterns and implement your own.
