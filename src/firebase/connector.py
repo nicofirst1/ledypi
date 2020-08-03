@@ -334,7 +334,7 @@ class FireBaseConnector(Thread):
         """
         gets = self.root.get()
 
-        if key in gets.keys():
+        if gets is not None and key in gets.keys():
             return gets[key]
 
         return default
