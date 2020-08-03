@@ -32,7 +32,7 @@
 
 <p align="center" 
     href="https://youtu.be/c0NvfBiJOkw">
-    <img src="Resources/ledyweb_tutorial.gif">
+    <img src="Resources/ledyweb_tutorial.gif"  width="450" >
 </p>
 
 
