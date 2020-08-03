@@ -63,7 +63,6 @@ class FireBaseController(FireBaseConnector):
     def close(self):
         super().close()
         self.pattern.stop()
-        self.listener.close()
 
     @frequency
     def listener_method(self, event):

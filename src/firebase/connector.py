@@ -30,7 +30,7 @@ class FireBaseConnector(Thread):
         """
 
         # init thread class
-        super().__init__()
+        super().__init__(name="FireBaseConnectorThread")
 
         # define local attributes
         self.tracker = tracker if tracker is not None else lambda: None
@@ -46,6 +46,7 @@ class FireBaseConnector(Thread):
         cred = credentials.Certificate(credential_path)
         firebase_admin.initialize_app(credential=cred,
                                       options={'databaseURL': database_url})
+
 
         # update db and get references
         self.root = db.reference('/')

@@ -25,10 +25,12 @@ class Default(threading.Thread):
         :param color: (default RGB), the initial color for the leds
         """
 
+        # init the thread and the handler
+        threading.Thread.__init__(self, name="PatternThread")
+
         rate /= RATE_DIVISOR
 
-        # init the thread and the handler
-        threading.Thread.__init__(self)
+
         self.handler = handler
         self.rate = rate
 
