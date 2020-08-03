@@ -8,16 +8,15 @@ class PiHandler(object):
 
     def __init__(self, pixels):
         # the imports must be hidden since they won't work on pc
-        from rpi_ws281x import PixelStrip
+        from neopixel import NeoPixel
+        import board
 
         # init the pixel strip
-        self.np = PixelStrip(pixels, PIN)
-        self.np.begin()
+        self.np = NeoPixel(board.D18, pixels, auto_write=False)
         self.pixel_count = pixels
         self.is_stopped = False
 
     def set(self, index, c, b, g, r):
-        from rpi_ws281x import Color
 
         if index is not None and index < self.pixel_count:
             # scale the rgb value by the intensity
@@ -25,8 +24,8 @@ class PiHandler(object):
             g = scale(g, c)
             b = scale(b, c)
             # create color and set it
-            color = Color(r, g, b)
-            self.np.setPixelColor(index, color)
+            color =(r, g, b)
+            self.np[index]= color
 
     def send(self):
 
@@ -37,7 +36,7 @@ class PiHandler(object):
 
     def close(self):
         for index in range(self.pixel_count):
-            self.np.setPixelColor(index, 0)
+            self.np[index]= (0,0,0)
         self.np.show()
 
 

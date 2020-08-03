@@ -8,6 +8,10 @@
 
 ## Raspberry
 - fix closing []
+- use neopixel [X]
+
+## Patterns
+- add allowed range for attributes []
 
 # LedyWeb
 - fix readme [X]
