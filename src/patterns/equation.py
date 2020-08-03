@@ -4,6 +4,7 @@ from Equation import Expression
 
 from patterns.default import Default
 from utils.color import scale
+from utils.modifier import Modifier
 
 pattern_logger = logging.getLogger("pattern_logger")
 
@@ -26,9 +27,13 @@ class Equation(Default):
         self.fns = {}
 
         # r,g,b functions in string format
+        self._r_eq = Modifier('red_equation', "cos(t)")
+        self._g_eq = Modifier('green_equation', "sin(t)")
+        self._b_eq = Modifier('blue_equation', "idx")
+
         self.red_equation = "cos(t)"
-        self.green_equation = "sin(t)"
-        self.blue_equation = "idx"
+        self.blue_equation = "sin(t)"
+        self.green_equation = "idx"
 
         # time step
         self.t = 1
@@ -44,33 +49,33 @@ class Equation(Default):
 
     @property
     def red_equation(self):
-        return self._r_eq
+        return self._r_eq()
 
     @red_equation.setter
     def red_equation(self, value):
         assert isinstance(value, str), pattern_logger.warning("The equation value is not a string")
         self.fns['r_fn'] = Expression(value, ["t", "idx"])
-        self._r_eq = value
+        self._r_eq.value = value
 
     @property
     def green_equation(self):
-        return self._g_eq
+        return self._g_eq()
 
     @green_equation.setter
     def green_equation(self, value):
         assert isinstance(value, str), pattern_logger.warning("The equation value is not a string")
         self.fns['g_fn'] = Expression(value, ["t", "idx"])
-        self._g_eq = value
+        self._g_eq.value = value
 
     @property
     def blue_equation(self):
-        return self._b_eq
+        return self._b_eq()
 
     @blue_equation.setter
     def blue_equation(self, value):
         assert isinstance(value, str), pattern_logger.warning("The equation value is not a string")
         self.fns['b_fn'] = Expression(value, ["t", "idx"])
-        self._b_eq = value
+        self._b_eq.value = value
 
     def fill(self):
 

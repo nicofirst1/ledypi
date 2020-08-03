@@ -5,6 +5,7 @@ from opensimplex import OpenSimplex
 from patterns.default import Default
 from rgb import RGB
 from utils.color import bound_add, scale
+from utils.modifier import Modifier
 
 
 class Water(Default):
@@ -18,10 +19,10 @@ class Water(Default):
 
         self.pattern_name = "Water"
 
-        self.x_div = 2 ** 4  # horizontal divisor
-        self.y_div = 2 ** 4  # vertical divisor
-        self.deepness = 100  # measure of blueness (the more the more blue)
-
+        self.x_div = Modifier('horizontal', 2 ** 4, minimum=1, maximum=2 ** 10)
+        self.y_div = Modifier('vertical', 2 ** 4, minimum=1, maximum=2 ** 10)
+        # measure of blueness (the more the more blue)
+        self.deepness = Modifier('deepness', 10, minimum=1, maximum=255)
         self.op = OpenSimplex()
         self.counter = 0
 
@@ -33,24 +34,6 @@ class Water(Default):
             deepness=self.deepness,
         )
 
-    @property
-    def y_div(self):
-        return self._y_div
-
-    @y_div.setter
-    def y_div(self, value):
-        if value == 0: value = 0.001
-        self._y_div = value
-
-    @property
-    def x_div(self):
-        return self._x_div
-
-    @x_div.setter
-    def x_div(self, value):
-        if value == 0: value = 0.001
-        self._x_div = value
-
     def fill(self):
 
         # reset counter
@@ -59,11 +42,11 @@ class Water(Default):
 
         # color
         for idx in range(self.strip_length):
-            val = self.op.noise2d(idx / self.x_div, self.counter / self.y_div)
+            val = self.op.noise2d(idx / self.x_div(), self.counter / self.y_div())
             val = scale(val, 0, 255, -1, 1)
 
             # add base value + deepness
-            val = bound_add(val, self.deepness)
+            val = bound_add(val, self.deepness())
             self.pixels[idx]['color'] = RGB(b=val, g=255 - val, a=self.color.a)
 
         # update counter

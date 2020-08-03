@@ -148,8 +148,7 @@ class FireBaseController(FireBaseConnector):
             # update pattern values
             random = data["RGBA"]['random']
             rgba = init_rgba(data["RGBA"])
-            self.pattern.update_args(randomize_color=bool(random))
-            self.pattern.update_args(color=rgba)
-            self.pattern.update_args(alpha=rgba.a)
+            self.pattern.update_args(randomize_color=bool(random), color=rgba, alpha=rgba.a)
+
         except AttributeError:
             pass

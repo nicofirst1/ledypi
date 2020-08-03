@@ -4,6 +4,7 @@ from random import randint
 from patterns.default import Default
 from rgb import RGB
 from utils.color import bound_sub
+from utils.modifier import Modifier
 
 
 class Fire(Default):
@@ -15,8 +16,8 @@ class Fire(Default):
 
         super().__init__(**kwargs)
 
-        self.cooling = 2
-        self.sparking = 80
+        self.cooling = Modifier('cooling', 10, minimum=1, maximum=self.strip_length)
+        self.sparking = Modifier('sparking', 40, minimum=1, maximum=255)
         self.cooldown_list = [0 for _ in range(self.strip_length)]
         self.pattern_name = "Fire"
         self.mid = self.strip_length // 2
@@ -27,7 +28,7 @@ class Fire(Default):
         )
 
     def bound_attrs(self):
-        self.sparking = min(self.sparking, 255)
+        self.sparking.value = min(self.sparking(), 255)
 
     def fill(self):
 
@@ -35,7 +36,7 @@ class Fire(Default):
 
         # cooling_down
         for idx in range(self.strip_length):
-            cooldown = randint(0, ceil(((self.cooldown_list[idx] * 10) / self.strip_length)) + self.cooling)
+            cooldown = randint(0, ceil(((self.cooldown_list[idx] * 10) / self.strip_length)) + self.cooling())
             self.cooldown_list[idx] = bound_sub(self.cooldown_list[idx], cooldown, minimum=0)
 
         for idx in range(self.strip_length - 1, self.mid, -1):
@@ -46,7 +47,7 @@ class Fire(Default):
             v = (self.cooldown_list[idx + 1] + 2 * self.cooldown_list[idx + 2]) / 3
             self.cooldown_list[idx] = v
 
-        if randint(0, 255) < self.sparking:
+        if randint(0, 255) < self.sparking():
             # sparking starting point
             y = randint(self.mid - 3, self.mid + 3)
             self.cooldown_list[y] = self.cooldown_list[y] + randint(160, 255)

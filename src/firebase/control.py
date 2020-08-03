@@ -13,6 +13,7 @@ def control(args):
         from DotStar_Emulator.emulator.send_test_data import App
 
         handler = App
+        args.pixels=64
         print("Running from PC")
 
     elif args.mode == "rpi":

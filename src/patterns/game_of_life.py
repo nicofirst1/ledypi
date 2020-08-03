@@ -21,8 +21,7 @@ class GameOfLife(Default):
         self.alive = Alive(size=self.strip_length)
         self.num_alives = [0] * self.strip_length
         self.randomize_color = True
-        self.modifiers = dict(
-        )
+
 
     def fill(self):
 

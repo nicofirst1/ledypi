@@ -4,6 +4,7 @@ from random import randint
 from patterns.default import Default
 from rgb import RGB
 from utils.color import bound_sub, circular_step
+from utils.modifier import Modifier
 
 
 class FireWork(Default):
@@ -14,10 +15,11 @@ class FireWork(Default):
     def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
-        self.fires = 5
-        self.loss = 25
+        self.fires = Modifier('fires', self.strip_length // 50, minimum=1, maximum=self.strip_length)
+        self.loss = Modifier('speed', 25, minimum=1, maximum=255)
+
         self.step = 0
-        self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.fires)}
+        self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.fires())}
         self.pattern_name = "FireWork"
 
         self.modifiers = dict(
@@ -32,7 +34,7 @@ class FireWork(Default):
             return dict(color=self.color, tail=[], step=0)
 
     def bound_attrs(self):
-        self.fires = min(self.fires, self.strip_length)
+        self.fires.values = min(self.fires(), self.strip_length)
 
     def fill(self):
 
@@ -50,7 +52,7 @@ class FireWork(Default):
             has_popped = False
 
             # estimate the center intesity and update
-            ci = bound_sub(255, loss_weight * self.loss * step)
+            ci = bound_sub(255, loss_weight * self.loss() * step)
             color.update_single(a=ci)
             self.add_update_pixel(a, color)
 
@@ -68,7 +70,7 @@ class FireWork(Default):
 
                     # estimate intensity and update
                     # ci is= 255 - the loss times the current step and the index (farther points from center are newer)
-                    ci = bound_sub(255, self.loss * (loss_weight * step + 1 - idx))
+                    ci = bound_sub(255, self.loss() * (loss_weight * step + 1 - idx))
                     color.update_single(a=ci)
 
                     self.add_update_pixel(p, color)
@@ -90,7 +92,7 @@ class FireWork(Default):
                         n = t[1]
                         idx = t[2]
                         # estimate ci as before
-                        ci = bound_sub(255, self.loss * (loss_weight * step + 1 - idx))
+                        ci = bound_sub(255, self.loss() * (loss_weight * step + 1 - idx))
                         # update
                         color.update_single(a=ci)
                         self.add_update_pixel(p, color)
@@ -104,9 +106,9 @@ class FireWork(Default):
                     # remove the center
                     self.centers.pop(a)
 
-                    if len(self.centers) < self.fires:
+                    if len(self.centers) < self.fires():
 
-                        for _ in range(self.fires - len(self.centers)):
+                        for _ in range(self.fires() - len(self.centers)):
 
                             # get another one which is not in the center lists already
                             rd = randint(0, self.strip_length - 1)
@@ -125,20 +127,12 @@ class FireWork(Default):
                 except KeyError:
                     pass
 
-        self.update_couter()
+        self.update_counter()
 
     def add_update_pixel(self, idx, new_color):
 
         self.pixels[idx]['color'] = new_color
-        # current_color = self.pixels[idx]['color']
 
-        # if current_color.same_color(new_color) or current_color.is_gray():
-        #     self.pixels[idx]['color']=new_color
-        # elif self.use_add:
-        #     self.pixels[idx]['color'].add_colors(new_color)
-        # else:
-        #     self.pixels[idx]['color']=new_color
-
-    def update_couter(self):
+    def update_counter(self):
         self.step += 1
         self.step %= self.strip_length

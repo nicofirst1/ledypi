@@ -1,5 +1,6 @@
 from patterns.default import Default
 from utils.color import bound_sub, bound_add
+from utils.modifier import Modifier
 
 
 class Pulse(Default):
@@ -12,7 +13,7 @@ class Pulse(Default):
         super().__init__(**kwargs)
 
         self.increasing = False
-        self.speed = 255
+        self.speed = Modifier('speed', 50, minimum=1, maximum=255)
         self.pattern_name = "Pulse"
 
         self.modifiers = dict(
@@ -24,13 +25,13 @@ class Pulse(Default):
         a = self.color.a
 
         if 0 <= a < 255 and self.increasing:
-            a = bound_add(a, self.speed, maximum=255)
+            a = bound_add(a, self.speed(), maximum=255)
         elif 0 < a <= 255 and not self.increasing:
-            a = bound_sub(a, self.speed, minimum=0)
+            a = bound_sub(a, self.speed(), minimum=0)
         else:
             self.increasing = not self.increasing
 
-        self.color.update_single(a=a)
+        self.color.a=a
 
         for idx in range(self.strip_length):
             self.pixels[idx]['color'] = self.color
