@@ -20,9 +20,8 @@ class GameOfLife(Default):
         self.pattern_name = "GameOfLife"
         self.alive = Alive(size=self.strip_length)
         self.num_alives = [0] * self.strip_length
-        self.randomize_color=True
-        self.modifiers = dict(
-        )
+        self.randomize_color = True
+
 
     def fill(self):
 
@@ -58,7 +57,7 @@ class GameOfLife(Default):
         if self.num_alives[1:] == self.num_alives[:-1]:
             self.alive = Alive(self.strip_length)
             # shut down 
-            self.color_all((0,0,0,0))
+            self.color_all((0, 0, 0, 0))
             pattern_logger.debug("Game of Life reset")
 
     def color_idx(self, idx):
@@ -72,8 +71,8 @@ class GameOfLife(Default):
         else:
             self.pixels[idx]['color'] = (0, 0, 0, 0)
 
-class Alive(list):
 
+class Alive(list):
     """
     Custom extension of the list class, implements easier slicing for circular buffer
     """

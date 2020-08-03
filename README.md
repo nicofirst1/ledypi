@@ -31,18 +31,13 @@
 </h4>
 
 <p align="center" 
-    href="http://www.youtube.com/watch?v=k1sSvwABXCE">
-    <img src="Resources/tutorial_demo.gif">
+    href="https://youtu.be/c0NvfBiJOkw">
+    <img src="Resources/ledyweb_tutorial.gif">
 </p>
 
 
 <br>
 <br>
-
-
-# Update
-
-Check out the [develop branch](https://github.com/nicofirst1/ledypi/tree/develop) for the LedyWeb update.
 
 
 # Key Features
@@ -55,6 +50,10 @@ The modular desing allows you to add the logic you wish by overriding a single m
 - [Android app](AppInventor) for control 
 - Firebase database
 - Debug mode available 
+
+On [develop branch](https://github.com/nicofirst1/ledypi/tree/develop):
+- [LedyWeb](https://github.com/nicofirst1/ledyweb) online controller 
+- Dynamic android app
 
 # Patterns
 Each pattern inherits from a [base class](src/patterns/default.py) with its own logic. This allows anyone to implement his own pattern simply by overriding a method (see more on the [readme](patterns/README.md)).
@@ -108,7 +107,7 @@ For example the following patters is given with:
 ![equation demo](Resources/equation_demo.gif)
 
 # Installation 
-For the installation check out the related [INSTALL markdown/](INSTALL.md).
+For the installation check out the related [INSTALL markdown/](markdowns/INSTALL.md).
 
 # Testing
 If you get a `ModuleNotFoundError` source the python path with
@@ -133,7 +132,7 @@ python src/rpi/test.py PatternName
 
 ### Remote 
 
-You can test the remote configuration running the [connect](src/firebase/connect.py) script which takes as **mandatory** inputs 
+You can test the remote configuration running the [control](src/firebase/control.py) script which takes as **mandatory** inputs 
 the credential json file and the mode (either 'pc' or 'rpi') which specify where the script is being run.
 
 An example might be
@@ -149,7 +148,7 @@ python src/firebase/connect.py credential.json rpi
 To run it on the RaspberryPi.
 
 #### Additional params
-The [connect script](src/firebase/connect.py)  accepts two optional arguments:
+The [control script](src/firebase/control.py)  accepts two optional arguments:
 - _databaseURL_ : the url of your database (default [value](https://ledypie.firebaseio.com/), more in the [firebase tutorial](https://rominirani.com/tutorial-mit-app-inventor-firebase-4be95051c325)
 - _pixels_ : the number of pixels (default 300).
 

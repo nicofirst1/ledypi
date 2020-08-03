@@ -4,7 +4,7 @@ from random import randint
 
 def scale(old_val, new_min, new_max, old_min, old_max):
     old_range = (old_max - old_min)
-    if old_range==0:old_range+=1e-100
+    if old_range == 0: old_range += 1e-100
     new_range = (new_max - new_min)
     new_value = (((old_val - old_min) * new_range) / old_range) + new_min
     return new_value
@@ -29,3 +29,8 @@ def bound_add(value, to_add, maximum=255):
 def circular_step(step, maximum):
     step += 1
     return step % maximum
+
+
+def scale_brightness(value, brightness):
+    brightness /= 255
+    return int(value * brightness)

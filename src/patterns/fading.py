@@ -4,6 +4,7 @@ from random import randint
 from patterns.default import Default
 from rgb import RGB
 from utils.color import bound_sub, bound_add
+from utils.modifier import Modifier
 
 
 class Fading(Default):
@@ -19,12 +20,12 @@ class Fading(Default):
 
         super().__init__(**kwargs)
 
-        self.point_number = 29
-        self.rate_start = 40
-        self.rate_end = 4
+        self.point_number = Modifier('points', 30, minimum=1, maximum=self.strip_length)
+        self.rate_start = Modifier('start rate', 40, minimum=1, maximum=101)
+        self.rate_end = Modifier('end rate', 4, minimum=1, maximum=101)
 
         # assert there are no more points than leds
-        self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.point_number)}
+        self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.point_number())}
         self.pattern_name = "Fading"
 
         self.modifiers = dict(
@@ -56,7 +57,7 @@ class Fading(Default):
         center_copy = deepcopy(self.centers)
 
         # bound the rnadom point to the maximum 
-        self.point_number = min(self.point_number, self.strip_length)
+        self.point_number.value = min(self.point_number(), self.strip_length)
 
         # for every center in the list
         for a, attr in center_copy.items():
@@ -75,10 +76,10 @@ class Fading(Default):
 
             # if increasing and there is still room for increasing do it
             if 0 <= alpha < 255 and increasing:
-                alpha = bound_add(alpha, self.rate_start, maximum=255)
+                alpha = bound_add(alpha, self.rate_start.max-self.rate_start(), maximum=255)
             # if not increasing and still in good range, decrease
             elif 0 < alpha <= 255 and not increasing:
-                alpha = bound_sub(alpha, self.rate_end, minimum=0)
+                alpha = bound_sub(alpha, self.rate_end.max-self.rate_end(), minimum=0)
             # if zero and decreasing we're done
             elif alpha == 0 and not increasing:
                 done = True
@@ -100,7 +101,7 @@ class Fading(Default):
                 self.centers.pop(a)
 
                 # if centers are less than supposed, add other
-                if len(self.centers) < self.point_number:
+                if len(self.centers) < self.point_number():
                     # get a new one
                     new_c = randint(0, self.strip_length - 1)
                     while new_c in self.centers.keys():

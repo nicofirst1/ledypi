@@ -1,3 +1,5 @@
+from utils.color import scale_brightness
+
 PIN = 18
 
 
@@ -8,25 +10,25 @@ class PiHandler(object):
 
     def __init__(self, pixels):
         # the imports must be hidden since they won't work on pc
-        from rpi_ws281x import PixelStrip
+        import neopixel
+        import board
 
         # init the pixel strip
-        self.np = PixelStrip(pixels, PIN)
-        self.np.begin()
+        self.np = neopixel.NeoPixel(board.D18, pixels, auto_write=False)
         self.pixel_count = pixels
-        self.is_stopped = False
 
-    def set(self, index, c, b, g, r):
-        from rpi_ws281x import Color
+
+
+    def set(self, index, a, b, g, r):
 
         if index is not None and index < self.pixel_count:
             # scale the rgb value by the intensity
-            r = scale(r, c)
-            g = scale(g, c)
-            b = scale(b, c)
+            r = scale_brightness(r, a)
+            g = scale_brightness(g, a)
+            b = scale_brightness(b, a)
             # create color and set it
-            color = Color(r, g, b)
-            self.np.setPixelColor(index, color)
+            color = (r, g, b)
+            self.np[index] = color
 
     def send(self):
 
@@ -36,11 +38,6 @@ class PiHandler(object):
         raise NotImplementedError
 
     def close(self):
-        for index in range(self.pixel_count):
-            self.np.setPixelColor(index, 0)
-        self.np.show()
+        self.np.deinit()
+        print("Closing PiHandler")
 
-
-def scale(value, brightness):
-    brightness /= 255
-    return int(value * brightness)

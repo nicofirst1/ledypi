@@ -1,21 +1,19 @@
 import argparse
 import signal
-import sys
 
-from firebase.connector import FireBaseConnector
+from firebase.controller import FireBaseController
 
 
-def connect(args):
+def control(args):
     def signal_handler(signal, frame):
         fbc.close()
-        # your code here
-        sys.exit(0)
 
     # import the correct handler depending on the mode
     if args.mode == "pc":
         from DotStar_Emulator.emulator.send_test_data import App
 
         handler = App
+        args.pixels=64
         print("Running from PC")
 
     elif args.mode == "rpi":
@@ -28,18 +26,12 @@ def connect(args):
         raise ValueError(f"Mode '{args.mode}' is not supported")
 
     # init the firebase connector
-    fbc = FireBaseConnector(credential_path=args.credential, database_url=args.databaseURL, handler=handler,
-                            pixels=args.pixels, debug=args.debug)
+    fbc = FireBaseController(credential_path=args.credential, database_url=args.databaseURL, handler=handler,
+                             pixels=args.pixels, debug=args.debug)
+    fbc.start()
 
     # add signal handler for interruption
     signal.signal(signal.SIGINT, signal_handler)
-
-    # keep the thread alive
-    try:
-        while True:
-            pass
-    except KeyboardInterrupt:
-        fbc.close()
 
 
 if __name__ == '__main__':
@@ -55,9 +47,9 @@ if __name__ == '__main__':
     parser.add_argument('--pixels', type=int, nargs='?', default="300",
                         help='Number of pixels')
 
-    parser.add_argument('--debug', nargs='?',
+    parser.add_argument('--debug', nargs='?', const=True,
                         help='If to start in debug mode')
 
     args = parser.parse_args()
 
-    connect(args)
+    control(args)

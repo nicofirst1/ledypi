@@ -1,12 +1,17 @@
+from logging import getLogger
+
 import numpy as np
 import pyaudio
 
 from config import CONFIGS
 from patterns.default import Default
+from utils.modifier import Modifier
 from visualization import Visualizer
 
 _gamma = np.load(CONFIGS['gamma_table_path'])
 """Gamma lookup table used for nonlinear brightness correction"""
+
+music_logger = getLogger("music_logger")
 
 
 class Music(Default):
@@ -31,10 +36,10 @@ class Music(Default):
         )
 
         # name of the effect to be used
-        self.effect = 'spectrum'
+        self._effect = Modifier('visualizer', "spectrum" ,options=list(self.effect_dict.keys()))
 
         self.modifiers = dict(
-            visualizer=self.effect,
+            effect=self._effect,
         )
 
         # attributes for the mic
@@ -42,7 +47,10 @@ class Music(Default):
         self.stream = None
         self.frames_per_buffer = int(CONFIGS['mic_rate'] / CONFIGS['fps'])
 
-        self.setup()
+        try:
+            self.setup()
+        except OSError:
+            music_logger.warning(f"Could not initialize the audio stream")
 
     def setup(self):
         """
@@ -55,9 +63,11 @@ class Music(Default):
                                   input=True,
                                   frames_per_buffer=self.frames_per_buffer)
 
+        music_logger.info("Audio stream initialized")
+
     @property
     def effect(self):
-        return self._effect
+        return self._effect()
 
     @effect.setter
     def effect(self, value):
@@ -67,7 +77,7 @@ class Music(Default):
         try:
             ef = self.effect_dict[value]
             self.vis.visualization_effect = ef
-            self._effect = value
+            self._effect.value = value
 
         except KeyError as e:
             print(f"Error for key {value}\n{e}")
@@ -118,12 +128,13 @@ class Music(Default):
         except TypeError:
             pass
 
-    def stop(self):
+    def close(self):
         """
         Call super method and close audio stream
         """
-        super(Music, self).stop()
+        super(Music, self).close()
 
         self.stream.stop_stream()
         self.stream.close()
         self.p.terminate()
+        music_logger.info("Audio stream stopped")

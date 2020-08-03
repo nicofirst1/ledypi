@@ -4,6 +4,7 @@ from Equation import Expression
 
 from patterns.default import Default
 from utils.color import scale
+from utils.modifier import Modifier
 
 pattern_logger = logging.getLogger("pattern_logger")
 
@@ -26,9 +27,13 @@ class Equation(Default):
         self.fns = {}
 
         # r,g,b functions in string format
-        self.r_eq = "cos(t)"
-        self.g_eq = "sin(t)"
-        self.b_eq = "idx"
+        self._r_eq = Modifier('red equation', "cos(t)")
+        self._g_eq = Modifier('blue equation', "sin(t)")
+        self._b_eq = Modifier('green equation', "idx")
+
+        self.red_equation = "cos(t)"
+        self.blue_equation = "sin(t)"
+        self.green_equation = "idx"
 
         # time step
         self.t = 1
@@ -37,40 +42,40 @@ class Equation(Default):
         self.max_range = self.strip_length * 1000
 
         self.modifiers = dict(
-            red_equation=self.r_eq,
-            blue_equation=self.g_eq,
-            green_equation=self.b_eq,
+            red_equation=self._r_eq,
+            blue_equation=self._g_eq,
+            green_equation=self._b_eq,
         )
 
     @property
-    def r_eq(self):
-        return self._r_eq
+    def red_equation(self):
+        return self._r_eq()
 
-    @r_eq.setter
-    def r_eq(self, value):
+    @red_equation.setter
+    def red_equation(self, value):
         assert isinstance(value, str), pattern_logger.warning("The equation value is not a string")
         self.fns['r_fn'] = Expression(value, ["t", "idx"])
-        self._r_eq = value
+        self._r_eq.value = value
 
     @property
-    def g_eq(self):
-        return self._g_eq
+    def green_equation(self):
+        return self._g_eq()
 
-    @g_eq.setter
-    def g_eq(self, value):
+    @green_equation.setter
+    def green_equation(self, value):
         assert isinstance(value, str), pattern_logger.warning("The equation value is not a string")
         self.fns['g_fn'] = Expression(value, ["t", "idx"])
-        self._g_eq = value
+        self._g_eq.value = value
 
     @property
-    def b_eq(self):
-        return self._b_eq
+    def blue_equation(self):
+        return self._b_eq()
 
-    @b_eq.setter
-    def b_eq(self, value):
+    @blue_equation.setter
+    def blue_equation(self, value):
         assert isinstance(value, str), pattern_logger.warning("The equation value is not a string")
         self.fns['b_fn'] = Expression(value, ["t", "idx"])
-        self._b_eq = value
+        self._b_eq.value = value
 
     def fill(self):
 
@@ -92,7 +97,7 @@ class Equation(Default):
 
             # set values
             for idx in range(self.strip_length):
-                self.pixels[idx]['color'] = (rs[idx], gs[idx], bs[idx], self.color.a)
+                self.pixels[idx]['color'] = (rs[idx], gs[idx], bs[idx], 255)
 
         except Exception as e:
             pattern_logger.warning(f"One of the equation failed to execute, please change it\nError: {e}")

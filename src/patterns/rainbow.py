@@ -3,6 +3,7 @@ from math import sin, pi, floor
 from patterns.default import Default
 from rgb import RGB
 from utils.color import scale
+from utils.modifier import Modifier
 
 
 class Rainbow(Default):
@@ -15,10 +16,10 @@ class Rainbow(Default):
         super().__init__(**kwargs)
         self.counter = 0
         self.color = RGB(white=True)
-        self.r_phi = 0
-        self.b_phi = 1
-        self.g_phi = 2
-        self.max_range = 1
+        self.r_phi = Modifier('red shift', 0.0, minimum=0, maximum=pi)
+        self.b_phi = Modifier('blue shift', 35.0, minimum=0, maximum=pi)
+        self.g_phi = Modifier('green shift', 70.0, minimum=0, maximum=pi)
+        self.max_range = Modifier('max range', 1, minimum=1, maximum=self.strip_length)
         self.pattern_name = "Rainbow"
 
         self.modifiers = dict(
@@ -28,23 +29,23 @@ class Rainbow(Default):
             max_range=self.max_range,
         )
 
-        self.set_pixels()
-
     def fill(self):
 
-        r_phi = self.r_phi
-        b_phi = self.b_phi
-        g_phi = self.g_phi
+        r_phi = self.r_phi()
+        b_phi = self.b_phi()
+        g_phi = self.g_phi()
 
-        if not self.r_phi == 0:
-            r_phi = pi / self.r_phi
-        if not self.b_phi == 0:
-            b_phi = pi / self.b_phi
-        if not self.g_phi == 0:
-            g_phi = pi / self.g_phi
+
+        if not self.r_phi() == 0:
+            r_phi = pi / r_phi
+        if not self.b_phi() == 0:
+            b_phi = pi / b_phi
+        if not self.g_phi() == 0:
+            g_phi = pi / g_phi
+
 
         for idx in range(self.strip_length):
-            idx2degree = scale(idx + self.counter, 0, self.max_range, 0, self.strip_length)
+            idx2degree = scale(idx + self.counter, 0, self.max_range(), 0, self.strip_length)
 
             r = sin(idx2degree + r_phi)
             g = sin(idx2degree + g_phi)
