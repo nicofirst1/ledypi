@@ -35,9 +35,7 @@ class PiHandler(object):
         raise NotImplementedError
 
     def close(self):
-        for index in range(self.pixel_count):
-            self.np[index] = (0, 0, 0)
-        self.np.show()
+        self.np.deinit()
 
 
 def scale(value, brightness):
