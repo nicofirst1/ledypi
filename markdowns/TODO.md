@@ -13,6 +13,8 @@
 ## Patterns
 - add allowed range for attributes []
 - fix alpha dependencies [X]
+- add modifier instructions in readme []
+- Fix music modifier [X]
 
 # LedyWeb
 - fix readme [X]
@@ -31,6 +33,7 @@
 - add readme [X]
 - remove redundant text input for list of choices []
 - add components update on database change []
+- add modifier compatibility
 
 #### template
 - []

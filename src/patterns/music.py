@@ -5,6 +5,7 @@ import pyaudio
 
 from config import CONFIGS
 from patterns.default import Default
+from utils.modifier import Modifier
 from visualization import Visualizer
 
 _gamma = np.load(CONFIGS['gamma_table_path'])
@@ -35,11 +36,10 @@ class Music(Default):
         )
 
         # name of the effect to be used
-        self.effect = 'spectrum'
+        self._effect = Modifier('visualizer', "spectrum" ,options=list(self.effect_dict.keys()))
 
         self.modifiers = dict(
-            visualizer=self.effect,
-            __visualizer=list(self.effect_dict.keys())
+            effect=self._effect,
         )
 
         # attributes for the mic
@@ -67,7 +67,7 @@ class Music(Default):
 
     @property
     def effect(self):
-        return self._effect
+        return self._effect()
 
     @effect.setter
     def effect(self, value):
@@ -77,7 +77,7 @@ class Music(Default):
         try:
             ef = self.effect_dict[value]
             self.vis.visualization_effect = ef
-            self._effect = value
+            self._effect.value = value
 
         except KeyError as e:
             print(f"Error for key {value}\n{e}")

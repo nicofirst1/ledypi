@@ -187,6 +187,9 @@ class FireBaseConnector(Thread):
                         request[mod_name] = int(request[name])
                     elif tp == float:
                         request[mod_name] = float(request[name])
+                    elif tp==list or tp ==str:
+                        request[mod_name] = str(request[name])
+
                     else:
                         fire_logger.info(f"Type {tp} not recognized for modifier {name} ({mod_name})")
 
@@ -275,9 +278,6 @@ class FireBaseConnector(Thread):
             # for every pattern in the pattern dict
             for pt_name, pt_class in Patterns.items():
 
-                if pt_name == "Music":
-                    continue
-
                 remote_att = {}
                 # get the local modifier dictionary
                 local_att = pt_class(handler=None, rate=1, pixels=1).modifiers
@@ -305,6 +305,9 @@ class FireBaseConnector(Thread):
                         name=modifier.name,
                         type=modifier.type.__name__
                     )
+                    if modifier.type == list:
+                        att_dict['options'] = modifier.options
+
                     # try to override the default value with the one from the db
                     try:
                         att_dict['value'] = remote_att[att_name]['value']
