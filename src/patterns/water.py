@@ -39,7 +39,7 @@ class Water(Default):
 
     @y_div.setter
     def y_div(self, value):
-        if value==0: value=0.001
+        if value == 0: value = 0.001
         self._y_div = value
 
     @property

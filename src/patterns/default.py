@@ -53,15 +53,14 @@ class Default(threading.Thread):
 
     def color_all(self, color):
         for idx in self.strip_length:
-            self.pixels[idx]['color']=color
-
+            self.pixels[idx]['color'] = color
 
     def color_set(self, index, rgb, **kwargs):
 
         if isinstance(rgb, RGB):
             self.handler.set(index, rgb.a, rgb.b, rgb.g, rgb.r)
         elif isinstance(rgb, tuple) or isinstance(rgb, list):
-            assert len(rgb)==4, "The length of the color should be 4"
+            assert len(rgb) == 4, "The length of the color should be 4"
             r, g, b, a = rgb
             self.handler.set(index, a, b, g, r)
 
@@ -97,7 +96,7 @@ class Default(threading.Thread):
 
     def run(self):
         # init handler and set pixels
-        self.handler=self.handler(self.strip_length)
+        self.handler = self.handler(self.strip_length)
         self.set_pixels()
 
         pattern_logger.info(f"Started pattern: {self.pattern_name} with rate: {self.rate}")

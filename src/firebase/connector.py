@@ -33,7 +33,7 @@ class FireBaseConnector(Thread):
         super().__init__()
 
         # define local attributes
-        self.tracker = tracker if tracker is not None else lambda:None
+        self.tracker = tracker if tracker is not None else lambda: None
         self.stop = False
         self.rgba = None
         self.random_colors = False
@@ -75,7 +75,7 @@ class FireBaseConnector(Thread):
         keys.pop(0)
 
         # check if there is a difference
-        if get_from_dict(self.local_db,keys)!= event.data:
+        if get_from_dict(self.local_db, keys) != event.data:
             # update local db
             set_in_dict(self.local_db, keys, event.data)
             self.tracker()
@@ -342,8 +342,6 @@ class FireBaseConnector(Thread):
             data = self.get('cur_pattern')
 
         return data.replace('"', '')
-
-
 
 
 def floor_int(value):

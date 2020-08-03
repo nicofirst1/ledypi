@@ -10,7 +10,8 @@ from visualization import Visualizer
 _gamma = np.load(CONFIGS['gamma_table_path'])
 """Gamma lookup table used for nonlinear brightness correction"""
 
-music_logger=getLogger("music_logger")
+music_logger = getLogger("music_logger")
+
 
 class Music(Default):
     """

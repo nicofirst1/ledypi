@@ -28,7 +28,6 @@ class Rainbow(Default):
             max_range=self.max_range,
         )
 
-
     def fill(self):
 
         r_phi = self.r_phi

@@ -3,7 +3,7 @@ This project uses five main tools:
 1. [DotStar_emulator](https://github.com/chrisrossx/DotStar_Emulator) to simulate the led strip.
 2. [AppInventor](http://appinventor.mit.edu/) for the android app.
 3. [Firebase](https://console.firebase.google.com/) to allow communication between android and pc/raspberry.
-4. [rpi-ws281x](https://github.com/rpi-ws281x/rpi-ws281x-python) to control the leds on the raspberry.
+4. [Adafruit_CircuitPython_NeoPixel](https://github.com/adafruit/Adafruit_CircuitPython_NeoPixel) to control the leds on the raspberry.
 5. [audio-reactive-led-strip](https://github.com/scottlawsonbc/audio-reactive-led-strip) to control leds with music.
 
 Since the _DotStar_emulator_ cannot be installed on the raspberry and the _rpi-ws281x_ does not work on pc, this two libraries are kept well separated.

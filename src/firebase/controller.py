@@ -46,21 +46,19 @@ class FireBaseController(FireBaseConnector):
     def __init__(self, credential_path, database_url, handler, pixels, debug=None):
 
         # dummy pattern to avoid exception
-        self.pattern = Patterns['Steady'](rate=10,handler=handler, pixels=pixels)
+        self.pattern = Patterns['Steady'](rate=10, handler=handler, pixels=pixels)
 
         super().__init__(credential_path=credential_path, database_url=database_url, debug=debug)
-
 
         self.handler = handler
         self.pixels = pixels
 
         # choose correct pattern and start it
-        cur_pattern=self.get_cur_pattern()
-        rate=self.get_rate()
-        rgba=self.get_rgba()
+        cur_pattern = self.get_cur_pattern()
+        rate = self.get_rate()
+        rgba = self.get_rgba()
         self.pattern = Patterns[cur_pattern](rate=rate, color=rgba, handler=handler, pixels=pixels)
         self.pattern.start()
-
 
     def close(self):
         super().close()
@@ -80,8 +78,8 @@ class FireBaseController(FireBaseConnector):
         to_log = f"{event.event_type}\n{event.path}\n{event.data}"
         fire_logger.debug(to_log)
 
-        k=event.data.keys()
-        k=list(k)
+        k = event.data.keys()
+        k = list(k)
 
         if "rate" in k:
             rate = self.get_rate(data=event.data)
@@ -93,7 +91,7 @@ class FireBaseController(FireBaseConnector):
             # get values
             pattern_choice = self.get_cur_pattern()
             rate = self.get_rate()
-            rgba= self.get_rgba()
+            rgba = self.get_rgba()
             # stop and restart
             self.pattern.stop()
             self.pattern = Patterns[pattern_choice](rate=rate, color=rgba, handler=self.handler, pixels=self.pixels)
@@ -119,10 +117,10 @@ class FireBaseController(FireBaseConnector):
         """
 
         # check that the values to modify are indeed of the current pattern
-        pattern= next(iter(data))
+        pattern = next(iter(data))
         assert self.pattern.pattern_name == pattern
         # remove pattern name
-        data=data[pattern]
+        data = data[pattern]
         # and update pattern
         self.pattern.update_args(**data)
 
@@ -143,13 +141,13 @@ class FireBaseController(FireBaseConnector):
             b = int(b)
             a = int(a)
 
-            return RGB(r=r,g=g,b=b,a=a)
+            return RGB(r=r, g=g, b=b, a=a)
 
         # if method is called before pattern initialization skip
         try:
             # update pattern values
-            random= data["RGBA"]['random']
-            rgba=init_rgba(data["RGBA"])
+            random = data["RGBA"]['random']
+            rgba = init_rgba(data["RGBA"])
             self.pattern.update_args(randomize_color=bool(random))
             self.pattern.update_args(color=rgba)
         except AttributeError:

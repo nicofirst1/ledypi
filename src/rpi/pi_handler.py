@@ -24,8 +24,8 @@ class PiHandler(object):
             g = scale(g, c)
             b = scale(b, c)
             # create color and set it
-            color =(r, g, b)
-            self.np[index]= color
+            color = (r, g, b)
+            self.np[index] = color
 
     def send(self):
 
@@ -36,7 +36,7 @@ class PiHandler(object):
 
     def close(self):
         for index in range(self.pixel_count):
-            self.np[index]= (0,0,0)
+            self.np[index] = (0, 0, 0)
         self.np.show()
 
 
