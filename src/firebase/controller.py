@@ -13,7 +13,7 @@ fire_logger = logging.getLogger("fire_logger")
 # skipped if there was a previous call less than '__call_resolution' seconds before
 
 __last_call = time.time()
-__call_resolution = 0.01
+__call_resolution = 0.1
 
 
 def frequency(listener):
@@ -50,19 +50,19 @@ class FireBaseController(FireBaseConnector):
 
         super().__init__(credential_path=credential_path, database_url=database_url, debug=debug)
 
-        self.handler = handler
+        self.handler = handler(pixels)
         self.pixels = pixels
 
         # choose correct pattern and start it
         cur_pattern = self.get_cur_pattern()
         rate = self.get_rate()
         rgba = self.get_rgba()
-        self.pattern = Patterns[cur_pattern](rate=rate, color=rgba, handler=handler, pixels=pixels)
+        self.pattern = Patterns[cur_pattern](rate=rate, color=rgba, handler=self.handler, pixels=pixels)
         self.pattern.start()
 
     def close(self):
         super().close()
-        self.pattern.stop()
+        self.pattern.close()
 
     @frequency
     def listener_method(self, event):
@@ -83,7 +83,6 @@ class FireBaseController(FireBaseConnector):
         if "rate" in k:
             rate = self.get_rate(data=event.data)
             self.pattern.set_rate(rate)
-            self.rate = rate
 
         # stop and restart pattern if required
         elif "cur_pattern" in k:
@@ -92,7 +91,7 @@ class FireBaseController(FireBaseConnector):
             rate = self.get_rate()
             rgba = self.get_rgba()
             # stop and restart
-            self.pattern.stop()
+            self.pattern.close()
             self.pattern = Patterns[pattern_choice](rate=rate, color=rgba, handler=self.handler, pixels=self.pixels)
             self.pattern.start()
 

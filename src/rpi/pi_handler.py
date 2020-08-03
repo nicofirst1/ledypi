@@ -8,21 +8,22 @@ class PiHandler(object):
 
     def __init__(self, pixels):
         # the imports must be hidden since they won't work on pc
-        from neopixel import NeoPixel
+        import neopixel
         import board
 
         # init the pixel strip
-        self.np = NeoPixel(board.D18, pixels, auto_write=False)
+        self.np = neopixel.NeoPixel(board.D18, pixels, auto_write=False)
         self.pixel_count = pixels
-        self.is_stopped = False
 
-    def set(self, index, c, b, g, r):
+
+
+    def set(self, index, a, b, g, r):
 
         if index is not None and index < self.pixel_count:
             # scale the rgb value by the intensity
-            r = scale(r, c)
-            g = scale(g, c)
-            b = scale(b, c)
+            r = scale(r, a)
+            g = scale(g, a)
+            b = scale(b, a)
             # create color and set it
             color = (r, g, b)
             self.np[index] = color
@@ -36,6 +37,7 @@ class PiHandler(object):
 
     def close(self):
         self.np.deinit()
+        print("Closing PiHandler")
 
 
 def scale(value, brightness):

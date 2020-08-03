@@ -94,8 +94,7 @@ class FireBaseConnector(Thread):
                 pass
         except KeyboardInterrupt:
             fire_logger.info("FireBaseConnector has been interrupted")
-
-        self.close()
+            self.close()
 
     def close(self):
         fire_logger.info("Closing firebase connection, this make take a few seconds...")

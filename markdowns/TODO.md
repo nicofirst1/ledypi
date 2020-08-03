@@ -7,11 +7,12 @@
 - fix random button [X]
 
 ## Raspberry
-- fix closing []
+- fix closing [X]
 - use neopixel [X]
 
 ## Patterns
 - add allowed range for attributes []
+- fix water alpha dependencies []
 
 # LedyWeb
 - fix readme [X]

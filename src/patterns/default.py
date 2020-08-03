@@ -30,9 +30,9 @@ class Default(threading.Thread):
 
         rate /= RATE_DIVISOR
 
-
         self.handler = handler
         self.rate = rate
+        self.stop=False
 
         self.strip_length = pixels
         self.color = color
@@ -57,17 +57,21 @@ class Default(threading.Thread):
         for idx in self.strip_length:
             self.pixels[idx]['color'] = color
 
-    def color_set(self, index, rgb, **kwargs):
+    def color_set(self, index, rgb):
 
         if isinstance(rgb, RGB):
-            self.handler.set(index, rgb.a, rgb.b, rgb.g, rgb.r)
+            r= rgb.r
+            g=rgb.b
+            b=rgb.b
+            a=rgb.a
         elif isinstance(rgb, tuple) or isinstance(rgb, list):
             assert len(rgb) == 4, "The length of the color should be 4"
             r, g, b, a = rgb
-            self.handler.set(index, a, b, g, r)
 
         else:
             raise ValueError(f"Class {rgb.__class__} not recognized")
+
+        self.handler.set(index=index, r=r, g=g, b=b, a=a)
 
     def fill(self):
 
@@ -93,23 +97,21 @@ class Default(threading.Thread):
 
         return changed
 
-    def stop(self):
-        self.handler.is_stopped = True
+    def close(self):
+        self.stop = True
+        pattern_logger.info(f"Pattern {self.pattern_name} stopped")
 
     def run(self):
         # init handler and set pixels
-        self.handler = self.handler(self.strip_length)
         self.set_pixels()
 
         pattern_logger.info(f"Started pattern: {self.pattern_name} with rate: {self.rate}")
         try:
-            while not self.handler.is_stopped:
+            while not self.stop:
                 self.on_loop()
         except KeyboardInterrupt:
             pattern_logger.info("Pattern has been interrupted")
-
-        self.handler.close()
-        pattern_logger.info("Stopped pattern")
+            self.close()
 
     def bound_attrs(self):
         """
