@@ -3,7 +3,7 @@
 ## Controller
 - fix compatibility with connector [X]
 - Fix rgba values on pattern change []
-- add range for modifiers []
+- add range for modifiers [X]
 - fix random button [X]
 
 ## Raspberry
@@ -11,9 +11,9 @@
 - use neopixel [X]
 
 ## Patterns
-- add allowed range for attributes []
+- add allowed range for attributes [X]
 - fix alpha dependencies [X]
-- add modifier instructions in readme []
+- add modifier instructions in readme [X]
 - Fix music modifier [X]
 
 # LedyWeb
@@ -31,9 +31,9 @@
 - add comments [X]
 - remove patterns [X]
 - add readme [X]
-- remove redundant text input for list of choices []
+- remove redundant text input for list of choices [X]
 - add components update on database change []
-- add modifier compatibility
+- add modifier compatibility [X]
 
 #### template
 - []
