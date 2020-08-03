@@ -47,7 +47,6 @@ class FireBaseConnector(Thread):
         firebase_admin.initialize_app(credential=cred,
                                       options={'databaseURL': database_url})
 
-
         # update db and get references
         self.root = db.reference('/')
         self.init_db()
@@ -173,21 +172,37 @@ class FireBaseConnector(Thread):
 
             if self.local_db['pattern_attributes'][rq_pattern] == "NA": return
 
-            for k, v in self.local_db['pattern_attributes'][rq_pattern].items():
-                try:
-                    # cast to bool or int
-                    if isinstance(v, bool):
-                        request[k] = request[k] == 'true'
-                    elif isinstance(v, int):
-                        request[k] = int(request[k])
+            for mod_name, modifier in self.local_db['pattern_attributes'][rq_pattern].items():
 
-                    if request[k] != v:
-                        to_update[k] = request[k]
+                # get the attributes
+                tp = eval(modifier['type'])
+                value = modifier['value']
+                name = modifier['name']
+
+                try:
+                    # cast to correct type
+                    if tp == bool:
+                        request[mod_name] = request[name] == 'true'
+                    elif tp == int:
+                        request[mod_name] = int(request[name])
+                    elif tp == float:
+                        request[mod_name] = float(request[name])
+                    else:
+                        fire_logger.info(f"Type {tp} not recognized for modifier {name} ({mod_name})")
+
+                    # check if to update
+                    if request[mod_name] != value:
+                        to_update[mod_name] = modifier
+                        to_update[mod_name]['value'] = request[mod_name]
+
                 except KeyError:
                     continue
 
+            # if there is something to update
             if len(to_update) > 0:
+                # add missing (not to update) elements to the update dict
                 to_update = update_dict_no_override(self.local_db['pattern_attributes'][rq_pattern], to_update)
+                # send update both remotely and locally
                 self.pattern_attributes.update({rq_pattern: to_update})
                 self.local_db["pattern_attributes"][rq_pattern] = to_update
 
@@ -258,31 +273,45 @@ class FireBaseConnector(Thread):
             pattern_attributes = {}
 
             # for every pattern in the pattern dict
-            for k, pt in Patterns.items():
-                remote_att = {}
-                # get the local ones and find differences
-                local_att = pt(handler=None, rate=1, pixels=1).modifiers
+            for pt_name, pt_class in Patterns.items():
 
+                if pt_name == "Music":
+                    continue
+
+                remote_att = {}
+                # get the local modifier dictionary
+                local_att = pt_class(handler=None, rate=1, pixels=1).modifiers
+
+                # if there are none, then set to NA
                 if len(local_att) == 0:
-                    pattern_attributes[k] = "NA"
+                    pattern_attributes[pt_name] = "NA"
                     continue
 
                 # get the remote attributes
                 try:
-                    remote_att = data[k]
-
+                    remote_att = data[pt_name]
                 except KeyError:
                     if len(local_att) > 0:
-                        fire_logger.warning(f"Patter '{k}' not found in pattern dict")
+                        fire_logger.warning(f"Patter '{pt_name}' not found in pattern dict")
 
-                # set the remote ones by default
-                pattern_attributes[k] = remote_att
+                pattern_attributes[pt_name] = {}
 
-                to_add = set(local_att.keys()) - set(remote_att.keys())
+                # for every attribute
+                for att_name, modifier in local_att.items():
 
-                # for every difference update with the local one
-                for at in to_add:
-                    pattern_attributes[k][at] = local_att[at]
+                    # generate a dictionary with the corresponding values
+                    att_dict = dict(
+                        value=modifier.value,
+                        name=modifier.name,
+                        type=modifier.type.__name__
+                    )
+                    # try to override the default value with the one from the db
+                    try:
+                        att_dict['value'] = remote_att[att_name]['value']
+                    except (TypeError, KeyError):
+                        pass
+                    # set the value
+                    pattern_attributes[pt_name][att_name] = att_dict
 
             # update the database
             self.root.update(dict(pattern_attributes=pattern_attributes))
@@ -367,3 +396,9 @@ def update_dict_no_override(additional_dict, base_dict):
     Update the base dict with the new pairs from additional_dict. If there are some same keys then keep the ones on base_dict
     """
     return dict(list(additional_dict.items()) + list(base_dict.items()))
+
+
+if __name__ == '__main__':
+    # init the firebase connector
+    fbc = FireBaseConnector(credential_path="./credential.json", debug=True)
+    fbc.start()

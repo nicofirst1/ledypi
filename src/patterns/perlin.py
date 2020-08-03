@@ -25,8 +25,8 @@ class Perlin(Default):
         self.counter = 0
 
         self.modifiers = dict(
-            x_div=self.x_div,
-            y_div=self.y_div,
+            x_div=self._x_div,
+            y_div=self._y_div,
         )
 
     @property

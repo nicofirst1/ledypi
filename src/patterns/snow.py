@@ -17,7 +17,7 @@ class Snow(Default):
         super().__init__(**kwargs)
         self.trail = Modifier('trail size', 5, minimum=1, maximum=self.strip_length//2)
         # min space between trail end and trail start
-        self.min_space = Modifier('trail size', 3, minimum=1, maximum=self.strip_length // 2)
+        self.min_space = Modifier('spacing', 3, minimum=1, maximum=self.strip_length // 2)
         self.counter = 0
         self.pattern_name = "Snow"
         self.color = RGB(white=True)

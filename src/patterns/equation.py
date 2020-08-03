@@ -27,9 +27,9 @@ class Equation(Default):
         self.fns = {}
 
         # r,g,b functions in string format
-        self._r_eq = Modifier('red_equation', "cos(t)")
-        self._g_eq = Modifier('green_equation', "sin(t)")
-        self._b_eq = Modifier('blue_equation', "idx")
+        self._r_eq = Modifier('red equation', "cos(t)")
+        self._g_eq = Modifier('blue equation', "sin(t)")
+        self._b_eq = Modifier('green equation', "idx")
 
         self.red_equation = "cos(t)"
         self.blue_equation = "sin(t)"
@@ -42,9 +42,9 @@ class Equation(Default):
         self.max_range = self.strip_length * 1000
 
         self.modifiers = dict(
-            red_equation=self.red_equation,
-            blue_equation=self.blue_equation,
-            green_equation=self.green_equation,
+            red_equation=self._r_eq,
+            blue_equation=self._g_eq,
+            green_equation=self._b_eq,
         )
 
     @property
