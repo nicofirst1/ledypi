@@ -4,7 +4,7 @@ path2repo="$( dirname $( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 &
 echo "Your path is: $path2repo"
 pixels=600                  # change here the number of pixels
 
-pythonpath="$path2repo/src:$path2repo/audio-reactive-led-strip/python:$path2repo/ledyweb"
+pythonpath="$path2repo/src:$path2repo/audio-reactive-led-strip/src:$path2repo/ledyweb"
 export PYTHONPATH="$pythonpath"
 # Carry out specific functions when asked to by the system
 case "$1" in
