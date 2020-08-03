@@ -63,6 +63,7 @@ class FireBaseController(FireBaseConnector):
     def close(self):
         super().close()
         self.pattern.close()
+        self.handler.close()
 
     @frequency
     def listener_method(self, event):
@@ -93,6 +94,7 @@ class FireBaseController(FireBaseConnector):
             # stop and restart
             self.pattern.close()
             self.pattern = Patterns[pattern_choice](rate=rate, color=rgba, handler=self.handler, pixels=self.pixels)
+            self.pattern.color_all(RGB())
             self.pattern.start()
 
         # update rgba
@@ -148,5 +150,6 @@ class FireBaseController(FireBaseConnector):
             rgba = init_rgba(data["RGBA"])
             self.pattern.update_args(randomize_color=bool(random))
             self.pattern.update_args(color=rgba)
+            self.pattern.update_args(alpha=rgba.a)
         except AttributeError:
             pass

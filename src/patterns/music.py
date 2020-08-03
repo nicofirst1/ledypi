@@ -128,11 +128,11 @@ class Music(Default):
         except TypeError:
             pass
 
-    def stop(self):
+    def close(self):
         """
         Call super method and close audio stream
         """
-        super(Music, self).stop()
+        super(Music, self).close()
 
         self.stream.stop_stream()
         self.stream.close()

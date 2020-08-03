@@ -1,3 +1,5 @@
+from utils.color import scale_brightness
+
 PIN = 18
 
 
@@ -21,9 +23,9 @@ class PiHandler(object):
 
         if index is not None and index < self.pixel_count:
             # scale the rgb value by the intensity
-            r = scale(r, a)
-            g = scale(g, a)
-            b = scale(b, a)
+            r = scale_brightness(r, a)
+            g = scale_brightness(g, a)
+            b = scale_brightness(b, a)
             # create color and set it
             color = (r, g, b)
             self.np[index] = color
@@ -39,7 +41,3 @@ class PiHandler(object):
         self.np.deinit()
         print("Closing PiHandler")
 
-
-def scale(value, brightness):
-    brightness /= 255
-    return int(value * brightness)

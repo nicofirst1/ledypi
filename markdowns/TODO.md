@@ -12,7 +12,7 @@
 
 ## Patterns
 - add allowed range for attributes []
-- fix water alpha dependencies []
+- fix alpha dependencies [X]
 
 # LedyWeb
 - fix readme [X]
@@ -28,8 +28,9 @@
 - fix android app to be compatible with new connector[X]
 - add comments [X]
 - remove patterns [X]
-- add readme []
+- add readme [X]
 - remove redundant text input for list of choices []
 - add components update on database change []
+
 #### template
 - []

@@ -92,7 +92,7 @@ class Equation(Default):
 
             # set values
             for idx in range(self.strip_length):
-                self.pixels[idx]['color'] = (rs[idx], gs[idx], bs[idx], self.color.a)
+                self.pixels[idx]['color'] = (rs[idx], gs[idx], bs[idx], 255)
 
         except Exception as e:
             pattern_logger.warning(f"One of the equation failed to execute, please change it\nError: {e}")

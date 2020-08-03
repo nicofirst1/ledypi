@@ -4,6 +4,7 @@ import threading
 import time
 
 from rgb import RGB
+from utils.color import scale_brightness
 
 pattern_logger = logging.getLogger("pattern_logger")
 
@@ -32,10 +33,11 @@ class Default(threading.Thread):
 
         self.handler = handler
         self.rate = rate
-        self.stop=False
+        self.stop = False
 
         self.strip_length = pixels
         self.color = color
+        self.alpha=255
         # boolan value to randomize color
         self.randomize_color = False
 
@@ -54,16 +56,16 @@ class Default(threading.Thread):
         self.handler.send()
 
     def color_all(self, color):
-        for idx in self.strip_length:
+        for idx in range(self.strip_length):
             self.pixels[idx]['color'] = color
 
     def color_set(self, index, rgb):
 
         if isinstance(rgb, RGB):
-            r= rgb.r
-            g=rgb.b
-            b=rgb.b
-            a=rgb.a
+            r = rgb.r
+            g = rgb.b
+            b = rgb.b
+            a = rgb.a
         elif isinstance(rgb, tuple) or isinstance(rgb, list):
             assert len(rgb) == 4, "The length of the color should be 4"
             r, g, b, a = rgb
@@ -71,7 +73,10 @@ class Default(threading.Thread):
         else:
             raise ValueError(f"Class {rgb.__class__} not recognized")
 
-        self.handler.set(index=index, r=r, g=g, b=b, a=a)
+        # scale rgb based on passed alpha
+        r,g,b=[scale_brightness(elem,a) for elem in (r,g,b)]
+
+        self.handler.set(index=index, r=r, g=g, b=b, a=self.alpha)
 
     def fill(self):
 

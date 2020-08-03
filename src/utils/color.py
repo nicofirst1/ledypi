@@ -29,3 +29,8 @@ def bound_add(value, to_add, maximum=255):
 def circular_step(step, maximum):
     step += 1
     return step % maximum
+
+
+def scale_brightness(value, brightness):
+    brightness /= 255
+    return int(value * brightness)
