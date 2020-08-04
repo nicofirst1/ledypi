@@ -38,6 +38,7 @@ class PiHandler(object):
         raise NotImplementedError
 
     def close(self):
+        self.np.fill((0,0,0,0))
         self.np.deinit()
         print("Closing PiHandler")
 

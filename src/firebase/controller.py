@@ -149,11 +149,11 @@ class FireBaseController(FireBaseConnector):
             # update the randomize_color attribute of pattern
             if bool(data):
                 color = RGB(random=True)
-                self.pattern.update_args(color=color)
+                self.pattern.update_args(color=color, randomize_color=True)
             else:
 
                 color = self.get_rgba()
-                self.pattern.update_args(color=color)
+                self.pattern.update_args(color=color, randomize_color=False)
 
         else:
             # if is r,g,b,a, update just the value in the dictionary
