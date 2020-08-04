@@ -5,11 +5,9 @@ import time
 
 from rgb import RGB
 from utils.color import scale_brightness
+from utils.modifier import Modifier
 
 pattern_logger = logging.getLogger("pattern_logger")
-
-# the rate is passed as a value>=1 second which is too slow
-RATE_DIVISOR = 200
 
 
 class Default(threading.Thread):
@@ -29,15 +27,14 @@ class Default(threading.Thread):
         # init the thread and the handler
         threading.Thread.__init__(self, name="PatternThread")
 
-        rate /= RATE_DIVISOR
-
         self.handler = handler
-        self.rate = rate
+        self.rate = Modifier("rate", float(rate), minimum=0.0001, maximum=1.5)
         self.stop = False
 
         self.strip_length = pixels
         self.color = color
         self.alpha = 255
+
         # boolan value to randomize color
         self.randomize_color = False
 
@@ -111,11 +108,9 @@ class Default(threading.Thread):
         """
         self.fill()
         self.show()
-        time.sleep(self.rate)
+        time.sleep(self.rate())
 
     def update_args(self, **kwargs):
-
-
 
         variables = [i for i in dir(self) if not inspect.ismethod(i)]
 
@@ -123,7 +118,7 @@ class Default(threading.Thread):
         for k in kwargs.keys():
             # check if the keys are in the modifiers dict
             if k in self.modifiers.keys():
-                self.modifiers[k].value= kwargs[k]
+                self.modifiers[k].value = kwargs[k]
             # check if there are some attributes of the class
             elif k in variables:
                 setattr(self, k, kwargs[k])
@@ -149,7 +144,7 @@ class Default(threading.Thread):
         # init handler and set pixels
         self.show()
 
-        pattern_logger.info(f"Started pattern: {self.pattern_name} with rate: {self.rate}")
+        pattern_logger.info(f"Started pattern: {self.pattern_name} with rate: {self.rate()}")
         try:
             while not self.stop:
                 self.on_loop()
@@ -165,5 +160,4 @@ class Default(threading.Thread):
         raise NotImplementedError()
 
     def set_rate(self, rate):
-        rate /= RATE_DIVISOR
-        self.rate = rate
+        self.rate.value = rate
