@@ -50,7 +50,12 @@ class FireBaseConnector(Thread):
         # update db and get references
         self.root = db.reference('/')
         self.init_db()
-        self.pattern_attributes = db.reference('/pattern_attributes')
+        self.db_refs = dict(
+            pattern_attributes={pt: db.reference(f"/pattern_attributes/{pt}") for pt in Patterns.keys()},
+            cur_pattern=db.reference('/cur_pattern'),
+            rate=db.reference('/rate'),
+            RGBA=db.reference('/RGBA')
+        )
 
         # add listener and sleep to wait for the first call where self.local_db is initialized
         self.listener = self.root.listen(self.listener_method)
@@ -68,7 +73,8 @@ class FireBaseConnector(Thread):
             self.local_db = event.data
             return False
 
-        if event.event_type == "patch": return
+        if event.event_type == "patch":
+            return True
 
         # get all the keys, remove empty
         keys = event.path.split("/")
@@ -117,7 +123,7 @@ class FireBaseConnector(Thread):
             rq_pattern = request.get("cur_pattern")
             if not rq_pattern == "" and rq_pattern != self.local_db.get("cur_pattern"):
                 # if yes update both local and remote
-                self.root.update(dict(cur_pattern=rq_pattern))
+                self.db_refs['cur_pattern'].set(rq_pattern)
                 self.local_db["cur_pattern"] = rq_pattern
 
         def rate():
@@ -131,7 +137,7 @@ class FireBaseConnector(Thread):
             rq_rate = int(rq_rate)
             if rq_rate != self.local_db.get("rate"):
                 # if yes update both local and remote
-                self.root.update(dict(rate=rq_rate))
+                self.db_refs["rate"].set(rq_rate)
                 self.local_db["rate"] = rq_rate
 
         def rgba():
@@ -158,7 +164,7 @@ class FireBaseConnector(Thread):
 
             if len(to_update) > 0:
                 to_update = update_dict_no_override(self.local_db['RGBA'], to_update)
-                self.root.update(dict(RGBA=to_update))
+                self.db_refs["RGBA"].set(to_update)
                 self.local_db["RGBA"] = to_update
 
         def pattern_attributes():
@@ -167,11 +173,12 @@ class FireBaseConnector(Thread):
             :return:
             """
             # update pattern attributes
-            to_update = {}
+            to_update = []
             rq_pattern = request.get("cur_pattern")
 
             if self.local_db['pattern_attributes'][rq_pattern] == "NA": return
 
+            # need to iterate on local db since we do not have all the info in the request
             for mod_name, modifier in self.local_db['pattern_attributes'][rq_pattern].items():
 
                 # get the attributes
@@ -187,7 +194,7 @@ class FireBaseConnector(Thread):
                         request[mod_name] = int(request[name])
                     elif tp == float:
                         request[mod_name] = float(request[name])
-                    elif tp==list or tp ==str:
+                    elif tp == list or tp == str:
                         request[mod_name] = str(request[name])
 
                     else:
@@ -195,19 +202,19 @@ class FireBaseConnector(Thread):
 
                     # check if to update
                     if request[mod_name] != value:
-                        to_update[mod_name] = modifier
-                        to_update[mod_name]['value'] = request[mod_name]
+                        # add it to list in format (name, value)
+                        to_update.append((mod_name, request[mod_name]))
 
                 except KeyError:
                     continue
 
             # if there is something to update
             if len(to_update) > 0:
-                # add missing (not to update) elements to the update dict
-                to_update = update_dict_no_override(self.local_db['pattern_attributes'][rq_pattern], to_update)
-                # send update both remotely and locally
-                self.pattern_attributes.update({rq_pattern: to_update})
-                self.local_db["pattern_attributes"][rq_pattern] = to_update
+                # for every value to update
+                for md_name, value in to_update:
+                    # update local and remote
+                    self.db_refs['pattern_attributes'][rq_pattern].child(f'{md_name}/value').set(value)
+                    self.local_db["pattern_attributes"][rq_pattern][md_name]['value'] = value
 
         # check the differences for the following entries
         pattern()

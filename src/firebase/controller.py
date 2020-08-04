@@ -73,22 +73,22 @@ class FireBaseController(FireBaseConnector):
         :return: None
         """
 
-        super(FireBaseController, self).listener_method(event)
+        if not super(FireBaseController, self).listener_method(event):
+            return
 
         to_log = f"{event.event_type}\n{event.path}\n{event.data}"
         fire_logger.debug(to_log)
 
-        k = event.data.keys()
-        k = list(k)
+        path = event.path
+        data=event.data
 
-        if "rate" in k:
-            rate = self.get_rate(data=event.data)
-            self.pattern.set_rate(rate)
+        if "rate" in path:
+            self.pattern.set_rate(data)
 
         # stop and restart pattern if required
-        elif "cur_pattern" in k:
+        elif "cur_pattern" in path:
             # get values
-            pattern_choice = self.get_cur_pattern()
+            pattern_choice = data
             rate = self.get_rate()
             rgba = self.get_rgba()
             # stop and restart
@@ -98,17 +98,17 @@ class FireBaseController(FireBaseConnector):
             self.pattern.start()
 
         # update rgba
-        elif "RGBA" in k:
-            self.floor_rgba(event.data)
+        elif "RGBA" in path:
+            self.floor_rgba(path,data)
 
         # update pattern attributes
-        elif "pattern_attributes" in event.path:
-            self.ps_attrs_getter(event.data)
+        elif "pattern_attributes" in path:
+            self.ps_attrs_getter(path, data)
 
         else:
             raise NotImplementedError(f"No such field for {event.path}")
 
-    def ps_attrs_getter(self, data):
+    def ps_attrs_getter(self,path, data):
         """
         Converts and updates values from db
         :param key: str, name of db variable AND of class attribute
@@ -116,39 +116,28 @@ class FireBaseController(FireBaseConnector):
         :return:
         """
 
-        # check that the values to modify are indeed of the current pattern
-        pattern = next(iter(data))
-        assert self.pattern.pattern_name == pattern
-        # remove pattern name
-        data = data[pattern]
-        # and update pattern
-        self.pattern.update_args(**data)
+        pattern=path.split("/")[2]
+        modifier= path.split("/")[3]
 
-    def floor_rgba(self, data):
+        # check that the values to modify are indeed of the current pattern
+        assert self.pattern.pattern_name == pattern
+        # and update pattern
+        self.pattern.update_args(**{modifier:data})
+
+    def floor_rgba(self, path ,data):
         """
         Update RGBA values taking them from the database
         :return:
         """
+        # get the rgba attribute to update
+        rgb_attr=path.split("/")[-1]
 
-        def init_rgba(rgba):
-            r = rgba['r']
-            g = rgba['g']
-            b = rgba['b']
-            a = rgba['a']
+        # if is random
+        if rgb_attr == "random":
+            # update the randomize_color attribute of pattern
+            self.pattern.update_args(randomize_color=bool(data))
+        else:
+            # if is r,g,b,a, update just the value in the dictionary
+            self.pattern.color.__dict__[rgb_attr]=int(data)
 
-            r = int(r)
-            g = int(g)
-            b = int(b)
-            a = int(a)
 
-            return RGB(r=r, g=g, b=b, a=a)
-
-        # if method is called before pattern initialization skip
-        try:
-            # update pattern values
-            random = data["RGBA"]['random']
-            rgba = init_rgba(data["RGBA"])
-            self.pattern.update_args(randomize_color=bool(random), color=rgba, alpha=rgba.a)
-
-        except AttributeError:
-            pass
