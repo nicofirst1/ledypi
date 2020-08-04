@@ -16,7 +16,7 @@ class FireWork(Default):
 
         super().__init__(**kwargs)
         self.fires = Modifier('fires', self.strip_length // 50, minimum=1, maximum=self.strip_length)
-        self.loss = Modifier('speed', 25, minimum=1, maximum=255)
+        self.loss = Modifier('speed', 25, minimum=1, maximum=80)
 
         self.step = 0
         self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.fires())}

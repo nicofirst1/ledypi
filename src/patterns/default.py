@@ -28,7 +28,7 @@ class Default(threading.Thread):
         threading.Thread.__init__(self, name="PatternThread")
 
         self.handler = handler
-        self.rate = Modifier("rate", float(rate), minimum=0.0001, maximum=1.5)
+        self.rate = Modifier("rate", float(rate), minimum=0.0, maximum=1.5)
         self.stop = False
 
         self.strip_length = pixels

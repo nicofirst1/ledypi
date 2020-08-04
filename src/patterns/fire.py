@@ -16,7 +16,7 @@ class Fire(Default):
 
         super().__init__(**kwargs)
 
-        self.cooling = Modifier('cooling', 10, minimum=1, maximum=self.strip_length)
+        self.cooling = Modifier('cooling', 10, minimum=1, maximum=100)
         self.sparking = Modifier('sparking', 40, minimum=1, maximum=255)
         self.cooldown_list = [0 for _ in range(self.strip_length)]
         self.pattern_name = "Fire"

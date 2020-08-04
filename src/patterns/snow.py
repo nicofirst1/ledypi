@@ -15,22 +15,23 @@ class Snow(Default):
     def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
-        self.trail = Modifier('trail size', 5, minimum=1, maximum=self.strip_length//2)
         # min space between trail end and trail start
-        self.min_space = Modifier('spacing', 3, minimum=1, maximum=self.strip_length // 2)
+        self.centers = Modifier('centers', self.strip_length // 4, minimum=1, maximum=self.strip_length)
+        self.trail = Modifier('trail size', 20, minimum=1, maximum=self.centers.value * 3)
+
         self.counter = 0
         self.pattern_name = "Snow"
         self.color = RGB(white=True)
 
         self.modifiers = dict(
             trail=self.trail,
-            min_space=self.min_space,
+            centers=self.centers,
         )
 
     def fill(self):
 
         # get the number of trails the strip can have
-        num_of_trail = self.strip_length // (self.trail() + self.min_space())
+        num_of_trail = self.centers.max - self.centers()
         # make them even
         if num_of_trail % 2 != 0:
             num_of_trail -= 1

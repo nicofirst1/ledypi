@@ -16,10 +16,10 @@ from rgb import RGB
 # Chasing
 
 # choose pattern, rate and color
-pat = Patterns['Music']
+pat = Patterns['Snow']
 rate = 10
 color = RGB(random=True)
 
 # init app and run
-app = pat(handler=App, rate=rate, pixels=64, color=color)
+app = pat(handler=App(rate), rate=rate, pixels=64, color=color)
 app.run()

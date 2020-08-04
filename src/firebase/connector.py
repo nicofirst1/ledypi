@@ -163,9 +163,9 @@ class FireBaseConnector(Thread):
                     to_update[k] = rq
 
             if len(to_update) > 0:
-                to_update = update_dict_no_override(self.local_db['RGBA'], to_update)
-                self.db_refs["RGBA"].set(to_update)
-                self.local_db["RGBA"] = to_update
+                for k,v in to_update.items():
+                    self.db_refs["RGBA"].child(k).set(v)
+                    self.local_db["RGBA"][k] = v
 
         def pattern_attributes():
             """
