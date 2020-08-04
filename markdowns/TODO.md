@@ -2,7 +2,7 @@
 
 ## Controller
 - fix compatibility with connector [X]
-- Fix rgba values on pattern change []
+- Fix rgba values on pattern change [X]
 - add range for modifiers [X]
 - fix random button [X]
 

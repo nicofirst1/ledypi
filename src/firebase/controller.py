@@ -18,7 +18,7 @@ __call_resolution = 0.1
 
 def frequency(listener):
     """
-    Decoratorr to skip call to the firebase listener
+    Decorator to skip call to the firebase listener, used since the updates can bee to frequent
     :param listener:
     :return:
     """
@@ -44,6 +44,14 @@ class FireBaseController(FireBaseConnector):
     """
 
     def __init__(self, credential_path, database_url, handler, pixels, debug=None):
+        """
+
+        :param credential_path: str, path to credential file
+        :param database_url: str, firebase databse url
+        :param handler: APP or Pi_handler, low level class to control leds
+        :param pixels: int, number of pixels
+        :param debug: bool, debug flag
+        """
 
         # dummy pattern to avoid exception
         self.pattern = Patterns['Steady'](rate=10, handler=handler, pixels=pixels)
@@ -61,6 +69,10 @@ class FireBaseController(FireBaseConnector):
         self.pattern.start()
 
     def close(self):
+        """
+        Call to close connection
+        :return:
+        """
         super().close()
         self.pattern.close()
         self.handler.close()
@@ -80,7 +92,7 @@ class FireBaseController(FireBaseConnector):
         fire_logger.debug(to_log)
 
         path = event.path
-        data=event.data
+        data = event.data
 
         if "rate" in path:
             self.pattern.set_rate(data)
@@ -99,7 +111,7 @@ class FireBaseController(FireBaseConnector):
 
         # update rgba
         elif "RGBA" in path:
-            self.floor_rgba(path,data)
+            self.process_rgba(path, data)
 
         # update pattern attributes
         elif "pattern_attributes" in path:
@@ -108,42 +120,41 @@ class FireBaseController(FireBaseConnector):
         else:
             raise NotImplementedError(f"No such field for {event.path}")
 
-    def ps_attrs_getter(self,path, data):
+    def ps_attrs_getter(self, path, data):
         """
         Converts and updates values from db
-        :param key: str, name of db variable AND of class attribute
+        :param path: str, name of db variable AND of class attribute
         :param data: str, data to convert
         :return:
         """
 
-        pattern=path.split("/")[2]
-        modifier= path.split("/")[3]
+        pattern = path.split("/")[2]
+        modifier = path.split("/")[3]
 
         # check that the values to modify are indeed of the current pattern
         assert self.pattern.pattern_name == pattern
         # and update pattern
-        self.pattern.update_args(**{modifier:data})
+        self.pattern.update_args(**{modifier: data})
 
-    def floor_rgba(self, path ,data):
+    def process_rgba(self, path, data):
         """
         Update RGBA values taking them from the database
         :return:
         """
         # get the rgba attribute to update
-        rgb_attr=path.split("/")[-1]
+        rgb_attr = path.split("/")[-1]
 
         # if is random
         if rgb_attr == "random":
             # update the randomize_color attribute of pattern
             if bool(data):
-                color=RGB(random=True)
+                color = RGB(random=True)
                 self.pattern.update_args(color=color)
             else:
-                color=self.get_rgba()
+
+                color = self.get_rgba()
                 self.pattern.update_args(color=color)
 
         else:
             # if is r,g,b,a, update just the value in the dictionary
-            self.pattern.color.__dict__[rgb_attr]=int(data)
-
-
+            self.pattern.color.__dict__[rgb_attr] = int(data)
