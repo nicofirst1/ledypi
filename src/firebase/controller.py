@@ -135,7 +135,13 @@ class FireBaseController(FireBaseConnector):
         # if is random
         if rgb_attr == "random":
             # update the randomize_color attribute of pattern
-            self.pattern.update_args(randomize_color=bool(data))
+            if bool(data):
+                color=RGB(random=True)
+                self.pattern.update_args(color=color)
+            else:
+                color=self.get_rgba()
+                self.pattern.update_args(color=color)
+
         else:
             # if is r,g,b,a, update just the value in the dictionary
             self.pattern.color.__dict__[rgb_attr]=int(data)

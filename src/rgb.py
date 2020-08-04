@@ -69,7 +69,7 @@ class RGB:
             self.b = kwargs["rgb"].b
             self.a = kwargs["rgb"].a
 
-        if "random" in kwargs.keys():
+        if "random" in kwargs.keys() and kwargs['random']:
             self.r = randint(0, 255)
             self.g = randint(0, 255)
             self.b = randint(0, 255)
