@@ -142,6 +142,8 @@ class RGB:
         if self.b <= minimum:
             self.b = 0
 
+        return self
+
     def is_black(self):
 
         if self.a > 0:

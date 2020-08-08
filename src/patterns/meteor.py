@@ -32,7 +32,8 @@ class Meteor(Default):
 
         for jdx in range(self.strip_length):
             if not self.random_decay() or random() > 0.5:
-                self.pixels[jdx]['color'].fade( self.trail_decay(inverse=True))
+                px= self.pixels[jdx]['color']
+                self.pixels[jdx]['color']=px.fade( self.trail_decay(inverse=True))
 
         for jdx in range(0, self.size()):
             if self.step + jdx < self.strip_length and self.step - jdx >= 0:

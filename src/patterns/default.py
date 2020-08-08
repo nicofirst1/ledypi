@@ -3,6 +3,7 @@ import logging
 import threading
 import time
 
+from utils.pixels import  Pixel
 from utils.rgb import RGB
 from utils.modifier import Modifier
 
@@ -44,15 +45,14 @@ class Default(threading.Thread):
         self.modifiers = dict()
 
         # init and set the pixels to the default color
-        self.pixels = {idx: dict(color=self.color.copy()) for idx in range(self.strip_length + 1)}
+        self.pixels = {idx: Pixel(index=idx, color=self.color.copy(), set_func=self.color_set) for idx in range(self.strip_length + 1)}
 
     def show(self):
         """
         Set the color of the strip using the handler and show
         :return:
         """
-        for idx in range(self.strip_length):
-            self.color_set(idx, self.pixels[idx]['color'])
+
         self.handler.send()
 
     def color_all(self, color):
@@ -140,6 +140,8 @@ class Default(threading.Thread):
 
     def run(self):
         # init handler and set pixels
+
+
         self.show()
 
         pattern_logger.info(f"Started pattern: {self.pattern_name} with rate: {self.rate()}")
