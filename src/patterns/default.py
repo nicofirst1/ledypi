@@ -3,6 +3,8 @@ import logging
 import threading
 import time
 
+import numpy as np
+
 from utils.pixels import  Pixel
 from utils.rgb import RGB
 from utils.modifier import Modifier
@@ -78,14 +80,17 @@ class Default(threading.Thread):
             rgb = rgb.scale()
 
         except AttributeError:
+            # if the rgb value is not of RGB class then it should be a tuple, check if it has length 4 first
             assert len(rgb) == 4, "The length of the color should be 4"
+            # get and normalize a
             a = rgb[-1] / 255
-            rgb = map(lambda x: int(x * a), rgb[:-1])
+            # scale for alpha
+            rgb = np.multiply(rgb[:-1], a, casting='unsafe').astype(int)
 
 
 
         # scale rgb based on passed alpha
-        r, g, b = map(lambda x: int(x * self.alpha / 255), rgb)
+        r, g, b = np.multiply(rgb, self.alpha / 255, casting='unsafe').astype(int)
 
         # set with handler
         self.handler.set(index=index, r=r, g=g, b=b, a=self.alpha)
