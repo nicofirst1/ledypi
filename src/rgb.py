@@ -2,6 +2,8 @@ import math
 from copy import deepcopy
 from random import randint
 
+import numpy as np
+
 from utils.color import bound_add
 
 
@@ -80,6 +82,11 @@ class RGB:
             self.g = 255
             self.b = 255
             self.a = 255
+
+        self.rgb_vec=np.array([self.r,self.g,self.b])
+
+    def scale(self):
+        return np.multiply(self.rgb_vec, self.a/255, casting='unsafe').astype(int)
 
     def fade(self, fade_val, minimum=10):
         """
