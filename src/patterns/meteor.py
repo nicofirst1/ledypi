@@ -15,7 +15,7 @@ class Meteor(Default):
     def __init__(self, **kwargs):
 
         super().__init__(**kwargs)
-        self.size = Modifier('size', self.strip_length//30, minimum=1, maximum=self.strip_length)
+        self.size = Modifier('size', self.strip_length // 30, minimum=1, maximum=self.strip_length)
         self.trail_decay = Modifier('trail decay', 64, minimum=1, maximum=255)
         self.random_decay = Modifier('random decay', True)
 
@@ -28,12 +28,11 @@ class Meteor(Default):
             random_decay=self.random_decay
         )
 
-
     def fill(self):
 
         for jdx in range(self.strip_length):
             if not self.random_decay() or randint(0, 10) > 5:
-                self.pixels[jdx]['color'].fade(self.trail_decay.max-self.trail_decay())
+                self.pixels[jdx]['color'].fade(self.trail_decay.max - self.trail_decay())
 
         for jdx in range(0, self.size()):
             if self.step - jdx < self.strip_length and self.step - jdx >= 0:

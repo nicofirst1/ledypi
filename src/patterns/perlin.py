@@ -18,33 +18,17 @@ class Perlin(Default):
         super().__init__(**kwargs)
 
         self.pattern_name = "Perlin"
-        self._x_div = Modifier('horizontal',2**4, minimum=1, maximum=2 ** 10)
-        self._y_div = Modifier('vertical', 2 ** 4, minimum=1, maximum=2 ** 10)
+        self.x_div = Modifier('horizontal',2**4, minimum=1, maximum=2 ** 10)
+        self.y_div = Modifier('vertical', 2 ** 4, minimum=1, maximum=2 ** 10)
 
         self.op = OpenSimplex()
         self.counter = 0
 
         self.modifiers = dict(
-            x_div=self._x_div,
-            y_div=self._y_div,
+            x_div=self.x_div,
+            y_div=self.y_div,
         )
 
-    @property
-    def y_div(self):
-        return self._y_div()
-
-    @y_div.setter
-    def y_div(self, value):
-        if value == 0: value = 0.0001
-        self._y_div.value = self.strip_length // value
-
-    @property
-    def x_div(self):
-        return self._x_div()
-
-    @x_div.setter
-    def x_div(self, value):
-        self._x_div.value = value
 
     def fill(self):
 

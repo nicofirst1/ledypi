@@ -27,13 +27,9 @@ class Equation(Default):
         self.fns = {}
 
         # r,g,b functions in string format
-        self._r_eq = Modifier('red equation', "cos(t)")
-        self._g_eq = Modifier('blue equation', "sin(t)")
-        self._b_eq = Modifier('green equation', "idx")
-
-        self.red_equation = "cos(t)"
-        self.blue_equation = "sin(t)"
-        self.green_equation = "idx"
+        self.red_equation = Modifier('red equation', "cos(t)", on_change=self.on_change_red)
+        self.green_equation = Modifier('green equation', "idx", on_change=self.on_change_green)
+        self.blue_equation = Modifier('blue equation', "sin(t)", on_change=self.on_change_blue)
 
         # time step
         self.t = 1
@@ -42,40 +38,23 @@ class Equation(Default):
         self.max_range = self.strip_length * 1000
 
         self.modifiers = dict(
-            red_equation=self._r_eq,
-            blue_equation=self._g_eq,
-            green_equation=self._b_eq,
+            red_equation=self.red_equation,
+            green_equation=self.green_equation,
+            blue_equation=self.blue_equation,
+
         )
 
-    @property
-    def red_equation(self):
-        return self._r_eq()
-
-    @red_equation.setter
-    def red_equation(self, value):
+    def on_change_red(self, value):
         assert isinstance(value, str), pattern_logger.warning("The equation value is not a string")
         self.fns['r_fn'] = Expression(value, ["t", "idx"])
-        self._r_eq.value = value
 
-    @property
-    def green_equation(self):
-        return self._g_eq()
-
-    @green_equation.setter
-    def green_equation(self, value):
+    def on_change_green(self, value):
         assert isinstance(value, str), pattern_logger.warning("The equation value is not a string")
         self.fns['g_fn'] = Expression(value, ["t", "idx"])
-        self._g_eq.value = value
 
-    @property
-    def blue_equation(self):
-        return self._b_eq()
-
-    @blue_equation.setter
-    def blue_equation(self, value):
+    def on_change_blue(self, value):
         assert isinstance(value, str), pattern_logger.warning("The equation value is not a string")
         self.fns['b_fn'] = Expression(value, ["t", "idx"])
-        self._b_eq.value = value
 
     def fill(self):
 
