@@ -110,7 +110,7 @@ For example the following patters is given with:
 For the installation check out the related [INSTALL markdown/](markdowns/INSTALL.md).
 
 # Running 
-Once you have installed the project on the RaspberryPi you can start it with:
+Once you have installed the project on the RaspberryPi you can start it with the [start script](scripts):
 ```shell script
 bash ledypi/scripts/app.sh start
 ```

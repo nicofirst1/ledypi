@@ -1,5 +1,5 @@
 # Build 
-Follow the [BUILD file](markdowns/BUILD.md) if you need to buy the components, set up the raspberryPi or connect the cables.
+Follow the [BUILD file](BUILD.md) if you need to buy the components, set up the raspberryPi or connect the cables.
 
 The following instructions regards the project installation only.
 # Setup
@@ -102,13 +102,3 @@ In the Firebase console, open Settings > Service Accounts.
 Click Generate New Private Key, then confirm by clicking Generate Key.
 ```
 This will create a _privatekey.json_ file which will be used later.
-
-## Raspberry 
-
-### Starting script
-Check the [script README](../scripts/README.md) to  learn how to start/stop the app with one script (useful when you want it to start on boot) and for syncing the pc repo with your rpi (for debug).
-
-### Audio reactive
-To install the custom fork [audio-reactive-led-strip](https://github.com/nicofirst1/audio-reactive-led-strip) you'll need to 
-follow the instructions in the [README](audio-reactive-led-strip/README.md)
-                       
