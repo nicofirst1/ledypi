@@ -48,12 +48,9 @@ The modular desing allows you to add the logic you wish by overriding a single m
 - Customizable attributes for each one
 - [Music reactive](#music-reactive-click-gif-for-video) 
 - [Android app](AppInventor) for control 
+- [LedyWeb](https://github.com/nicofirst1/ledyweb) online controller 
 - Firebase database
 - Debug mode available 
-
-On [develop branch](https://github.com/nicofirst1/ledypi/tree/develop):
-- [LedyWeb](https://github.com/nicofirst1/ledyweb) online controller 
-- Dynamic android app
 
 # Patterns
 Each pattern inherits from a [base class](src/patterns/default.py) with its own logic. This allows anyone to implement his own pattern simply by overriding a method (see more on the [readme](patterns/README.md)).
@@ -107,7 +104,7 @@ For example the following patters is given with:
 ![equation demo](Resources/equation_demo.gif)
 
 # Installation 
-For the installation check out the related [INSTALL markdown/](markdowns/INSTALL.md).
+For the installation check out the related [INSTALL file](markdowns/INSTALL.md).
 
 # Running 
 Once you have installed the project on the RaspberryPi you can start it with the [start script](scripts):
