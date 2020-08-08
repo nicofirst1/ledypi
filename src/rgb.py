@@ -39,6 +39,8 @@ class RGB:
 
         """
 
+        self.rgb_vec = np.array([0,0,0])
+
         if "r" in kwargs.keys():
             self.assertion(kwargs["r"])
             self.r = kwargs["r"]
@@ -83,7 +85,34 @@ class RGB:
             self.b = 255
             self.a = 255
 
-        self.rgb_vec=np.array([self.r,self.g,self.b])
+
+    @property
+    def r(self):
+        return self._r
+
+    @r.setter
+    def r(self, value):
+        self.rgb_vec[0]=value
+        self._r=value
+
+    @property
+    def g(self):
+        return self._g
+
+    @r.setter
+    def g(self, value):
+        self.rgb_vec[1] = value
+        self._g = value
+
+    @property
+    def b(self):
+        return self._b
+
+    @r.setter
+    def b(self, value):
+        self.rgb_vec[2] = value
+        self._b = value
+
 
     def scale(self):
         return np.multiply(self.rgb_vec, self.a/255, casting='unsafe').astype(int)

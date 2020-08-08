@@ -47,7 +47,7 @@ class Default(threading.Thread):
         self.modifiers = dict()
 
         # init and set the pixels to the default color
-        self.pixels = {idx: dict(color=self.color) for idx in range(self.strip_length + 1)}
+        self.pixels = {idx: dict(color=self.color.copy()) for idx in range(self.strip_length + 1)}
 
     def show(self):
         """

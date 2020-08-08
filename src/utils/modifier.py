@@ -29,14 +29,20 @@ class Modifier:
         self.name = name
         self.value = value
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, inverse=False):
         """
         Return the value when called
         :param args:
         :param kwargs:
         :return: self.value
         """
-        return self.value
+
+        if inverse:
+            return self.max-self.value
+
+        else:
+
+            return self.value
 
     @property
     def value(self):
