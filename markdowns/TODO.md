@@ -1,6 +1,6 @@
 # LedyPi
 
-- complete instructions of how to build []
+- complete instructions of how to build [X]
 
 ## Controller
 - fix compatibility with connector [X]
@@ -10,15 +10,15 @@
 
 ## Raspberry
 - fix closing [X]
-- use neopixel [X]
-- fix slow patters []
+- fix slow patters [X]
 
 ## Patterns
 - add allowed range for attributes [X]
 - fix alpha dependencies [X]
 - add modifier instructions in readme [X]
 - Fix music modifier [X]
-- Fix proprety setter and readme []
+- Fix proprety setter and readme [X]
+
 # LedyWeb
 - fix readme [X]
 - fix double call in get_form_values [X]

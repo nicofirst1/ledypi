@@ -43,7 +43,24 @@ sudo apt-get install python3-numpy
 - Install Blinka with the [tutorial](https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-circuitpython-on-raspberry-pi)
 - Install the required modules:
 ```sudo pip3 install -r requirements_pi.txt ```
+- Install opencv:
+```
+sudo apt-get install libhdf5-dev libhdf5-serial-dev
+sudo apt-get install libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5
+sudo apt-get install libatlas-base-dev
+sudo apt-get install libjasper-dev
 
+wget https://bootstrap.pypa.io/get-pip.py
+sudo python3 get-pip.py
+
+sudo pip3 install opencv-contrib-python==4.1.0.25
+```
+- Install Pillow:
+```shell script
+sudo apt-get install  libjpeg-dev zlib1g-dev libfreetype6-dev liblcms1-dev libopenjp2-7 libtiff5 
+sudo pip3 install pillow
+
+```
 - (Optional) If you have a microphone connected to your Rpi follow the instructions in the [audio reactive readme](audio-reactive-led-strip/README.md)
 
 If you get a gcc error see [this](https://stackoverflow.com/questions/20023131/cannot-install-pyaudio-gcc-error).
