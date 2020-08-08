@@ -18,7 +18,7 @@ class Perlin(Default):
         super().__init__(**kwargs)
 
         self.pattern_name = "Perlin"
-        self.x_div = Modifier('horizontal',2**4, minimum=1, maximum=2 ** 10)
+        self.x_div = Modifier('horizontal', 2 ** 4, minimum=1, maximum=2 ** 10)
         self.y_div = Modifier('vertical', 2 ** 4, minimum=1, maximum=2 ** 10)
 
         self.op = OpenSimplex()
@@ -29,7 +29,6 @@ class Perlin(Default):
             y_div=self.y_div,
         )
 
-
     def fill(self):
 
         # reset counter
@@ -38,7 +37,7 @@ class Perlin(Default):
 
         # color
         for idx in range(self.strip_length):
-            val = self.op.noise2d(idx / self.x_div, self.counter / self.y_div)
+            val = self.op.noise2d(idx / self.x_div(), self.counter / self.y_div())
             val = scale(val, 0, 3, -1, 1)
             self.pixels[idx]['color'] = num_to_rgb(val) + (self.color.a,)
 
