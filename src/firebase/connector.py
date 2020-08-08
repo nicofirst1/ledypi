@@ -10,7 +10,7 @@ from firebase_admin import credentials
 from firebase_admin import db
 
 from patterns import Patterns
-from rgb import RGB
+from utils.rgb import RGB
 
 fire_logger = logging.getLogger("fire_logger")
 

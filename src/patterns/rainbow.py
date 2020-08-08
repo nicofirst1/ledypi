@@ -1,7 +1,7 @@
 from math import sin, pi, floor
 
 from patterns.default import Default
-from rgb import RGB
+from utils.rgb import RGB
 from utils.color import scale
 from utils.modifier import Modifier
 

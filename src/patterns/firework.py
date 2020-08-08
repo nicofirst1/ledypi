@@ -2,7 +2,7 @@ from copy import deepcopy
 from random import randint
 
 from patterns.default import Default
-from rgb import RGB
+from utils.rgb import RGB
 from utils.color import bound_sub, circular_step
 from utils.modifier import Modifier
 

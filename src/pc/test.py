@@ -1,7 +1,7 @@
 from DotStar_Emulator.emulator.send_test_data import App
 
 from patterns import Patterns
-from rgb import RGB
+from utils.rgb import RGB
 
 # Available patterns are:
 # ColorWipe
@@ -16,8 +16,8 @@ from rgb import RGB
 # Chasing
 
 # choose pattern, rate and color
-pat = Patterns['Snow']
-rate = 10
+pat = Patterns['Meteor']
+rate = 1
 color = RGB(random=True)
 
 # init app and run

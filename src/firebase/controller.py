@@ -3,7 +3,7 @@ import time
 
 from firebase.connector import FireBaseConnector
 from patterns import Patterns
-from rgb import RGB
+from utils.rgb import RGB
 
 fire_logger = logging.getLogger("fire_logger")
 

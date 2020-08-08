@@ -1,5 +1,5 @@
 from patterns.default import Default
-from rgb import RGB
+from utils.rgb import RGB
 
 
 class Off(Default):

@@ -1,7 +1,7 @@
 from copy import copy
 
 from patterns.default import Default
-from rgb import RGB
+from utils.rgb import RGB
 from utils.modifier import Modifier
 
 
@@ -31,7 +31,7 @@ class Snow(Default):
     def fill(self):
 
         # get the number of trails the strip can have
-        num_of_trail = self.centers.max - self.centers()
+        num_of_trail = self.centers(inverse=True)
         # make them even
         if num_of_trail % 2 != 0:
             num_of_trail -= 1

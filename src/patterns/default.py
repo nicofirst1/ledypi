@@ -3,10 +3,7 @@ import logging
 import threading
 import time
 
-import numpy as np
-
-from rgb import RGB
-from utils.color import scale_brightness
+from utils.rgb import RGB
 from utils.modifier import Modifier
 
 pattern_logger = logging.getLogger("pattern_logger")

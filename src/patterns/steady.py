@@ -1,5 +1,4 @@
 from patterns.default import Default
-from rgb import RGB
 
 
 class Steady(Default):

@@ -3,7 +3,7 @@ import argparse
 import yappi
 
 from patterns import Patterns
-from rgb import RGB
+from utils.rgb import RGB
 from rpi.pi_handler import PiHandler
 
 _NTHREAD = 3

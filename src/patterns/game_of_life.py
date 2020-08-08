@@ -2,7 +2,7 @@ import logging
 from random import random
 
 from patterns.default import Default
-from rgb import RGB
+from utils.rgb import RGB
 
 pattern_logger = logging.getLogger("pattern_logger")
 

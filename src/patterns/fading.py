@@ -2,7 +2,7 @@ from copy import deepcopy
 from random import randint
 
 from patterns.default import Default
-from rgb import RGB
+from utils.rgb import RGB
 from utils.color import bound_sub, bound_add
 from utils.modifier import Modifier
 
@@ -76,10 +76,10 @@ class Fading(Default):
 
             # if increasing and there is still room for increasing do it
             if 0 <= alpha < 255 and increasing:
-                alpha = bound_add(alpha, self.rate_start.max-self.rate_start(), maximum=255)
+                alpha = bound_add(alpha, self.rate_start(inverse=True), maximum=255)
             # if not increasing and still in good range, decrease
             elif 0 < alpha <= 255 and not increasing:
-                alpha = bound_sub(alpha, self.rate_end.max-self.rate_end(), minimum=0)
+                alpha = bound_sub(alpha, self.rate_end(inverse=True), minimum=0)
             # if zero and decreasing we're done
             elif alpha == 0 and not increasing:
                 done = True
