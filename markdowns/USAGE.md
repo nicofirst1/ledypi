@@ -1,5 +1,3 @@
-# Testing
-
 ## RaspberryPi
 
 ### Testing
@@ -27,7 +25,7 @@ To run it on the RaspberryPi.
 
 
 
-### PC
+## PC
 To test first run the [gui](src/pc/gui.py) and then in a separate process run [patterns](./src/pc/test.py)
 ```shell script
 python src/pc/gui.py
@@ -44,7 +42,7 @@ python src/firebase/connect.py credential.json pc
 
 ## Additional params
 The [control script](src/firebase/control.py)  accepts two optional arguments:
-- _databaseURL_ : the url of your database (default [value](https://ledypie.firebaseio.com/), more in the [firebase tutorial](https://rominirani.com/tutorial-mit-app-inventor-firebase-4be95051c325)
+- _databaseURL_ : the url of your database (default [value](https://ledypie.firebaseio.com/), more in the [firebase tutorial](https://rominirani.com/tutorial-mit-app-inventor-firebase-4be95051c325))
 - _pixels_ : the number of pixels (default 300).
 
 To connect to a custom databaseURL with 64 leds on the rpi you should run
