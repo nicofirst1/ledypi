@@ -73,7 +73,6 @@ To allow the same thing with the _modifiers_ dictionary take a look at the follo
 ```python
 
 
-
 class Equation(Default):
     """
     Use user-defined function for the rgb values. The function may depend on :
@@ -91,35 +90,25 @@ class Equation(Default):
 
         self.fns = {}
 
-        # modifier named after the hidden variable for red_equation
-        self._r_eq = Modifier('red equation', "cos(t)")
-        
-        # the main attribute with it's default value
-        self.red_equation = "cos(t)"
-            
-        self.modifiers = dict(
-            # a map between the main attribute name and the hidden variable value
-            red_equation=self._r_eq,
+        # r,g,b functions in string format
+        self.red_equation = Modifier('red equation', "cos(t)", on_change=self.on_change_red)
 
+       
+        self.modifiers = dict(
+            red_equation=self.red_equation,
         )
 
-    @property
-    def red_equation(self):
-        # returning the value of the hidden variable
-        return self._r_eq()
-
-    @red_equation.setter
-    def red_equation(self, value):
-        # change the red equation in the fns dict and then assing the modifiers with its new value
+    def on_change_red(self, value):
+        assert isinstance(value, str), pattern_logger.warning("The equation value is not a string")
         self.fns['r_fn'] = Expression(value, ["t", "idx"])
-        self._r_eq.value = value
+
 
 ```
 
-As you can see from the init function, the modifier instance name is the hidden value of the red_equation.
- By keeping the _modifiers_ key the same as the main attribute "red_equation" you can process the hidden variable "_r_eq" 
- as you like.
+As you can see from the init function, the modifier instance uses an additional parameter _on_change_ which takes a function as input. 
+The function will be then called whenever there is a change in the modifier value.
 
+In this case we are checking that the value to change is a string and then setting the red function key of the _self.fns_ dictionary to the Expression.
 
 
 
