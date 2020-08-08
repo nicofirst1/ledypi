@@ -16,7 +16,7 @@ class Snow(Default):
 
         super().__init__(**kwargs)
         # min space between trail end and trail start
-        self.centers = Modifier('centers', self.strip_length // 2, minimum=self.strip_length//2, maximum=self.strip_length)
+        self.centers = Modifier('centers', 10, minimum=self.strip_length//2, maximum=self.strip_length)
         self.trail = Modifier('trail size', 3, minimum=1, maximum=self.strip_length//2 )
 
         self.counter = 0

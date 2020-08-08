@@ -36,10 +36,12 @@ class Music(Default):
         )
 
         # name of the effect to be used
-        self._effect = Modifier('visualizer', "spectrum" ,options=list(self.effect_dict.keys()))
+        self.effect = Modifier('visualizer', "spectrum", options=list(self.effect_dict.keys()),
+                               on_change=self.on_change)
+        self._rate = Modifier('Delay', 0, minimum=0, maximum=0)
 
         self.modifiers = dict(
-            effect=self._effect,
+            effect=self.effect,
         )
 
         # attributes for the mic
@@ -48,7 +50,9 @@ class Music(Default):
         self.frames_per_buffer = int(CONFIGS['mic_rate'] / CONFIGS['fps'])
 
         try:
-            self.setup()
+            # do not initialize if the pattern is temp
+            if kwargs['handler'] is not None:
+                self.setup()
         except OSError:
             music_logger.warning(f"Could not initialize the audio stream")
 
@@ -63,21 +67,15 @@ class Music(Default):
                                   input=True,
                                   frames_per_buffer=self.frames_per_buffer)
 
-        music_logger.info("Audio stream initialized")
+        music_logger.info(f"Audio stream initialized with {CONFIGS['fps']} fps")
 
-    @property
-    def effect(self):
-        return self._effect()
-
-    @effect.setter
-    def effect(self, value):
+    def on_change(self, value):
         """
         Set the effect to a certain value and change the visualization effect in the vis calss
         """
         try:
             ef = self.effect_dict[value]
             self.vis.visualization_effect = ef
-            self._effect.value = value
 
         except KeyError as e:
             print(f"Error for key {value}\n{e}")
@@ -85,9 +83,9 @@ class Music(Default):
     @property
     def rate(self):
         """
-        Rate should always be zero here9
+        Rate should always be zero here
         """
-        return 0
+        return self._rate
 
     @rate.setter
     def rate(self, value):
@@ -101,10 +99,12 @@ class Music(Default):
             y = np.fromstring(self.stream.read(self.frames_per_buffer, exception_on_overflow=False),
                               dtype=np.int16)
             y = y.astype(np.float32)
-            self.stream.read(self.stream.get_read_available(), exception_on_overflow=False)
             return y
         except IOError:
-            print('Audio buffer has overflowed')
+            music_logger.warning('Audio buffer has overflowed')
+        except AttributeError:
+            music_logger.error("Could not read from audio buffer, do you have a microphone?")
+            self.close()
 
     def fill(self):
         """
@@ -134,7 +134,14 @@ class Music(Default):
         """
         super(Music, self).close()
 
-        self.stream.stop_stream()
-        self.stream.close()
-        self.p.terminate()
-        music_logger.info("Audio stream stopped")
+        try:
+            # try to stop the stream if any
+            self.stream.stop_stream()
+            self.stream.close()
+        except AttributeError:
+            # if there is no recognized microphone then the close operation will fail on the stream
+            pass
+        finally:
+            # terminate the py audio and log
+            self.p.terminate()
+            music_logger.info("Audio stream stopped")

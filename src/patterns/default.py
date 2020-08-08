@@ -3,6 +3,8 @@ import logging
 import threading
 import time
 
+import numpy as np
+
 from rgb import RGB
 from utils.color import scale_brightness
 from utils.modifier import Modifier
@@ -74,20 +76,19 @@ class Default(threading.Thread):
         """
 
         # extract the values
-        if isinstance(rgb, RGB):
-            r = rgb.r
-            g = rgb.g
-            b = rgb.b
-            a = rgb.a
-        elif isinstance(rgb, tuple) or isinstance(rgb, list):
-            assert len(rgb) == 4, "The length of the color should be 4"
-            r, g, b, a = rgb
+        try:
 
-        else:
-            raise ValueError(f"Class {rgb.__class__} not recognized")
+            rgb = rgb.scale()
+
+        except AttributeError:
+            assert len(rgb) == 4, "The length of the color should be 4"
+            a = rgb[-1] / 255
+            rgb = map(lambda x: int(x * a), rgb[:-1])
+
+
 
         # scale rgb based on passed alpha
-        r, g, b = [scale_brightness(elem, a) for elem in (r, g, b)]
+        r, g, b = map(lambda x: int(x * self.alpha / 255), rgb)
 
         # set with handler
         self.handler.set(index=index, r=r, g=g, b=b, a=self.alpha)

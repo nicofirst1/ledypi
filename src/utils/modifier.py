@@ -6,7 +6,7 @@ class Modifier:
     Modifier class used for variable attributes in the Patterns
     """
 
-    def __init__(self, name, value, minimum=None, maximum=None, options=None):
+    def __init__(self, name, value, minimum=None, maximum=None, options=None, on_change=None):
         """
 
         :param name: str, the name of the modifier, the one shown in the interfaces
@@ -15,6 +15,8 @@ class Modifier:
         :param maximum:  optional int, max factor for scaling
         :param options: optional list, list of possible options for value
         """
+
+        self.on_change = on_change
 
         if options is None:
             self.type = type(value)
@@ -63,3 +65,6 @@ class Modifier:
 
         else:
             self._value = value
+
+        if self.on_change is not None:
+            self.on_change(value)

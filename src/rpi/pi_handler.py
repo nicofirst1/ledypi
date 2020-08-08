@@ -1,8 +1,3 @@
-from utils.color import scale_brightness
-
-PIN = 18
-
-
 class PiHandler(object):
     """
     Hanlder fot the rapberrypi and led control
@@ -14,31 +9,22 @@ class PiHandler(object):
         import board
 
         # init the pixel strip
-        self.np = neopixel.NeoPixel(board.D18, pixels, auto_write=False)
+        self.np = neopixel.NeoPixel(board.D18, pixels, auto_write=False, pixel_order=neopixel.RGB)
         self.pixel_count = pixels
-
-
 
     def set(self, index, a, b, g, r):
 
-        if index is not None and index < self.pixel_count:
-            # scale the rgb value by the intensity
-            r = scale_brightness(r, a)
-            g = scale_brightness(g, a)
-            b = scale_brightness(b, a)
+        try:
             # create color and set it
             color = (r, g, b)
             self.np[index] = color
+        except IndexError:
+            print("error")
 
     def send(self):
-
         self.np.show()
 
-    def on_loop(self):
-        raise NotImplementedError
-
     def close(self):
-        self.np.fill((0,0,0,0))
+        self.np.fill((0, 0, 0, 0))
         self.np.deinit()
         print("Closing PiHandler")
-
