@@ -32,13 +32,11 @@ class Modifier:
     def __call__(self, inverse=False):
         """
         Return the value when called
-        :param args:
-        :param kwargs:
-        :return: self.value
+        :param inverse: bool, if to return self.max - val or just val
         """
 
         if inverse:
-            return self.max-self.value
+            return self.max - self.value
 
         else:
 
