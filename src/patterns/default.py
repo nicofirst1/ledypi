@@ -90,10 +90,10 @@ class Default(threading.Thread):
 
 
         # scale rgb based on passed alpha
-        r, g, b = np.multiply(rgb, self.alpha / 255, casting='unsafe').astype(int)
+        r, g, b = np.multiply(rgb, self.alpha / 255, casting='unsafe')
 
         # set with handler
-        self.handler.set(index=index, r=r, g=g, b=b, a=self.alpha)
+        self.handler.set(index=index, r=int(r), g=int(g), b=int(b), a=self.alpha)
 
     def fill(self):
         """
