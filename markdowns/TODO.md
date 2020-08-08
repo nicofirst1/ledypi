@@ -37,6 +37,7 @@
 - remove redundant text input for list of choices [X]
 - add components update on database change []
 - add modifier compatibility [X]
+- add firebase auth with screen []
 
 #### template
 - []

@@ -109,54 +109,18 @@ For example the following patters is given with:
 # Installation 
 For the installation check out the related [INSTALL markdown/](markdowns/INSTALL.md).
 
-# Testing
-If you get a `ModuleNotFoundError` source the python path with
+# Running 
+Once you have installed the project on the RaspberryPi you can start it with:
 ```shell script
-source scripts/app.sh  
-```
-Both the local and remote test relies on two processes to work, one of which is always the [gui](src/pc/gui.py).
-
-### Local PC
-To test first run the [gui](src/pc/gui.py) and then in a separate process run [patterns](./src/pc/test.py)
-```shell script
-python src/pc/gui.py
-python src/pc/test.py
+bash ledypi/scripts/app.sh start
 ```
 
-### Local RPI
-If you wish to run a local test of the RaspberryPi you don't need the gui process, simply ssh into the rpi and execute the test
-
+For the web controller run it with ( more options are available in the ledyweb [README](ledyweb/README.md)):
 ```shell script
-python src/rpi/test.py PatternName 
+python manage.py start
 ```
 
-### Remote 
-
-You can test the remote configuration running the [control](src/firebase/control.py) script which takes as **mandatory** inputs 
-the credential json file and the mode (either 'pc' or 'rpi') which specify where the script is being run.
-
-An example might be
-```shell script
-python src/gui.py
-python src/firebase/connect.py credential.json pc
-```
-To run the remote app on your pc together with the gui, or 
-
-```shell script
-python src/firebase/connect.py credential.json rpi
-```
-To run it on the RaspberryPi.
-
-#### Additional params
-The [control script](src/firebase/control.py)  accepts two optional arguments:
-- _databaseURL_ : the url of your database (default [value](https://ledypie.firebaseio.com/), more in the [firebase tutorial](https://rominirani.com/tutorial-mit-app-inventor-firebase-4be95051c325)
-- _pixels_ : the number of pixels (default 300).
-
-To connect to a custom databaseURL with 64 leds on the rpi you should run
-
-```shell script
-python src/firebase/connect.py credential.json rpi --databaseURL https://customURL.firebaseio.com/ --pixels 64
-```
+For testing see the [USAGE file](markdowns/USAGE.md)
 
 # Contributing
 If you wish to support this project just fork it and add your pattern following the [readme](src/patterns/README.md).

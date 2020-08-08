@@ -1,3 +1,7 @@
+# Build 
+Follow the [BUILD file](markdowns/BUILD.md) if you need to buy the components, set up the raspberryPi or connect the cables.
+
+The following instructions regards the project installation only.
 # Setup
 This project uses these tools:
 1. [DotStar_emulator](https://github.com/chrisrossx/DotStar_Emulator) to simulate the led strip on pc.
@@ -10,18 +14,48 @@ Since the _DotStar_emulator_ cannot be installed on the raspberry and the _rpi-N
 
 In the following I will guide you to the installation and setup required to make everything work
 
-## Python 3.7
-The project works with python>=3.7, to set up your environment follow the steps:
-- (Optional but suggested) source your environment
-- Install the required modules:
-    - On pc run `pip install -r requirements.txt `
-    - On rpi run `sudo pip3 install -r requirements_pi.txt `
+## Get the code on Raspberry
+There are two ways to get the repo on your raspberry: cloning the repo or copying through ssh.
 
+### Clone
+If you just wish to use the project without implementing custom patterns use:
+```shell script
+git clone --recursive https://github.com/nicofirst1/ledypi
+```
+On your raspeberryPi
+
+### Copy
+On the other hand, if you would like to play with the repo, you should clone it on your PC with:
+```shell script
+git clone --recursive https://github.com/nicofirst1/ledypi
+```
+And then use the [sync script](scripts/) to copy the repo onto your RaspberryPi
+
+## Python 3.7
+The project works with python>=3.7, it is advised to source your custom env before proceeding.
+
+### RaspberryPi
+
+- Install packages:
+```shell script
+sudo apt-get install python3-numpy 
+```
+- Install Blinka with the [tutorial](https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-circuitpython-on-raspberry-pi)
+- Install the required modules:
+```sudo pip3 install -r requirements_pi.txt ```
+
+- (Optional) If you have a microphone connected to your Rpi follow the instructions in the [audio reactive readme](audio-reactive-led-strip/README.md)
+
+If you get a gcc error see [this](https://stackoverflow.com/questions/20023131/cannot-install-pyaudio-gcc-error).
+
+### PC
+
+- Install the required modules:
+```pip install -r requirements.txt ```
 - (Optional, only if you wish to create custom patterns) install [DotStar_emulator repo](https://github.com/nicofirst/DotStar_Emulator) to debug Patterns on pc:
 ```
 python DotStar_Emulator/setup.py install
 ```
-If you get a gcc error see [this](https://stackoverflow.com/questions/20023131/cannot-install-pyaudio-gcc-error).
 
 
 
@@ -71,23 +105,10 @@ This will create a _privatekey.json_ file which will be used later.
 
 ## Raspberry 
 
-### Diagram
-Im currently using a _Raspberry Pi 4 Model B Rev 1.2_ with two 
-[ws2812b led strips](https://www.amazon.com/CHINLY-Individually-Addressable-Waterproof-waterproof/dp/B01LSF4Q0A/ref=sr_1_7?dchild=1&keywords=ws2812b&qid=1593792574&sr=8-7) counting 600 leds on 10 meters.
-
-Since the ws2812b draws 60mA for each led with 5V (check the [specs](https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf)),
- I am powering the led strip using two [5v 100W power supply](https://www.amazon.com/BTF-LIGHTING-Aluminum-WS2812B-LED8806-Modules/dp/B01D8FLWGE/ref=sr_1_13?dchild=1&keywords=5v+20A+power+supply&qid=1593792785&sr=8-13) 
- which should allow each pixel full brightness.
-
-For the connection you can follow [this tutorial](https://tutorials-raspberrypi.com/connect-control-raspberry-pi-ws2812-rgb-led-strips/)  which uses following diagram:
-![diagram](../Resources/diagram.png)
-
-Since there is no connection powering the RaspberryPi, an usb type c power supply is necessary.
-
 ### Starting script
 Check the [script README](../scripts/README.md) to  learn how to start/stop the app with one script (useful when you want it to start on boot) and for syncing the pc repo with your rpi (for debug).
 
 ### Audio reactive
 To install the custom fork [audio-reactive-led-strip](https://github.com/nicofirst1/audio-reactive-led-strip) you'll need to 
-follow the instructions in the [README](../audio-reactive-led-strip/README.md)
+follow the instructions in the [README](audio-reactive-led-strip/README.md)
                        
