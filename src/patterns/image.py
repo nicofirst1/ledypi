@@ -48,11 +48,11 @@ class Image(Default):
             # resize using csv interpolation
             img = cv2.resize(img, dsize=(self.strip_length, img.shape[1],), interpolation=cv2.INTER_CUBIC)
 
-            # show image
-            # PIL.Image.fromarray(img, "RGB").show()
-
             # add brightness level
             img = np.insert(img, 3, 255, axis=2)
+
+            # show image
+            # PIL.Image.fromarray(img, "RGBA").show()
 
             # set image
             self.image = img
@@ -60,6 +60,8 @@ class Image(Default):
             print("No image found in the provided url")
         except ValueError:
             print(f"'{value}' is not a valid url")
+        except urllib.error.HTTPError:
+            print("the image could not be provided")
 
     def fill(self):
 
