@@ -99,7 +99,7 @@ class RGB:
     def g(self):
         return self._g
 
-    @r.setter
+    @g.setter
     def g(self, value):
         self.rgb_vec[1] = value
         self._g = value
@@ -108,11 +108,22 @@ class RGB:
     def b(self):
         return self._b
 
-    @r.setter
+    @b.setter
     def b(self, value):
         self.rgb_vec[2] = value
         self._b = value
 
+    def blend(self, other_rgb):
+
+        alpha = 255 - ((255 - self.a) * (255 - other_rgb.a) / 255)
+        red = (self.r * (255 - other_rgb.a) + other_rgb.r * other_rgb.a) / 255
+        green = (self.g * (255 - other_rgb.a) + other_rgb.g * other_rgb.a) / 255
+        blue = (self.b * (255 - other_rgb.a) + other_rgb.b * other_rgb.a) / 255
+
+        self.a=int(alpha)
+        self.r=int(red)
+        self.g=int(green)
+        self.b=int(blue)
 
     def scale(self):
         return np.multiply(self.rgb_vec, self.a/255, casting='unsafe').astype(int)
