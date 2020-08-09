@@ -18,7 +18,7 @@ Simulate the deepness of the ocean.
 
 Can be a light rain or a heavy storm, you decide.
 
-![storm demo](../Resources/patterns/storm.gif)
+![storm demo](../Resources/patterns/storm_demo.gif)
 
 
 ### Fire
