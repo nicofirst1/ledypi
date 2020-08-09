@@ -22,7 +22,7 @@
   <a href="#key-features">Key Features</a> •
   <a href="#Patterns">Patterns</a> •
   <a href="#Installation">Installation</a> •
-  <a href="#Testing">Testing</a> •
+  <a href="#Running">Running</a> •
   <a href="#Contributing">Contributing</a>
 </p>
 
@@ -104,7 +104,8 @@ For example the following patters is given with:
 ![equation demo](Resources/equation_demo.gif)
 
 ### Image
-Desining a pattern can become hard and take some time, so why not using a pre-made pattern?
+Designing a pattern can become hard and take some time, so why not using a pre-made pattern?
+
 With _Image_ you can use an URL pointing to an image and LedyPi will download it and display it for you.
 
 ![image demo](Resources/image_demo.gif)
