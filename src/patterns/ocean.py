@@ -8,7 +8,7 @@ from utils.color import bound_add, scale
 from utils.modifier import Modifier
 
 
-class Water(Default):
+class Ocean(Default):
     """
     Use perlin noise with blue mapping to simulate water
     """
@@ -17,7 +17,7 @@ class Water(Default):
 
         super().__init__(**kwargs)
 
-        self.pattern_name = "Water"
+        self.pattern_name = "Ocean"
 
         self.x_div = Modifier('horizontal', 2 ** 4, minimum=1, maximum=2 ** 10)
         self.y_div = Modifier('vertical', 2 ** 4, minimum=1, maximum=2 ** 10)
