@@ -29,7 +29,7 @@ On the other hand, if you would like to play with the repo, you should clone it 
 ```shell script
 git clone --recursive https://github.com/nicofirst1/ledypi
 ```
-And then use the [sync script](scripts/) to copy the repo onto your RaspberryPi
+And then use the [sync script](../scripts) to copy the repo onto your RaspberryPi
 
 ## Python 3.7
 The project works with python>=3.7, it is advised to source your custom env before proceeding.
@@ -61,7 +61,7 @@ sudo apt-get install  libjpeg-dev zlib1g-dev libfreetype6-dev liblcms1-dev libop
 sudo pip3 install pillow
 
 ```
-- (Optional) If you have a microphone connected to your Rpi follow the instructions in the [audio reactive readme](audio-reactive-led-strip/README.md)
+- (Optional) If you have a microphone connected to your Rpi follow the instructions in the [audio reactive readme](../audio-reactive-led-strip/README.md)
 
 If you get a gcc error see [this](https://stackoverflow.com/questions/20023131/cannot-install-pyaudio-gcc-error).
 
