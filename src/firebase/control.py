@@ -13,14 +13,20 @@ def control(args):
         from DotStar_Emulator.emulator.send_test_data import App
 
         handler = App
-        args.pixels=64
+        args.pixels = 64
         print("Running from PC")
 
     elif args.mode == "rpi":
-        from rpi.pi_handler import PiHandler
+        if args.strip_type == "neopixel":
+            from rpi import NeoPixel
 
-        handler = PiHandler
-        print("Running from RPI")
+            handler = NeoPixel
+        else:
+            from rpi import Dotstar
+
+            handler = Dotstar
+
+        print(f"Running from RPI with {handler.__class__} stripe")
 
     else:
         raise ValueError(f"Mode '{args.mode}' is not supported")
@@ -46,6 +52,8 @@ if __name__ == '__main__':
                         help='The Firebase database url')
     parser.add_argument('--pixels', type=int, nargs='?', default="300",
                         help='Number of pixels')
+    parser.add_argument('--strip_type', type=str, help='Type of the strip', default='neopixel',
+                        choices=['neopixel', 'dotstar'],)
 
     parser.add_argument('--debug', nargs='?', const=True,
                         help='If to start in debug mode')

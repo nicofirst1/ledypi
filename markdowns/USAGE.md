@@ -13,15 +13,20 @@ Then run the test with:
 sudo python src/rpi/test.py PatternName 
 ```
 
+Remember to set the type of led strip you're using with the `--strip_type` argument. Choose: 
+- `neopixel`, if you have a single data input (WS281X)
+- `dotstar`, if you have three (APA102/SK98225)
+
+
+
 ### Remote
 
-You can test the remote configuration running the [control](../src/firebase/control.py) script which takes as **mandatory** inputs 
+You can test the remote configuration running the [control](../src/firebase) script which takes as **mandatory** inputs 
 the credential json file and the mode (either 'pc' or 'rpi') which specify where the script is being run.
 
 ```shell script
 python src/firebase/connect.py credential.json rpi
 ```
-To run it on the RaspberryPi.
 
 
 

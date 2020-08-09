@@ -3,8 +3,8 @@ import argparse
 import yappi
 
 from patterns import Patterns
+from rpi import NeoPixel, Dotstar
 from utils.rgb import RGB
-from rpi.pi_handler import PiHandler
 
 _NTHREAD = 3
 
@@ -12,6 +12,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('pattern', type=str, help='Pattern')
     parser.add_argument('--rate', type=float, help='rate', default=0)
+    parser.add_argument('--strip_type', type=str, help='rate', default='neopixel', choices=['neopixel', 'dotstar'])
     parser.add_argument('--pixels', type=int, help='rate', default=300)
     parser.add_argument('--debug', nargs='?', const=True, default=False,
                         help='If to start in debug mode')
@@ -20,7 +21,11 @@ if __name__ == '__main__':
     # set pattern, color and handler
     pat = Patterns[args.pattern]
     color = RGB(random=True)
-    handler = PiHandler(args.pixels)
+
+    if args.strip_type == "neopixel":
+        handler = NeoPixel(args.pixels)
+    else:
+        handler = Dotstar(args.pixels)
 
     # init app and run
     app = pat(handler=handler, rate=args.rate, pixels=args.pixels, color=color)
