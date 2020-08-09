@@ -1,6 +1,8 @@
-Here's a list of available patterns.
+Each pattern has multiple modifiers which can drastically change its appearance. 
 
-# Fixed
+The following videos are taken with the default values.
+
+## Fixed
 
 ### Game of Life
 
@@ -27,8 +29,33 @@ Light up the temperature with some fire.
 
 ![water demo](../Resources/patterns/fire_demo.gif)
 
+### ColorWipe
+check the [tutorial](https://youtu.be/c0NvfBiJOkw)
 
-# Interactive
+### Fading
+check the [tutorial](https://youtu.be/c0NvfBiJOkw)
+
+### Meteor
+check the [tutorial](https://youtu.be/c0NvfBiJOkw)
+
+### Perlin
+check the [tutorial](https://youtu.be/c0NvfBiJOkw)
+
+### Pulse
+check the [tutorial](https://youtu.be/c0NvfBiJOkw)
+
+### Rainbow
+check the [tutorial](https://youtu.be/c0NvfBiJOkw)
+
+### Snow
+check the [tutorial](https://youtu.be/c0NvfBiJOkw)
+
+### FireWork
+check the [tutorial](https://youtu.be/c0NvfBiJOkw)
+
+
+
+## Interactive
 
 ### Equation
 You can input a custom equation for the rgb values. Such equation can depend on:
