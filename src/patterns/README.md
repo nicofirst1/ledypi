@@ -15,7 +15,7 @@ The first dictionary maps an index (the pixel position) to another dictionary co
 
 `color:RGB.RGB`
 
-which is a [RGB](/utils/rgb.py) object. During the init or fill method you can add more attribute to each pixel as you see fit.
+which is a [RGB](../utils/rgb.py) object. During the init or fill method you can add more attribute to each pixel as you see fit.
 
 ## Fill method
 To change the values of the pixel, the fill method has to be implemented. This method will be called once every loop 
