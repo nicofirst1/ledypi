@@ -32,7 +32,7 @@
 
 <p align="center" 
     href="https://youtu.be/c0NvfBiJOkw">
-    <img src="Resources/ledyweb_tutorial.gif"  width="450" >
+    <img src="Resources/tutorials/ledyweb_tutorial.gif"  width="450" >
 </p>
 
 
@@ -60,23 +60,18 @@ Moreover each pattern can be customized by changing the values of its attributes
 ## Fixed logic
 There are more than 10 _standard_ pattern to choose from with a steady logic, that is a fixed behavior.
 
-<h3 >Water</h3>
+### Water
 
 Bring the ocean home with the ocean pattern. You can choose the deepness with the parameters
 
 ![water demo](Resources/water_demo.gif)
 
-<h3 >Fire</h3>
+### Fire
 
 If you're cold then try the fire pattern.
 
 ![water demo](Resources/fire_demo.gif)
 
-<h3 >Game of Life</h3>
-
-Watch how life evolves with the famous [game of life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) algorithm.
-
-![gof demo](Resources/gof_demo.gif)
 
 
 
@@ -84,31 +79,23 @@ Watch how life evolves with the famous [game of life](https://en.wikipedia.org/w
 On top of these fixed patters there are two interactive patters whose behavior can completely change based on the user input"
 
 ### Music Reactive (click gif for video)
-[![audio demo](Resources/audio_demo2.gif)](https://youtu.be/7PXDBr3uZmA) 
+[![audio demo](Resources/patterns/audio_demo.gif)](https://youtu.be/7PXDBr3uZmA) 
 
 This pattern uses a microphone to visualize the music on your led strip. There are three different type of visualization:
 - Spectrum: split the strip on subsequent frequency bands and visualize the amplitude as a mix of rgb values
 - Energy: use an energy function to plot the sound on the leds
 - Scroll: record the audio amplitude on a scrolling timeline.
 
-### Equation
-You can input a custom equation for the rgb values. Such equation can depend on:
-- time: a time-step is kept so to evolve the function through time
-- index: the position of the led-strip can also be used
-
-For example the following patters is given with:
-- red = _cos(t)_
-- green = _sin(t)_
-- blue = _idx_
-
-![equation demo](Resources/equation_demo.gif)
 
 ### Image
 Designing a pattern can become hard and take some time, so why not using a pre-made pattern?
 
 With _Image_ you can use an URL pointing to an image and LedyPi will download it and display it for you.
 
-![image demo](Resources/image_demo.gif)
+![image demo](Resources/patterns/image_demo.gif)
+
+## Complete List
+Check out the list of available patterns [here](markdowns/PATTERNS.md)
 
 # Installation 
 For the installation check out the related [INSTALL file](markdowns/INSTALL.md).
