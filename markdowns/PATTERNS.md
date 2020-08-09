@@ -1,6 +1,8 @@
-Here's a list of available patterns.
+Each pattern has multiple modifiers which can drastically change its appearance. 
 
-# Fixed
+The following videos are taken with the default values.
+
+## Fixed
 
 ### Game of Life
 
@@ -27,8 +29,33 @@ Light up the temperature with some fire.
 
 ![water demo](../Resources/patterns/fire_demo.gif)
 
+### ColorWipe
+todo
 
-# Interactive
+### Fading
+todo
+
+### Meteor
+todo
+
+### Perlin
+todo
+
+### Pulse
+todo
+
+### Rainbow
+todo
+
+### Snow
+todo
+
+### FireWork
+todo
+
+
+
+## Interactive
 
 ### Equation
 You can input a custom equation for the rgb values. Such equation can depend on:
