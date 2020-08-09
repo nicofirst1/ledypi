@@ -5,9 +5,9 @@ import time
 
 import numpy as np
 
-from utils.pixels import  Pixel
-from utils.rgb import RGB
 from utils.modifier import Modifier
+from utils.pixels import Pixel
+from utils.rgb import RGB
 
 pattern_logger = logging.getLogger("pattern_logger")
 
@@ -47,7 +47,8 @@ class Default(threading.Thread):
         self.modifiers = dict()
 
         # init and set the pixels to the default color
-        self.pixels = {idx: Pixel(index=idx, color=self.color.copy(), set_func=self.color_set) for idx in range(self.strip_length + 1)}
+        self.pixels = {idx: Pixel(index=idx, color=self.color.copy(), set_func=self.color_set) for idx in
+                       range(self.strip_length + 1)}
 
     def show(self):
         """
@@ -86,8 +87,6 @@ class Default(threading.Thread):
             a = rgb[-1] / 255
             # scale for alpha
             rgb = np.multiply(rgb[:-1], a, casting='unsafe').astype(int)
-
-
 
         # scale rgb based on passed alpha
         r, g, b = np.multiply(rgb, self.alpha / 255, casting='unsafe')
@@ -146,7 +145,6 @@ class Default(threading.Thread):
     def run(self):
         # init handler and set pixels
 
-
         self.show()
 
         pattern_logger.info(f"Started pattern: {self.pattern_name} with rate: {self.rate()}")
@@ -156,13 +154,6 @@ class Default(threading.Thread):
         except KeyboardInterrupt:
             pattern_logger.info("Pattern has been interrupted")
             self.close()
-
-    def bound_attrs(self):
-        """
-        override this function if the fill method to bound attributes to a limited range
-        :return:
-        """
-        raise NotImplementedError()
 
     def set_rate(self, rate):
         self.rate.value = rate
