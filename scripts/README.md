@@ -45,7 +45,7 @@ sudo PYTHONPATH="$pythonpath" python3 your_script.py
 
 #### Update
 Now the scripts supports argument propagation, that is you can pass any kind of argument to the bash script which will
- then be passed to the connect script (check the [REAMDE](src/firebase/README.md)).
+ then be passed to the connect script (check the [REAMDE](../src/firebase/README.md)).
  
  
 ## Sync

@@ -26,7 +26,7 @@ To make the new pattern available to the database add it in the [init file](__in
 
 
 ## Modifiers
-Each pattern inherit a dictionary called _modifiers_  which should be populated with instances from the [Modifier class](utils/modifier.py).
+Each pattern inherit a dictionary called _modifiers_  which should be populated with instances from the [Modifier class](../utils/modifier.py).
 
 This class accepts two mandatory attributes and 3 (as for now) optional ones:
 - __name__: str, the name which will be shown in the web/android app.
