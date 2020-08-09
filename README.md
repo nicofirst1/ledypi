@@ -64,13 +64,13 @@ There are more than 10 _standard_ pattern to choose from with a steady logic, th
 
 Bring the ocean home with the ocean pattern. You can choose the deepness with the parameters
 
-![water demo](Resources/water_demo.gif)
+![water demo](Resources/patterns/water_demo.gif)
 
 ### Fire
 
 If you're cold then try the fire pattern.
 
-![water demo](Resources/fire_demo.gif)
+![water demo](Resources/patterns/fire_demo.gif)
 
 
 
