@@ -16,6 +16,7 @@ from patterns.pulse import Pulse
 from patterns.rainbow import Rainbow
 from patterns.snow import Snow
 from patterns.steady import Steady
+from patterns.storm import Storm
 from patterns.water import Water
 
 pattern_logger = logging.getLogger("pattern_logger")
@@ -44,4 +45,5 @@ Patterns = dict(
     Perlin=Perlin,
     GameOfLife=GameOfLife,
     Image=Image,
+    Storm=Storm,
 )
