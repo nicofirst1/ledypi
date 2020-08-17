@@ -15,6 +15,7 @@ from patterns.perlin import Perlin
 from patterns.pulse import Pulse
 from patterns.rainbow import Rainbow
 from patterns.snow import Snow
+from patterns.sorting import Sorting
 from patterns.steady import Steady
 from patterns.storm import Storm
 from patterns.ocean import Ocean
@@ -46,4 +47,5 @@ Patterns = dict(
     GameOfLife=GameOfLife,
     Image=Image,
     Storm=Storm,
+    Sorting=Sorting,
 )
