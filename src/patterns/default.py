@@ -153,6 +153,7 @@ class Default(threading.Thread):
                 self.on_loop()
         except KeyboardInterrupt:
             pattern_logger.info("Pattern has been interrupted")
+        finally:
             self.close()
 
     def set_rate(self, rate):
