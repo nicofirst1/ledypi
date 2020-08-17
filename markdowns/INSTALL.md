@@ -44,17 +44,24 @@ sudo apt-get install python3-numpy
 - Install the required modules:
 ```sudo pip3 install -r requirements_pi.txt ```
 - Install opencv:
-```
-sudo apt-get install libhdf5-dev libhdf5-serial-dev
-sudo apt-get install libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5
-sudo apt-get install libatlas-base-dev
-sudo apt-get install libjasper-dev
-
-wget https://bootstrap.pypa.io/get-pip.py
-sudo python3 get-pip.py
-
-sudo pip3 install opencv-contrib-python==4.1.0.25
-```
+    - install dependencies
+    ```
+    sudo apt-get install libhdf5-dev libhdf5-serial-dev
+    sudo apt-get install libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5
+    sudo apt-get install libatlas-base-dev 
+    sudo apt-get install libjasper-dev
+    ```
+    or in one line
+    ```
+      sudo apt-get install libhdf5-dev libhdf5-serial-dev libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5 libatlas-base-dev libjasper-dev
+   ```
+    - install opencv 
+    ````
+    wget https://bootstrap.pypa.io/get-pip.py
+    sudo python3 get-pip.py
+    
+    sudo pip3 install opencv-contrib-python==4.1.0.25
+    ````
 - Install Pillow:
 ```shell script
 sudo apt-get install  libjpeg-dev zlib1g-dev libfreetype6-dev liblcms1-dev libopenjp2-7 libtiff5 
