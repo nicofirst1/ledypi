@@ -31,6 +31,9 @@ class ToSort(list):
 
     def __setitem__(self, key, item):
         super(ToSort, self).__setitem__(key, item)
+
+        self.color_set(key, (1,1,1))
+        time.sleep(self.rate()//10+0.01)
         self.color_set(key, item[1])
         time.sleep(self.rate())
 
@@ -75,6 +78,20 @@ class Sorting(Default):
             sorting_modifier=self.sorting_modifier
         )
 
+    def color_all(self, color):
+        """
+        Color all the pixels with the same color (useful to set all black)
+        :param color: rgba values
+        :return:
+        """
+        r,g,b=color
+        for idx in range(self.strip_length):
+            # set with handler
+
+            self.handler.set(index=idx, r=int(r), g=int(g), b=int(b), a=self.alpha)
+
+        self.show()
+
     def color_set(self, index, rgb):
         """
         Set the color for the specified pixel
@@ -106,6 +123,8 @@ class Sorting(Default):
             while not self.stop:
                 self.sorting_alg(self.pixels)
                 time.sleep(2)
+                self.color_all((0,0,0))
+                time.sleep(1)
                 random.shuffle(self.pixels)
         except KeyboardInterrupt:
             sorting_logger.info("Pattern has been interrupted")
