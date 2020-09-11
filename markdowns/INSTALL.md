@@ -69,6 +69,11 @@ sudo pip3 install pillow
 
 ```
 - (Optional) If you have a microphone connected to your Rpi follow the instructions in the [audio reactive readme](../audio-reactive-led-strip/README.md)
+- (Optional) Increase led speed by adding following to `/boot/config.txt` ( as written [here](https://github.com/jgarff/rpi_ws281x/issues/381)):
+```shell script
+ core_freq=500
+core_freq_min=500
+```                                         
 
 If you get a gcc error see [this](https://stackoverflow.com/questions/20023131/cannot-install-pyaudio-gcc-error).
 
