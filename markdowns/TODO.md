@@ -1,7 +1,7 @@
 # LedyPi
 
 - complete instructions of how to build [X]
-- file logging []
+- file logging [X]
 - check install script []
 
 ## Controller
@@ -20,6 +20,7 @@
 - add modifier instructions in readme [X]
 - Fix music modifier [X]
 - Fix property setter and readme [X]
+- fix color choosing [X]
 
 # LedyWeb
 - fix readme [X]

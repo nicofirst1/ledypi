@@ -36,6 +36,14 @@ The project works with python>=3.7, it is advised to source your custom env befo
 
 ### RaspberryPi
 
+The [install script](../scripts/install.sh) should take care of most of the installation part, simply use:
+```shell script
+bash scripts/install.sh
+```
+If you run into any problems check out the full install instructions which follows.
+
+#### Complete install instructions
+
 - Install packages:
 ```shell script
 sudo apt-get install python3-numpy 
