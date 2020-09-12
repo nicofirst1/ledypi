@@ -155,4 +155,4 @@ class FireBaseController(FireBaseConnector):
 
         else:
             # if is r,g,b,a, update just the value in the dictionary
-            self.pattern.color.__dict__[rgb_attr] = int(data)
+            self.pattern.color.__setattr__(rgb_attr, int(data))
