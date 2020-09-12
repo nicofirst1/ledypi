@@ -9,10 +9,9 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 
+from firebase import fire_logger
 from patterns import Patterns
 from utils.rgb import RGB
-
-fire_logger = logging.getLogger("fire_logger")
 
 
 class FireBaseConnector(Thread):
@@ -21,7 +20,8 @@ class FireBaseConnector(Thread):
     Allows for the modification of the pattern and attributes
     """
 
-    def __init__(self, credential_path, database_url="https://ledypie.firebaseio.com/", debug=False, tracker=None):
+    def __init__(self, credential_path, database_url="https://ledypie.firebaseio.com/", debug=False, tracker=None,
+                 thread_name="FireBaseConnectorThread"):
         """
         :param credential_path: str, path to the firebase credential json file
         :param database_url: str, URL of the firebase
@@ -30,7 +30,8 @@ class FireBaseConnector(Thread):
         """
 
         # init thread class
-        super().__init__(name="FireBaseConnectorThread")
+        super().__init__(name=thread_name)
+
 
         # define local attributes
         self.tracker = tracker if tracker is not None else lambda: None
@@ -49,6 +50,7 @@ class FireBaseConnector(Thread):
 
         # update db and get references
         self.root = db.reference('/')
+
         self.init_db()
         self.db_refs = dict(
             pattern_attributes={pt: db.reference(f"/pattern_attributes/{pt}") for pt in Patterns.keys()},
@@ -163,7 +165,7 @@ class FireBaseConnector(Thread):
                     to_update[k] = rq
 
             if len(to_update) > 0:
-                for k,v in to_update.items():
+                for k, v in to_update.items():
                     self.db_refs["RGBA"].child(k).set(v)
                     self.local_db["RGBA"][k] = v
 

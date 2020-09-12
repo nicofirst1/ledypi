@@ -1,3 +1,2 @@
-from rpi.pi_handler import Dotstar , NeoPixel
-
+from rpi.pi_handler import Dotstar, NeoPixel
 

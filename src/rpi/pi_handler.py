@@ -1,3 +1,7 @@
+from src import loggers
+
+rpi_logger = loggers["rpi"]
+
 LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
 LED_DMA = 10  # DMA channel to use for generating signal (try 10)
 LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
@@ -34,8 +38,8 @@ class NeoPixel(object):
             # create color and set it
             color = Color(r, g, b)
             self.np.setPixelColor(index, color)
-        except IndexError:
-            print("error")
+        except IndexError as e:
+            rpi_logger.debug(e)
 
     def send(self):
         """
@@ -56,7 +60,7 @@ class NeoPixel(object):
             self.np.setPixelColor(idx, c)
         self.np.show()
         self.np._cleanup()
-        print("Closing PiHandler")
+        rpi_logger.info("Closing PiHandler")
 
 
 class Dotstar(object):
@@ -87,8 +91,8 @@ class Dotstar(object):
             # create color and set it
             color = (r, g, b)
             self.np[index] = color
-        except IndexError:
-            print("error")
+        except IndexError as e:
+            rpi_logger.debug(e)
 
     def send(self):
         """
@@ -108,4 +112,5 @@ class Dotstar(object):
             self.np[idx] = c
         self.np.show()
         self.np.deinit()
-        print("Closing PiHandler")
+        rpi_logger.info("Closing PiHandler")
+

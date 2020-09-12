@@ -1,6 +1,8 @@
 # LedyPi
 
 - complete instructions of how to build [X]
+- file logging [X]
+- check install script []
 
 ## Controller
 - fix compatibility with connector [X]
@@ -17,7 +19,8 @@
 - fix alpha dependencies [X]
 - add modifier instructions in readme [X]
 - Fix music modifier [X]
-- Fix proprety setter and readme [X]
+- Fix property setter and readme [X]
+- fix color choosing [X]
 
 # LedyWeb
 - fix readme [X]
@@ -26,6 +29,7 @@
 - add patterns with no attributes in the drop down menu [X]
 - remove additional settings for pattern with no settings [X]
 - add components update on database change []
+- launch ledyweb from app script []
 
 
 # Android app

@@ -36,6 +36,14 @@ The project works with python>=3.7, it is advised to source your custom env befo
 
 ### RaspberryPi
 
+The [install script](../scripts/install.sh) should take care of most of the installation part, simply use:
+```shell script
+bash scripts/install.sh
+```
+If you run into any problems check out the full install instructions which follows.
+
+#### Complete install instructions
+
 - Install packages:
 ```shell script
 sudo apt-get install python3-numpy 
@@ -44,17 +52,24 @@ sudo apt-get install python3-numpy
 - Install the required modules:
 ```sudo pip3 install -r requirements_pi.txt ```
 - Install opencv:
-```
-sudo apt-get install libhdf5-dev libhdf5-serial-dev
-sudo apt-get install libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5
-sudo apt-get install libatlas-base-dev
-sudo apt-get install libjasper-dev
-
-wget https://bootstrap.pypa.io/get-pip.py
-sudo python3 get-pip.py
-
-sudo pip3 install opencv-contrib-python==4.1.0.25
-```
+    - install dependencies
+    ```
+    sudo apt-get install libhdf5-dev libhdf5-serial-dev
+    sudo apt-get install libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5
+    sudo apt-get install libatlas-base-dev 
+    sudo apt-get install libjasper-dev
+    ```
+    or in one line
+    ```
+      sudo apt-get install libhdf5-dev libhdf5-serial-dev libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5 libatlas-base-dev libjasper-dev
+   ```
+    - install opencv 
+    ````
+    wget https://bootstrap.pypa.io/get-pip.py
+    sudo python3 get-pip.py
+    
+    sudo pip3 install opencv-contrib-python==4.1.0.25
+    ````
 - Install Pillow:
 ```shell script
 sudo apt-get install  libjpeg-dev zlib1g-dev libfreetype6-dev liblcms1-dev libopenjp2-7 libtiff5 
@@ -62,8 +77,17 @@ sudo pip3 install pillow
 
 ```
 - (Optional) If you have a microphone connected to your Rpi follow the instructions in the [audio reactive readme](../audio-reactive-led-strip/README.md)
+- (Optional) Increase led speed by adding following to `/boot/config.txt` ( as written [here](https://github.com/jgarff/rpi_ws281x/issues/381)):
+```shell script
+core_freq=500
+core_freq_min=500
+```                                         
 
 If you get a gcc error see [this](https://stackoverflow.com/questions/20023131/cannot-install-pyaudio-gcc-error).
+
+#### Ledyweb on raspberry
+If you wish to run the ledyweb control server on the raspberry and connect with another pc you should follow
+ [this guide](https://www.codingforentrepreneurs.com/blog/raspberry-pi-network-server-guide-with-django-ssh/)
 
 ### PC
 

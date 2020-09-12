@@ -1,7 +1,10 @@
 import argparse
+import logging
 import signal
 
+from firebase import fire_logger
 from firebase.controller import FireBaseController
+from src import change_level
 
 
 def control(args):
@@ -30,6 +33,12 @@ def control(args):
 
     else:
         raise ValueError(f"Mode '{args.mode}' is not supported")
+
+    if args.debug:
+        change_level(logging.DEBUG)
+        fire_logger.debug("Logging level debug")
+    else:
+        change_level(logging.INFO)
 
     # init the firebase connector
     fbc = FireBaseController(credential_path=args.credential, database_url=args.databaseURL, handler=handler,

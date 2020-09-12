@@ -1,11 +1,9 @@
-import logging
 import time
 
+from firebase import fire_logger
 from firebase.connector import FireBaseConnector
 from patterns import Patterns
 from utils.rgb import RGB
-
-fire_logger = logging.getLogger("fire_logger")
 
 # since the firebase updater will call the listener a lot
 # during the slider value change, we need a way to skip too frequent updates.
@@ -56,8 +54,8 @@ class FireBaseController(FireBaseConnector):
         # dummy pattern to avoid exception
         self.pattern = Patterns['Steady'](rate=10, handler=handler, pixels=pixels)
 
-        super().__init__(credential_path=credential_path, database_url=database_url, debug=debug)
-
+        super().__init__(credential_path=credential_path, database_url=database_url, debug=debug,
+                         thread_name="FireBaseController")
         self.handler = handler(pixels)
         self.pixels = pixels
 
@@ -157,4 +155,4 @@ class FireBaseController(FireBaseConnector):
 
         else:
             # if is r,g,b,a, update just the value in the dictionary
-            self.pattern.color.__dict__[rgb_attr] = int(data)
+            self.pattern.color.__setattr__(rgb_attr, int(data))

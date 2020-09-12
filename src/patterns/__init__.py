@@ -1,6 +1,3 @@
-import logging
-import sys
-
 from patterns.color_wipe import ColorWipe
 from patterns.equation import Equation
 from patterns.fading import Fading
@@ -10,23 +7,18 @@ from patterns.game_of_life import GameOfLife
 from patterns.image import Image
 from patterns.meteor import Meteor
 from patterns.music import Music
+from patterns.ocean import Ocean
 from patterns.off import Off
 from patterns.perlin import Perlin
 from patterns.pulse import Pulse
 from patterns.rainbow import Rainbow
 from patterns.snow import Snow
+from patterns.sorting import Sorting
 from patterns.steady import Steady
 from patterns.storm import Storm
-from patterns.ocean import Ocean
+from src import loggers
 
-pattern_logger = logging.getLogger("pattern_logger")
-pattern_logger.setLevel(logging.DEBUG)
-
-handler = logging.StreamHandler(sys.stdout)
-handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s\n')
-handler.setFormatter(formatter)
-pattern_logger.addHandler(handler)
+pattern_logger = loggers["patterns"]
 
 Patterns = dict(
     ColorWipe=ColorWipe,
@@ -46,4 +38,5 @@ Patterns = dict(
     GameOfLife=GameOfLife,
     Image=Image,
     Storm=Storm,
+    Sorting=Sorting,
 )
