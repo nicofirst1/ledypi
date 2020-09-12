@@ -36,7 +36,7 @@ Remember to modify the parameter into the [app](/scripts/app.sh) to fit your nee
 ### Running tests
 If you wish to run some scripts on the rpi you should source the app with:
 ```shell script
-source scripts/app.sh
+source scripts/vars.sh
 ``` 
 And then execute the scripts with:
 ```shell script
