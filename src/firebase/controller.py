@@ -5,7 +5,6 @@ from firebase.connector import FireBaseConnector
 from patterns import Patterns
 from utils.rgb import RGB
 
-
 # since the firebase updater will call the listener a lot
 # during the slider value change, we need a way to skip too frequent updates.
 # with the frequency function the call to the listener will be
@@ -55,8 +54,8 @@ class FireBaseController(FireBaseConnector):
         # dummy pattern to avoid exception
         self.pattern = Patterns['Steady'](rate=10, handler=handler, pixels=pixels)
 
-        super().__init__(credential_path=credential_path, database_url=database_url, debug=debug)
-
+        super().__init__(credential_path=credential_path, database_url=database_url, debug=debug,
+                         thread_name="FireBaseController")
         self.handler = handler(pixels)
         self.pixels = pixels
 
