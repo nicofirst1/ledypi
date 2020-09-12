@@ -1,6 +1,7 @@
 # LedyPi
 
 - complete instructions of how to build [X]
+- file logging []
 
 ## Controller
 - fix compatibility with connector [X]
@@ -26,6 +27,7 @@
 - add patterns with no attributes in the drop down menu [X]
 - remove additional settings for pattern with no settings [X]
 - add components update on database change []
+- launch ledyweb from app script []
 
 
 # Android app

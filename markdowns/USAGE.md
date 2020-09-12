@@ -5,7 +5,7 @@ You can use the [test script](../src/rpi/test.py) to run a specific pattern with
 
 First source the python path with:
 ```shell script
-source scripts/app.sh  
+source scripts/vars.sh  
 ```
 
 Then run the test with:
