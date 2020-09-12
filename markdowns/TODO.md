@@ -2,6 +2,7 @@
 
 - complete instructions of how to build [X]
 - file logging []
+- check install script []
 
 ## Controller
 - fix compatibility with connector [X]
@@ -18,7 +19,7 @@
 - fix alpha dependencies [X]
 - add modifier instructions in readme [X]
 - Fix music modifier [X]
-- Fix proprety setter and readme [X]
+- Fix property setter and readme [X]
 
 # LedyWeb
 - fix readme [X]
