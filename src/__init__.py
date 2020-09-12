@@ -1,7 +1,6 @@
 import logging
 import os
 import pathlib
-import sys
 
 LOG_DIR = str(pathlib.Path(__file__).parent.absolute())
 LOG_DIR += "/logs"
@@ -12,9 +11,6 @@ if not os.path.isdir(LOG_DIR):
 formatter = '%(asctime)s - %(name)s - %(levelname)s - %(message)s\n'
 logging.basicConfig(format=formatter)
 
-
-
-
 loggers = dict(
     rpi="rpi_logger",
     patterns="pattern_logger",
@@ -23,10 +19,7 @@ loggers = dict(
 
 loggers = {k: logging.getLogger(v) for k, v in loggers.items()}
 
-for k,v in loggers.items():
-    sys_handler = logging.StreamHandler(sys.stdout)
-    v.addHandler(sys_handler)
-
+for k, v in loggers.items():
     fileHandler = logging.FileHandler(f"{LOG_DIR}/{k}.log")
     v.addHandler(fileHandler)
 
