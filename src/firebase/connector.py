@@ -9,10 +9,10 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 
+from firebase import fire_logger
 from patterns import Patterns
 from utils.rgb import RGB
 
-fire_logger = logging.getLogger("fire_logger")
 
 
 class FireBaseConnector(Thread):

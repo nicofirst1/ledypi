@@ -1,11 +1,10 @@
-import logging
 import time
 
+from firebase import fire_logger
 from firebase.connector import FireBaseConnector
 from patterns import Patterns
 from utils.rgb import RGB
 
-fire_logger = logging.getLogger("fire_logger")
 
 # since the firebase updater will call the listener a lot
 # during the slider value change, we need a way to skip too frequent updates.
