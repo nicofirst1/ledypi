@@ -82,7 +82,7 @@ class Sorting(Default):
 
         )
         self.sorting_alg = bubble_sort
-        self.sorting_modifier = Modifier("Sorting algorithm", "comb_sort", options=list(self.sorting_dict.keys()),
+        self.sorting_modifier = Modifier("Sorting algorithm", "quick_sort", options=list(self.sorting_dict.keys()),
                                          on_change=self.on_sort_change)
 
         self.modifiers = dict(
@@ -127,12 +127,12 @@ class Sorting(Default):
         :return:
         """
 
-        for idx in range(self.strip_length + 1):
-            self.color_set(idx, self.pixels[idx][1])
-
         sorting_logger.info(f"Started {self.pattern_name}  pattern with rate: {self.rate()}")
         try:
             while not self.stop:
+                for idx in range(self.strip_length + 1):
+                    self.color_set(idx, self.pixels[idx][1])
+
                 self.sorting_alg(self.pixels)
                 time.sleep(2)
                 self.color_all((0, 0, 0))
