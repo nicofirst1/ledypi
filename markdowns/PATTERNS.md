@@ -29,6 +29,9 @@ Light up the temperature with some fire.
 
 ![water demo](../Resources/patterns/fire_demo.gif)
 
+### ColorMap
+All the [matplotlib colormaps](https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html) are available.
+
 ### ColorWipe
 check the [tutorial](https://youtu.be/c0NvfBiJOkw)
 
