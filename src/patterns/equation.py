@@ -26,7 +26,7 @@ class Equation(Default):
         self.pattern_name = "Equation"
 
         # max range for function
-        self.max_range = self.strip_length * 100
+        self.max_range = self.strip_length * 1000
 
         self.fns = {}
 
@@ -50,64 +50,46 @@ class Equation(Default):
 
         )
 
-        self.generate_colors()
-
     def on_change_red(self, value):
         assert isinstance(value, str), pattern_logger.warning("The equation value is not a string")
         self.fns['r_fn'] = sympify(value)
-        self.generate_colors()
 
     def on_change_green(self, value):
         assert isinstance(value, str), pattern_logger.warning("The equation value is not a string")
         self.fns['g_fn'] = sympify(value)
-        self.generate_colors()
 
     def on_change_blue(self, value):
         assert isinstance(value, str), pattern_logger.warning("The equation value is not a string")
         self.fns['b_fn'] = sympify(value)
-        self.generate_colors()
-
-    def generate_colors(self):
-        """
-        Generate color out of fill for faster performance
-        :return:
-        """
-        try:
-            ts = range(0, self.max_range)
-            idxs= range(1, self.max_range-1)
-
-            t,idx = sym.symbols('t,idx')
-
-            rs = lambdify([t, idx], self.fns['r_fn'])
-            gs = lambdify([t, idx], self.fns['g_fn'])
-            bs = lambdify([t, idx], self.fns['b_fn'])
-
-            rs = rs(ts,idxs)
-            gs = gs(ts,idxs)
-            bs = bs(ts,idxs)
-
-
-            # scale in 0,255 values
-            rs, gs, bs = self.scale(rs, gs, bs)
-
-            self.rs = rs
-            self.gs = gs
-            self.bs = bs
-        except KeyError:
-            pass
-        except Exception as e:
-            pattern_logger.warning(f"Equation failed to evaluate.\n{e}")
 
     def fill(self):
 
         # cicle timestep
         if self.strip_length + self.t >= self.max_range:
             self.t = 1
+        try:
+            ts = range(self.t, self.t + self.strip_length)
+            idxs = range(len(ts))
 
-        # set values
-        for idx in range(self.strip_length):
-            jdx = idx + self.t
-            self.pixels[idx]['color'] = (self.rs[jdx], self.gs[jdx], self.bs[jdx], 255)
+            t, idx = sym.symbols('t,idx')
+
+            rs = lambdify([t, idx], self.fns['r_fn'])
+            gs = lambdify([t, idx], self.fns['g_fn'])
+            bs = lambdify([t, idx], self.fns['b_fn'])
+
+            rs = rs(ts, idxs)
+            gs = gs(ts, idxs)
+            bs = bs(ts, idxs)
+
+            # scale in 0,255 values
+            rs, gs, bs = self.scale(rs, gs, bs)
+
+            # set values
+            for idx in range(self.strip_length):
+                self.pixels[idx]['color'] = (rs[idx], gs[idx], bs[idx], 255)
+
+        except Exception as e:
+            pattern_logger.warning(f"Equation failed to evaluate.\n{e}")
 
         # update timestep
         self.t += 1
