@@ -21,6 +21,7 @@ loggers = {k: logging.getLogger(v) for k, v in loggers.items()}
 
 for k, v in loggers.items():
     fileHandler = logging.FileHandler(f"{LOG_DIR}/{k}.log")
+    fileHandler.setFormatter(formatter)
     v.addHandler(fileHandler)
 
 
