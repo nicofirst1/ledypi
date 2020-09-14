@@ -152,7 +152,8 @@ class FireBaseController(FireBaseConnector):
 
                 color = self.get_rgba()
                 self.pattern.update_args(color=color, randomize_color=False)
-
+        elif rgb_attr=="a":
+            self.pattern.alpha=int(data)
         else:
             # if is r,g,b,a, update just the value in the dictionary
             self.pattern.color.__setattr__(rgb_attr, int(data))
