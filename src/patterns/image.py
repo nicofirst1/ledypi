@@ -10,7 +10,7 @@ from utils.modifier import Modifier
 
 class Image(Default):
     """
-    Turno on\off the strip with a specific speed
+    Turno on/off the strip with a specific speed
     """
 
     def __init__(self, **kwargs):
@@ -71,4 +71,3 @@ class Image(Default):
 
         self.step += 1
         self.step %= self.image.shape[0]
-

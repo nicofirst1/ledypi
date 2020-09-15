@@ -89,6 +89,11 @@ class Music(Default):
 
     @rate.setter
     def rate(self, value):
+        """
+        Cannot change the value of rate since music must be real time
+        :param value:
+        :return:
+        """
         pass
 
     def read_audio(self):

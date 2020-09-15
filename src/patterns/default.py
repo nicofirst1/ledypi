@@ -20,7 +20,8 @@ class Default(threading.Thread):
     def __init__(self, handler, rate, pixels, color=RGB()):
         """
 
-        :param handler: The handler for the led strip, either a DotStar_Emulator.emulator.send_test_data.App or a rpi.pi_handler.PiHandler
+        :param handler: The handler for the led strip, either a DotStar_Emulator.emulator.send_test_data.App or a
+        rpi.pi_handler.PiHandler
         :param rate:(float) the rate for the pixel update
         :param pixels: (int) the number of pixels
         :param color: (default RGB), the initial color for the leds
@@ -37,7 +38,7 @@ class Default(threading.Thread):
         self.color = color
         self.alpha = 255
 
-        # boolan value to randomize color
+        # boolean value to randomize color
         self.randomize_color = False
 
         # string for patter name
@@ -130,7 +131,7 @@ class Default(threading.Thread):
 
         if not changed:
             for k in kwargs.keys():
-                pattern_logger.warn(f"No such attribute named '{k}' for class {self.__str__()}")
+                pattern_logger.warning(f"No such attribute named '{k}' for class {self.__str__()}")
 
         return changed
 

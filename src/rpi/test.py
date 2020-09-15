@@ -14,7 +14,7 @@ if __name__ == '__main__':
     parser.add_argument('--rate', type=float, help='rate', default=0)
     parser.add_argument('--strip_type', type=str, help='rate', default='neopixel', choices=['neopixel', 'dotstar'])
     parser.add_argument('--pixels', type=int, help='rate', default=300)
-    parser.add_argument('--debug', nargs='?', const=True, default=False,
+    parser.add_argument('--profile', nargs='?', const=True, default=False,
                         help='If to start in debug mode')
     args = parser.parse_args()
 
@@ -30,8 +30,8 @@ if __name__ == '__main__':
     # init app and run
     app = pat(handler=handler, rate=args.rate, pixels=args.pixels, color=color)
 
-    # start yappi if debug flag
-    if args.debug:
+    # start yappi if profile flag
+    if args.profile:
         yappi.start()
 
     try:
@@ -45,7 +45,7 @@ if __name__ == '__main__':
         handler.close()
 
     # report yappi stats
-    if args.debug:
+    if args.profile:
 
         yappi.stop()
         threads = yappi.get_thread_stats()

@@ -46,9 +46,6 @@ class Sorting(Default):
     Sorting patterns
     """
 
-    def fill(self):
-        pass
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.pattern_name = "Sorting"
@@ -78,7 +75,7 @@ class Sorting(Default):
             bitonic_sort=bitonic_sort,
             pancake_sort=pancake_sort,
             stooge_sort=stooge_sort,
-            oddEven_sort=oddEven_sort,
+            oddEven_sort=odd_even_sort,
 
         )
         self.sorting_alg = bubble_sort
@@ -293,7 +290,7 @@ def quick_sort(lst):
 # Function to sort arr[] using Comb Sort
 def comb_sort(arr):
     # To find next gap from current
-    def getNextGap(gap):
+    def get_next_gap(gap):
         # Shrink gap by Shrink factor
         gap = (gap * 10) // 13
         if gap < 1:
@@ -314,7 +311,7 @@ def comb_sort(arr):
     while gap != 1 or swapped == 1:
 
         # Find next gap
-        gap = getNextGap(gap)
+        gap = get_next_gap(gap)
 
         # Initialize swapped as false so that we can
         # check if swap happened or not
@@ -331,17 +328,17 @@ def cycle_sort(array):
     writes = 0
 
     # Loop through the array to find cycles to rotate.
-    for cycleStart in range(0, len(array) - 1):
-        item = array[cycleStart]
+    for cycle_start in range(0, len(array) - 1):
+        item = array[cycle_start]
 
         # Find where to put the item.
-        pos = cycleStart
-        for i in range(cycleStart + 1, len(array)):
+        pos = cycle_start
+        for i in range(cycle_start + 1, len(array)):
             if array[i] < item:
                 pos += 1
 
         # If the item is already there, this is not a cycle.
-        if pos == cycleStart:
+        if pos == cycle_start:
             continue
 
         # Otherwise, put the item there or right after any duplicates.
@@ -351,11 +348,11 @@ def cycle_sort(array):
         writes += 1
 
         # Rotate the rest of the cycle.
-        while pos != cycleStart:
+        while pos != cycle_start:
 
             # Find where to put the item.
-            pos = cycleStart
-            for i in range(cycleStart + 1, len(array)):
+            pos = cycle_start
+            for i in range(cycle_start + 1, len(array)):
                 if array[i] < item:
                     pos += 1
 
@@ -420,26 +417,26 @@ def bitonic_sort(a, low=0, cnt=None, dire=1):
     # The parameter dir indicates the sorting direction, ASCENDING
     # or DESCENDING; if (a[i] > a[j]) agrees with the direction,
     # then a[i] and a[j] are interchanged.*/
-    def compAndSwap(a, i, j, dire):
+    def comp_and_swap(a, i, j, dire):
         if (dire == 1 and a[i] > a[j]) or (dire == 0 and a[i] < a[j]):
             a[i], a[j] = a[j], a[i]
 
     # if dir = 1, and in descending order otherwise (means dir=0).
     # The sequence to be sorted starts at index position low,
     # the parameter cnt is the number of elements to be sorted.
-    def bitonicMerge(a, low, cnt, dire):
+    def bitonic_merge(a, low, cnt, dire):
         if cnt > 1:
             k = cnt // 2
             for i in range(low, low + k):
-                compAndSwap(a, i, i + k, dire)
-            bitonicMerge(a, low, k, dire)
-            bitonicMerge(a, low + k, k, dire)
+                comp_and_swap(a, i, i + k, dire)
+            bitonic_merge(a, low, k, dire)
+            bitonic_merge(a, low + k, k, dire)
 
     if cnt > 1:
         k = cnt // 2
         bitonic_sort(a, low, k, 1)
         bitonic_sort(a, low + k, k, 0)
-        bitonicMerge(a, low, cnt, dire)
+        bitonic_merge(a, low, cnt, dire)
 
 
 # The main function that
@@ -453,7 +450,7 @@ def pancake_sort(arr):
 
     # Returns index of the maximum
     # element in arr[0..n-1] */
-    def findMax(arr, n):
+    def find_max(arr, n):
         mi = 0
         for i in range(0, n):
             if arr[i] > arr[mi]:
@@ -475,7 +472,7 @@ def pancake_sort(arr):
         # Find index of the maximum
         # element in
         # arr[0..curr_size-1]
-        mi = findMax(arr, curr_size)
+        mi = find_max(arr, curr_size)
 
         # Move the maximum element
         # to end of current array
@@ -511,37 +508,34 @@ def stooge_sort(arr, l=0, h=None):
         # If there are more than 2 elements in
     # the array
     if h - l + 1 > 2:
-        t = (int)((h - l + 1) / 3)
+        t = int((h - l + 1) / 3)
 
         # Recursively sort first 2 / 3 elements
         stooge_sort(arr, l, (h - t))
 
         # Recursively sort last 2 / 3 elements
-        stooge_sort(arr, l + t, (h))
+        stooge_sort(arr, l + t, h)
 
         # Recursively sort first 2 / 3 elements
         # again to confirm
         stooge_sort(arr, l, (h - t))
 
 
-def oddEven_sort(arr):
+def odd_even_sort(arr):
     n = len(arr)
     # Initially array is unsorted
-    isSorted = 0
-    while isSorted == 0:
-        isSorted = 1
-        temp = 0
+    is_sorted = 0
+    while is_sorted == 0:
+        is_sorted = 1
         for i in range(1, n - 1, 2):
             if arr[i] > arr[i + 1]:
                 arr[i], arr[i + 1] = arr[i + 1], arr[i]
-                isSorted = 0
+                is_sorted = 0
 
         for i in range(0, n - 1, 2):
             if arr[i] > arr[i + 1]:
                 arr[i], arr[i + 1] = arr[i + 1], arr[i]
-                isSorted = 0
-
-    return
+                is_sorted = 0
 
 
 #       COLOR MAPS

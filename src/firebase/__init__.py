@@ -1,3 +1,3 @@
-from src import loggers, change_level
+from src import loggers
 
 fire_logger = loggers['firebase']
