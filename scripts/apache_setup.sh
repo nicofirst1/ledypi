@@ -6,8 +6,8 @@ path2repo="$(dirname "$path2repo")"
 source $path2repo/vars.sh
 
 # installing Apache and mod_wsgi
-#sudo apt-get update
-#sudo apt-get install python3-pip apache2 libapache2-mod-wsgi-py3
+sudo apt-get update
+sudo apt-get install python3-pip apache2 libapache2-mod-wsgi-py3
 
 apache_path="$path2repo/ledyweb/Apache"
 
