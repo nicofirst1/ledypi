@@ -1,7 +1,6 @@
 import urllib.request
 
 import PIL.Image
-import cv2
 import numpy as np
 
 from patterns.default import Default
@@ -10,7 +9,7 @@ from utils.modifier import Modifier
 
 class Image(Default):
     """
-    Turno on\off the strip with a specific speed
+    Turno on/off the strip with a specific speed
     """
 
     def __init__(self, **kwargs):
@@ -46,6 +45,8 @@ class Image(Default):
                 img = img[:, :, :3]
 
             # resize using csv interpolation
+            #fixme: use something compatible with Apache
+            import cv2
             img = cv2.resize(img, dsize=(self.strip_length, img.shape[1],), interpolation=cv2.INTER_CUBIC)
 
             # add brightness level
@@ -71,4 +72,3 @@ class Image(Default):
 
         self.step += 1
         self.step %= self.image.shape[0]
-

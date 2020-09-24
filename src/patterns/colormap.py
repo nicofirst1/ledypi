@@ -61,6 +61,8 @@ class ColorMap(Default):
 
         self.specular = Modifier('specular', False)
 
+        self.rate.value = 100
+
         self.modifiers = dict(
             cmap_name=self.cmap_name,
             lower_bound=self.lower_bound,
@@ -68,6 +70,8 @@ class ColorMap(Default):
             specular=self.specular,
 
         )
+
+
 
     def init_cmap(self, name):
         """

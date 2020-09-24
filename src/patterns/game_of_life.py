@@ -22,7 +22,6 @@ class GameOfLife(Default):
         self.num_alives = [0] * self.strip_length
         self.randomize_color = True
 
-
     def fill(self):
 
         # update alive nums
@@ -35,12 +34,8 @@ class GameOfLife(Default):
             cur = self.alive[idx]
 
             # Any live cell with fewer than two live neighbours dies, as if by underpopulation.
-            if cur and n < 2:
-                self.alive[idx] = 0
-                self.color_idx(idx)
-
             # Any live cell with more than three live neighbours dies, as if by overpopulation.
-            elif cur and n > 3:
+            if cur and (n < 2 or n > 3):
                 self.alive[idx] = 0
                 self.color_idx(idx)
 
@@ -50,8 +45,6 @@ class GameOfLife(Default):
                 self.color_idx(idx)
 
             # Any live cell with two or three live neighbours lives on to the next generation.
-            else:
-                pass
 
         # check if the number of alive players has not changed in an entire execution
         if self.num_alives[1:] == self.num_alives[:-1]:

@@ -5,7 +5,7 @@ from utils.modifier import Modifier
 
 class Pulse(Default):
     """
-    Turno on\off the strip with a specific speed
+    Turno on/off the strip with a specific speed
     """
 
     def __init__(self, **kwargs):
@@ -31,7 +31,7 @@ class Pulse(Default):
         else:
             self.increasing = not self.increasing
 
-        self.color.a=a
+        self.color.a = a
 
         for idx in range(self.strip_length):
             self.pixels[idx]['color'] = self.color

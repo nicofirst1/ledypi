@@ -113,4 +113,3 @@ class Dotstar(object):
         self.np.show()
         self.np.deinit()
         rpi_logger.info("Closing PiHandler")
-
