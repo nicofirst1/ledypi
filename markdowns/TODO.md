@@ -30,6 +30,7 @@
 - remove additional settings for pattern with no settings [X]
 - add components update on database change []
 - launch ledyweb from app script []
+- use apache to start webserver [X]
 
 
 # Android app
