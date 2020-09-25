@@ -38,16 +38,16 @@ class Image(Default):
 
             # open image from url and convert to array
             img = PIL.Image.open(urllib.request.urlopen(value)).convert('RGB')
-            img = np.array(img)
+            img_array = np.array(img)
 
             # reduce/expand third dimension to be 3
-            if img.shape[2] > 3:
-                img = img[:, :, :3]
+            if img_array.shape[2] > 3:
+                img=img.resize((img.width,img.height, 3))
 
             # resize using csv interpolation
-            #fixme: use something compatible with Apache
-            import cv2
-            img = cv2.resize(img, dsize=(self.strip_length, img.shape[1],), interpolation=cv2.INTER_CUBIC)
+            # import cv2
+            # img = cv2.resize(img, dsize=(self.strip_length, img.shape[1],), interpolation=cv2.INTER_CUBIC)
+            img=img.resize((self.strip_length, img.height), PIL.Image.BICUBIC)
 
             # add brightness level
             img = np.insert(img, 3, 255, axis=2)
@@ -72,3 +72,4 @@ class Image(Default):
 
         self.step += 1
         self.step %= self.image.shape[0]
+

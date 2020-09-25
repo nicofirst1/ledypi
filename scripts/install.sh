@@ -26,13 +26,6 @@ echo "https://learn.adafruit.com/circuitpython-on-raspberrypi-linux/installing-c
 #numpy
 sudo apt-get install python3-numpy
 
-## Opencv
-echo "Installing Opencv"
-sudo apt-get install libhdf5-dev libhdf5-serial-dev libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5 libatlas-base-dev libjasper-dev
-
-wget https://bootstrap.pypa.io/get-pip.py
-sudo python3 get-pip.py
-sudo pip3 install opencv-contrib-python==4.1.0.25
 
 #PIllow
 echo "Installing Pillow"
