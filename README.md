@@ -48,9 +48,10 @@ The modular desing allows you to add the logic you wish by overriding a single m
 - Customizable attributes for each one
 - [Music reactive](#music-reactive-click-gif-for-video) 
 - [Android app](AppInventor) for control 
-- [LedyWeb](https://github.com/nicofirst1/ledyweb) online controller 
+- [LedyWeb](https://github.com/nicofirst1/ledyweb) online controller with Apache integration
 - Firebase database
 - Debug mode available 
+- [Develop branch](https://github.com/nicofirst1/ledypi/tree/develop) with the latest updates!
 
 # Patterns
 Each pattern inherits from a [base class](src/patterns/default.py) with its own logic. This allows anyone to implement his own pattern simply by overriding a method (see more on the [readme](patterns/README.md)).

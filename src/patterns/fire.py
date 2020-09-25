@@ -2,9 +2,9 @@ from math import ceil
 from random import randint
 
 from patterns.default import Default
-from utils.rgb import RGB
 from utils.color import bound_sub
 from utils.modifier import Modifier
+from utils.rgb import RGB
 
 
 class Fire(Default):

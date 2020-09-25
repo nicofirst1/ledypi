@@ -13,6 +13,7 @@
 ## Raspberry
 - fix closing [X]
 - fix slow patters [X]
+- fix wifi drops []
 
 ## Patterns
 - add allowed range for attributes [X]
@@ -21,6 +22,7 @@
 - Fix music modifier [X]
 - Fix property setter and readme [X]
 - fix color choosing [X]
+- fix opencv in Images with apache []
 
 # LedyWeb
 - fix readme [X]
@@ -29,7 +31,11 @@
 - add patterns with no attributes in the drop down menu [X]
 - remove additional settings for pattern with no settings [X]
 - add components update on database change []
-- launch ledyweb from app script []
+- launch ledyweb from app script [X]
+- use apache to start webserver [X]
+
+## Apache
+- add domain name [X]
 
 
 # Android app

@@ -1,4 +1,5 @@
 from patterns.color_wipe import ColorWipe
+from patterns.colormap import ColorMap
 from patterns.equation import Equation
 from patterns.fading import Fading
 from patterns.fire import Fire
@@ -39,4 +40,5 @@ Patterns = dict(
     Image=Image,
     Storm=Storm,
     Sorting=Sorting,
+    ColorMap=ColorMap,
 )

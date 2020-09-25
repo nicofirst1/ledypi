@@ -1,5 +1,4 @@
 import math
-from copy import deepcopy
 from random import randint
 
 import numpy as np
@@ -39,7 +38,7 @@ class RGB:
 
         """
 
-        self.rgb_vec = np.array([0,0,0])
+        self.rgb_vec = np.array([0, 0, 0])
 
         if "r" in kwargs.keys():
             self.assertion(kwargs["r"])
@@ -85,15 +84,14 @@ class RGB:
             self.b = 255
             self.a = 255
 
-
     @property
     def r(self):
         return self._r
 
     @r.setter
     def r(self, value):
-        self.rgb_vec[0]=value
-        self._r=value
+        self.rgb_vec[0] = value
+        self._r = value
 
     @property
     def g(self):
@@ -120,13 +118,13 @@ class RGB:
         green = (self.g * (255 - other_rgb.a) + other_rgb.g * other_rgb.a) / 255
         blue = (self.b * (255 - other_rgb.a) + other_rgb.b * other_rgb.a) / 255
 
-        self.a=int(alpha)
-        self.r=int(red)
-        self.g=int(green)
-        self.b=int(blue)
+        self.a = int(alpha)
+        self.r = int(red)
+        self.g = int(green)
+        self.b = int(blue)
 
     def scale(self):
-        return np.multiply(self.rgb_vec, self.a/255, casting='unsafe').astype(int)
+        return np.multiply(self.rgb_vec, self.a / 255, casting='unsafe').astype(int)
 
     def fade(self, fade_val, minimum=10):
         """
@@ -162,9 +160,6 @@ class RGB:
                 return False
 
         return True
-
-    def copy(self):
-        return deepcopy(self)
 
     def update_single(self, **kwargs):
         """
@@ -212,7 +207,6 @@ class RGB:
         self.r = bound_add(self.r, rgb.r)
         self.g = bound_add(self.g, rgb.g)
         self.b = bound_add(self.b, rgb.b)
-        # self.a = bound_add(self.a, rgb.a)
 
     def is_gray(self):
         if self.r == self.g == self.b:
@@ -229,4 +223,4 @@ class RGB:
 
     @staticmethod
     def assertion(val):
-        assert val <= 255 and val >= 0
+        assert 255 >= val >= 0

@@ -8,8 +8,10 @@ LOG_DIR += "/logs"
 if not os.path.isdir(LOG_DIR):
     os.mkdir(LOG_DIR)
 
-formatter = '%(asctime)s - %(name)s - %(levelname)s - %(message)s\n'
-logging.basicConfig(format=formatter)
+format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s\n'
+formatter = logging.Formatter(format)
+
+logging.basicConfig(format=format)
 
 loggers = dict(
     rpi="rpi_logger",
@@ -21,6 +23,7 @@ loggers = {k: logging.getLogger(v) for k, v in loggers.items()}
 
 for k, v in loggers.items():
     fileHandler = logging.FileHandler(f"{LOG_DIR}/{k}.log")
+    fileHandler.setFormatter(formatter)
     v.addHandler(fileHandler)
 
 

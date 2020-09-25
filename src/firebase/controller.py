@@ -37,7 +37,7 @@ def frequency(listener):
 
 class FireBaseController(FireBaseConnector):
     """
-    Controller for the firebase databse.
+    Controller for the firebase database.
     Extends the FireBaseConnector to allow modification of the pixels in both pc or rpi mode
     """
 
@@ -45,7 +45,7 @@ class FireBaseController(FireBaseConnector):
         """
 
         :param credential_path: str, path to credential file
-        :param database_url: str, firebase databse url
+        :param database_url: str, firebase database url
         :param handler: APP or Pi_handler, low level class to control leds
         :param pixels: int, number of pixels
         :param debug: bool, debug flag
@@ -116,7 +116,7 @@ class FireBaseController(FireBaseConnector):
             self.ps_attrs_getter(path, data)
 
         else:
-            raise NotImplementedError(f"No such field for {event.path}")
+            fire_logger.warning(f"No such field for {event.path}")
 
     def ps_attrs_getter(self, path, data):
         """
@@ -152,7 +152,8 @@ class FireBaseController(FireBaseConnector):
 
                 color = self.get_rgba()
                 self.pattern.update_args(color=color, randomize_color=False)
-
+        elif rgb_attr == "a":
+            self.pattern.alpha = int(data)
         else:
             # if is r,g,b,a, update just the value in the dictionary
             self.pattern.color.__setattr__(rgb_attr, int(data))

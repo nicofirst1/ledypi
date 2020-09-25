@@ -32,7 +32,6 @@ class FireBaseConnector(Thread):
         # init thread class
         super().__init__(name=thread_name)
 
-
         # define local attributes
         self.tracker = tracker if tracker is not None else lambda: None
         self.stop = False
@@ -62,6 +61,7 @@ class FireBaseConnector(Thread):
         # add listener and sleep to wait for the first call where self.local_db is initialized
         self.listener = self.root.listen(self.listener_method)
         time.sleep(1)
+        fire_logger.debug("FireBaseConnector initialized")
 
     def listener_method(self, event):
         """
@@ -82,17 +82,20 @@ class FireBaseConnector(Thread):
         keys = event.path.split("/")
         keys.pop(0)
 
-        # check if there is a difference
-        if get_from_dict(self.local_db, keys) != event.data:
-            # update local db
-            set_in_dict(self.local_db, keys, event.data)
-            self.tracker()
+        try:
 
+            # check if there is a difference
+            if get_from_dict(self.local_db, keys) != event.data:
+                # update local db
+                set_in_dict(self.local_db, keys, event.data)
+                self.tracker()
+        except KeyError:
+            fire_logger.warning(f"Got keyerror looking in db for key {keys}")
         return True
 
     def run(self) -> None:
         """
-        Run the firebasa connection in a separate thread
+        Run the firebase connection in a separate thread
         :return:
         """
 
@@ -259,10 +262,10 @@ class FireBaseConnector(Thread):
             data = self.get("RGBA", {})
 
             # define standard RGBA components
-            RGBA = dict(r=255, g=255, b=255, a=100, random=0)
+            rgba = dict(r=255, g=255, b=255, a=100, random=0)
 
             to_update = {}
-            for k, v in RGBA.items():
+            for k, v in rgba.items():
                 # try to check if the value is updated
                 try:
                     if data[k] != v:
@@ -272,7 +275,7 @@ class FireBaseConnector(Thread):
 
             # if there are updates push them
             if len(to_update) > 0:
-                to_update = update_dict_no_override(RGBA, to_update)
+                to_update = update_dict_no_override(rgba, to_update)
                 self.root.update(dict(RGBA=to_update))
 
         def init_pattern_attributes():

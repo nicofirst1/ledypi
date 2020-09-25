@@ -50,7 +50,7 @@ def num_to_rgb(val, max_val=3):
     r = round(math.sin(0.024 * i + 0) * 127 + 128)
     g = round(math.sin(0.024 * i + 2) * 127 + 128)
     b = round(math.sin(0.024 * i + 4) * 127 + 128)
-    return (r, g, b)
+    return r, g, b
 
 
 if __name__ == '__main__':
