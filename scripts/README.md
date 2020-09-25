@@ -56,3 +56,32 @@ Now the scripts supports argument propagation, that is you can pass any kind of 
  ```shell script
  bash sync.sh \PC\path\to\ledypiRepo \RPI\path\to\ledypiRepo 
  ```
+If you wish to log without password follow [this](https://serverfault.com/questions/241588/how-to-automate-ssh-login-with-password):
+```shell script
+ssh-keygen -t rsa -b 2048
+ssh-copy-id id@server
+```
+
+## Setup Apache
+If you wish to use apache server to run the ledyweb app simply run 
+```shell script
+bash scripts/apache.sh setup
+```
+The script will replace the value in [000-default.conf](../ledyweb/Apache/000-default.conf) with your rpi paths, 
+copy them into the [apache config folder](/etc/apache2/0) and restart apache.
+
+You can then start it with 
+```shell script
+bash scripts/apache.sh start
+```
+
+If you run into permission problem try:
+```shell script
+bash scripts/apache.sh chmod
+```
+
+If that doesn't work you may need to add group permission to your home folder (if you are storing the repo in there) with:
+```shell script
+chgrp www-data $HOME
+```
+If the latter doesn't work either check [this out](https://serverfault.com/questions/357108/what-permissions-should-my-website-files-folders-have-on-a-linux-webserver)

@@ -90,7 +90,7 @@ If you wish to run the ledyweb control server on the raspberry and connect with 
  [this guide](https://www.codingforentrepreneurs.com/blog/raspberry-pi-network-server-guide-with-django-ssh/)
 
 ##### Ledyweb on apache
-If you rather have the ledyweb control directly running on the rpi, you can use the [apache_setup scrip](../scripts/apache_setup.sh). Simply run it with:
+If you rather have the ledyweb control directly running on the rpi, you can use the [apache_setup scrip](../scripts/apache.sh). Simply run it with:
 ```shell script
 bash scripts/apache_setup.sh
 ```
