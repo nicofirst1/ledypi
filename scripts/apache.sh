@@ -36,9 +36,9 @@ start)
   ;;
 chmod)
   # fix the permissions for the folder
-  chgrp -R www-data $path2repo
-  chmod -R 750 $path2repo
-  chmod g+sw $path2repo
+  sudo chgrp -R www-data $path2repo
+  sudo chmod -R 750 $path2repo
+  sudo chmod -R g+rw $path2repo
   ;;
 *)
   echo "Usage: app {start|stop|chmod}"
