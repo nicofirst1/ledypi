@@ -40,28 +40,7 @@ class RGB:
 
         self.rgb_vec = np.array([0, 0, 0])
 
-        if "r" in kwargs.keys():
-            self.assertion(kwargs["r"])
-            self.r = kwargs["r"]
-        else:
-            self.r = 0
 
-        if "g" in kwargs.keys():
-            self.assertion(kwargs["g"])
-            self.g = kwargs["g"]
-        else:
-            self.g = 0
-        if "b" in kwargs.keys():
-            self.assertion(kwargs["b"])
-            self.b = kwargs["b"]
-        else:
-            self.b = 0
-
-        if "a" in kwargs.keys():
-            self.assertion(kwargs["a"])
-            self.a = kwargs["a"]
-        else:
-            self.a = 0
 
         if "rgb" in kwargs.keys():
             self.assertion(kwargs["rgb"].r)
@@ -72,17 +51,40 @@ class RGB:
             self.b = kwargs["rgb"].b
             self.a = kwargs["rgb"].a
 
-        if "random" in kwargs.keys() and kwargs['random']:
+        elif "random" in kwargs.keys() and kwargs['random']:
             self.r = randint(0, 255)
             self.g = randint(0, 255)
             self.b = randint(0, 255)
             self.a = 255
 
-        if 'white' in kwargs.keys():
+        elif 'white' in kwargs.keys():
             self.r = 255
             self.g = 255
             self.b = 255
             self.a = 255
+        else:
+            if "r" in kwargs.keys():
+                self.assertion(kwargs["r"])
+                self.r = kwargs["r"]
+            else:
+                self.r = 0
+
+            if "g" in kwargs.keys():
+                self.assertion(kwargs["g"])
+                self.g = kwargs["g"]
+            else:
+                self.g = 0
+            if "b" in kwargs.keys():
+                self.assertion(kwargs["b"])
+                self.b = kwargs["b"]
+            else:
+                self.b = 0
+
+            if "a" in kwargs.keys():
+                self.assertion(kwargs["a"])
+                self.a = kwargs["a"]
+            else:
+                self.a = 0
 
     @property
     def r(self):
@@ -224,3 +226,6 @@ class RGB:
     @staticmethod
     def assertion(val):
         assert 255 >= val >= 0
+
+    def __repr__(self):
+        return f"({self.r},{self.g},{self.b},{self.a})"
