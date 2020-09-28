@@ -1,138 +1,130 @@
-from copy import deepcopy
-from random import randint
+import logging
+from copy import copy
+from random import random
 
 from patterns.default import Default
-from utils.color import bound_sub, circular_step
 from utils.modifier import Modifier
 from utils.rgb import RGB
+
+pattern_logger = logging.getLogger("pattern_logger")
 
 
 class FireWork(Default):
     """
-    Simulate teh firing of multiple fireworks which propagate and vanish
+    Custom Game
     """
 
     def __init__(self, **kwargs):
 
-        super().__init__(**kwargs)
-        self.fires = Modifier('fires', self.strip_length // 50, minimum=1, maximum=self.strip_length)
-        self.loss = Modifier('speed', 25, minimum=1, maximum=80)
+        kwargs['color'] = RGB()
 
-        self.step = 0
-        self.centers = {randint(0, self.strip_length - 1): self.empty_center() for _ in range(self.fires())}
+        super().__init__(**kwargs)
+
         self.pattern_name = "FireWork"
+        self.increment = Modifier('fire power', 10.0, minimum=0.001, maximum=0.25)
+        self.spark = Modifier('sparks', 10.0, minimum=0, maximum=1 / self.strip_length)
+
+        for idx in range(self.strip_length):
+            self.pixels[idx]['timestep'] = 0
+
+        self.centers = []
 
         self.modifiers = dict(
-            fires=self.fires,
-            loss=self.loss
+            increment=self.increment,
+            spark=self.spark,
         )
-
-    def empty_center(self):
-        if self.randomize_color:
-            return dict(color=RGB(random=True), tail=[], step=0)
-        else:
-            return dict(color=self.color, tail=[], step=0)
-
-    def bound_attrs(self):
-        self.fires.values = min(self.fires(), self.strip_length)
 
     def fill(self):
 
-        self.bound_attrs()
+        new_pixels = copy(self.pixels)
 
-        loss_weight = 1.3
-        center_copy = deepcopy(self.centers)
+        # increase tails for every center
+        for idx in range(len(self.centers)):
+            cntr, stop = self.centers[idx]
 
-        # for every center in the list
-        for a, attr in center_copy.items():
+            ### back motion
+            prev_pixel = new_pixels[(cntr - stop + 1) % self.strip_length]
+            cur_pixel = new_pixels[(cntr - stop) % self.strip_length]
 
-            # get the color and the tail
-            color = attr["color"]
-            step = attr["step"]
-            has_popped = False
+            color, timestep = drop([prev_pixel, cur_pixel], self.increment())
+            ts = max(timestep - self.increment(), 0.0)
+            cur_pixel['timestep'] = ts
+            cur_pixel['color'] = color
+            new_pixels[(cntr - stop) % self.strip_length] = cur_pixel
 
-            # estimate the center intesity and update
-            ci = bound_sub(255, loss_weight * self.loss() * step)
-            color.update_single(a=ci)
-            self.add_update_pixel(a, color)
+            ### forward motion
+            prev_pixel = new_pixels[(cntr + stop - 1) % self.strip_length]
+            cur_pixel = new_pixels[(cntr + stop) % self.strip_length]
 
-            idx = 1
+            color, timestep = drop([prev_pixel, cur_pixel], self.increment())
+            ts = max(timestep - self.increment(), 0.0)
+            cur_pixel['timestep'] = ts
+            cur_pixel['color'] = color
+            new_pixels[(cntr + stop) % self.strip_length] = cur_pixel
 
-            # if the intensity is more than zero, the the tail is still increasing
-            if ci > 0:
-                # for 1 to the current step
-                for idx in range(idx, step + 1):
-                    # get previous and next led
-                    p = a - idx
-                    n = a + idx
-                    p %= self.strip_length
-                    n %= self.strip_length
+            # increment stop for next iteration
+            self.centers[idx] = (cntr, stop + 1)
 
-                    # estimate intensity and update
-                    # ci is= 255 - the loss times the current step and the index (farther points from center are newer)
-                    ci = bound_sub(255, self.loss() * (loss_weight * step + 1 - idx))
-                    color.update_single(a=ci)
+        # remove all centers with a maximum stop
+        self.centers = [elem for elem in self.centers if elem[1] < 1 // self.increment()]
 
-                    self.add_update_pixel(p, color)
-                    self.add_update_pixel(n, color)
+        # fade all leds
+        for idx in range(self.strip_length):
+            new_pixels[idx]['color'].fade(self.increment())
 
-                    # update tail
-                    attr["tail"].append((p, n, idx))
-                # remove duplicates
-                attr["tail"] = list(set(attr["tail"]))
+        # either update pixels or spark
+        for idx in range(self.strip_length):
+            if random() < self.spark():
+                c = RGB(random=True)
+                self.pixels[idx]['color'] = c
+                self.pixels[idx]['timestep'] = 1.0
+                self.centers.append((idx, 1))
 
-            # if the center has faded then the tails need to fade too
             else:
-                # if there are some non zero tail
-                if len(attr["tail"]) > 0:
-                    # for every tail
-                    for t in attr["tail"]:
-                        # get previous, next and index
-                        p = t[0]
-                        n = t[1]
-                        idx = t[2]
-                        # estimate ci as before
-                        ci = bound_sub(255, self.loss() * (loss_weight * step + 1 - idx))
-                        # update
-                        color.update_single(a=ci)
-                        self.add_update_pixel(p, color)
-                        self.add_update_pixel(n, color)
-                        # if ci is zero remove point from tail
-                        if ci == 0:
-                            attr["tail"].pop(attr["tail"].index(t))
+                self.pixels[idx]['color'] = new_pixels[idx]['color']
+                self.pixels[idx]['timestep'] = new_pixels[idx]['timestep']
 
-                # if the center is faded and it has no more tail
-                else:
-                    # remove the center
-                    self.centers.pop(a)
 
-                    if len(self.centers) < self.fires():
+def drop(pixels, inc):
+    """
+    Perform an average on a list of pixels
+    :param pixels: list[dict], list of pixels with 'color' and 'timestep' keys
+    :param inc: float, increment
+    :return: tuple[RGB,int]: color, timestep
+    """
+    tots = [elem['timestep'] for elem in pixels if not elem['color'].is_black()]
 
-                        for _ in range(self.fires() - len(self.centers)):
+    tot = sum(tots)
+    if tot == 0: tot = 0.000001
 
-                            # get another one which is not in the center lists already
-                            rd = randint(0, self.strip_length - 1)
-                            while rd in self.centers.keys():
-                                rd = randint(0, self.strip_length - 1)
-                            # put random color
-                            self.centers[rd] = self.empty_center()
-                        has_popped = True
+    # perform weighed average for rgba
+    red = [elem['color'].r * elem['timestep'] for elem in pixels]
+    red = sum(red) / tot
 
-            # is the center has been removed then dont update
-            if not has_popped:
-                try:
-                    self.centers[a]["tail"] = attr["tail"]
-                    step = circular_step(step, self.strip_length)
-                    self.centers[a]["step"] = step
-                except KeyError:
-                    pass
+    green = [elem['color'].g * elem['timestep'] for elem in pixels]
+    green = sum(green) / tot
 
-        self.update_counter()
+    blue = [elem['color'].b * elem['timestep'] for elem in pixels]
+    blue = sum(blue) / tot
 
-    def add_update_pixel(self, idx, new_color):
+    alpha = [elem['color'].a * elem['timestep'] for elem in pixels]
+    alpha = sum(alpha) / tot
 
-        self.pixels[idx]['color'] = new_color
+    # bound max and min
+    red = max(red, 0)
+    green = max(green, 0)
+    blue = max(blue, 0)
+    alpha = max(alpha, 0)
 
-    def update_counter(self):
-        self.step += 1
-        self.step %= self.strip_length
+    red = min(red, 255)
+    green = min(green, 255)
+    blue = min(blue, 255)
+    alpha = min(alpha, 255)
+
+    # if there are no tots, use zero as average timestep
+    try:
+        ts = max(tots)
+    except ValueError:
+        ts = 0
+
+    return RGB(r=red, g=green, b=blue, a=alpha).fade(inc), ts
