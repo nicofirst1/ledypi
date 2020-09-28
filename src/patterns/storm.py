@@ -19,6 +19,12 @@ class Storm(Default):
         self.thunder = Modifier('thunder intensity', 5.0, minimum=0, maximum=0.2)
         self.thunder_size = Modifier('thunder size', 80, minimum=0, maximum=self.strip_length)
 
+        self.modifiers = dict(
+            rain=self.rain,
+            thunder=self.thunder,
+            thunder_size=self.thunder_size
+        )
+
         self.thunder_color = RGB(white=True)
         self.rain_color = RGB(r=70, g=100, b=255, a=255)
         self.thunder_centers = {}
