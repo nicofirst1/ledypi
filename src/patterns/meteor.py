@@ -16,7 +16,7 @@ class Meteor(Default):
 
         super().__init__(**kwargs)
         self.size = Modifier('size', 5, minimum=1, maximum=self.strip_length)
-        self.trail_decay = Modifier('trail decay', 50, minimum=1, maximum=255)
+        self.trail_decay = Modifier('trail decay', 5, minimum=0, maximum=1)
         self.random_decay = Modifier('random decay', True)
 
         self.step = 0
