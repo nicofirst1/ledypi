@@ -1,4 +1,4 @@
-from logging import getLogger
+import logging
 
 import numpy as np
 import pyaudio
@@ -11,7 +11,8 @@ from visualization import Visualizer
 _gamma = np.load(CONFIGS['gamma_table_path'])
 """Gamma lookup table used for nonlinear brightness correction"""
 
-music_logger = getLogger("music_logger")
+music_logger = logging.getLogger("music_logger")
+music_logger.setLevel(logging.INFO)
 
 
 class Music(Default):
@@ -78,7 +79,7 @@ class Music(Default):
             self.vis.visualization_effect = ef
 
         except KeyError as e:
-            print(f"Error for key {value}\n{e}")
+            music_logger.warning(f"Error for key {value}\n{e}")
 
     @property
     def rate(self):

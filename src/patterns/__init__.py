@@ -5,6 +5,7 @@ from patterns.fading import Fading
 from patterns.fire import Fire
 from patterns.firework import FireWork
 from patterns.game_of_life import GameOfLife
+from patterns.game_of_light import GameOfLight
 from patterns.image import Image
 from patterns.meteor import Meteor
 from patterns.music import Music
@@ -41,4 +42,5 @@ Patterns = dict(
     Storm=Storm,
     Sorting=Sorting,
     ColorMap=ColorMap,
+    GameOfLight=GameOfLight,
 )

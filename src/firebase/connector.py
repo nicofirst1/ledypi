@@ -1,6 +1,7 @@
 import logging
 import math
 import operator
+import socket
 import time
 from functools import reduce
 from threading import Thread
@@ -44,8 +45,14 @@ class FireBaseConnector(Thread):
 
         # connect to firebase
         cred = credentials.Certificate(credential_path)
-        firebase_admin.initialize_app(credential=cred,
-                                      options={'databaseURL': database_url})
+
+        try:
+            firebase_admin.initialize_app(credential=cred,
+                                          options={'databaseURL': database_url},)
+        except ValueError:
+            firebase_admin.initialize_app(credential=cred,
+                                          options={'databaseURL': database_url},
+                                          name=socket.gethostname())
 
         # update db and get references
         self.root = db.reference('/')

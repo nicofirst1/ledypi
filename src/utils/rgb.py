@@ -40,29 +40,6 @@ class RGB:
 
         self.rgb_vec = np.array([0, 0, 0])
 
-        if "r" in kwargs.keys():
-            self.assertion(kwargs["r"])
-            self.r = kwargs["r"]
-        else:
-            self.r = 0
-
-        if "g" in kwargs.keys():
-            self.assertion(kwargs["g"])
-            self.g = kwargs["g"]
-        else:
-            self.g = 0
-        if "b" in kwargs.keys():
-            self.assertion(kwargs["b"])
-            self.b = kwargs["b"]
-        else:
-            self.b = 0
-
-        if "a" in kwargs.keys():
-            self.assertion(kwargs["a"])
-            self.a = kwargs["a"]
-        else:
-            self.a = 0
-
         if "rgb" in kwargs.keys():
             self.assertion(kwargs["rgb"].r)
             self.assertion(kwargs["rgb"].g)
@@ -72,17 +49,40 @@ class RGB:
             self.b = kwargs["rgb"].b
             self.a = kwargs["rgb"].a
 
-        if "random" in kwargs.keys() and kwargs['random']:
+        elif "random" in kwargs.keys() and kwargs['random']:
             self.r = randint(0, 255)
             self.g = randint(0, 255)
             self.b = randint(0, 255)
             self.a = 255
 
-        if 'white' in kwargs.keys():
+        elif 'white' in kwargs.keys():
             self.r = 255
             self.g = 255
             self.b = 255
             self.a = 255
+        else:
+            if "r" in kwargs.keys():
+                self.assertion(kwargs["r"])
+                self.r = kwargs["r"]
+            else:
+                self.r = 0
+
+            if "g" in kwargs.keys():
+                self.assertion(kwargs["g"])
+                self.g = kwargs["g"]
+            else:
+                self.g = 0
+            if "b" in kwargs.keys():
+                self.assertion(kwargs["b"])
+                self.b = kwargs["b"]
+            else:
+                self.b = 0
+
+            if "a" in kwargs.keys():
+                self.assertion(kwargs["a"])
+                self.a = kwargs["a"]
+            else:
+                self.a = 0
 
     @property
     def r(self):
@@ -129,18 +129,20 @@ class RGB:
     def fade(self, fade_val, minimum=10):
         """
         Fade colors
-        :param fade_val: 0 to 255
-        :param minimum: threshold after which
+        :param fade_val: 0 to 1
+        :param minimum: threshold after which value is cut to 0
         :return:
         """
 
-        self.r -= self.r * fade_val / 256
-        self.g -= self.g * fade_val / 256
-        self.b -= self.b * fade_val / 256
+        self.r -= self.r * fade_val
+        self.g -= self.g * fade_val
+        self.b -= self.b * fade_val
+        #self.a -= self.a * fade_val
 
         self.r = math.floor(self.r)
         self.g = math.floor(self.g)
         self.b = math.floor(self.b)
+        #self.a = math.floor(self.a)
 
         if self.r <= minimum:
             self.r = 0
@@ -150,16 +152,10 @@ class RGB:
 
         if self.b <= minimum:
             self.b = 0
+        # if self.a <= minimum:
+        #     self.a = 0
 
         return self
-
-    def is_black(self):
-
-        if self.a > 0:
-            if self.r > 0 or self.g > 0 or self.b > 0:
-                return False
-
-        return True
 
     def update_single(self, **kwargs):
         """
@@ -214,6 +210,13 @@ class RGB:
 
         return False
 
+    def is_black(self, ):
+
+        if self.r == self.g == self.b == 0:
+            return True
+
+        return False
+
     def copy(self):
         """
         Return a copy of self
@@ -224,3 +227,6 @@ class RGB:
     @staticmethod
     def assertion(val):
         assert 255 >= val >= 0
+
+    def __repr__(self):
+        return f"({self.r},{self.g},{self.b},{self.a})"

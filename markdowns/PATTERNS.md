@@ -10,6 +10,12 @@ Watch how life evolves with the famous [game of life](https://en.wikipedia.org/w
 
 ![gof demo](../Resources/patterns/gof_demo.gif)
 
+### Game of Light
+
+Similar rules as before but with rgb values.
+
+![gof demo](../Resources/patterns/gameoflight_demo.gif)
+
 ### Water
 
 Simulate the deepness of the ocean.
