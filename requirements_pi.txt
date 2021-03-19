@@ -10,5 +10,5 @@ firebase_admin==4.3.0
 blinkstick==1.1.8
 django_getenv==1.3.2
 sympy==1.6.2
-Pillow==7.2.0
+Pillow==8.1.1
 pyqtgraph==0.11.0
