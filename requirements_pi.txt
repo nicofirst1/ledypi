@@ -1,7 +1,7 @@
 six==1.15.0
 matplotlib==3.3.0
 PyAudio==0.2.11
-Django==3.0.8
+Django==3.0.14
 scipy==1.5.1
 blinker==1.4
 yappi==1.2.5
